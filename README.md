@@ -1,4 +1,7 @@
 # doctor
 doctor panel
-to install icon pack
+#to install icon pack
 npm install --save @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
+
+#to install chart
+npm install chart.js
