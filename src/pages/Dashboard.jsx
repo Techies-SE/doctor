@@ -83,44 +83,44 @@ const Dashboard = () => {
       {/* Health Overview */}
       <div className="health-overview">
         <div className="health-card total-patients">
-          <div className="card-header">
+          <div className="card-top">
             <span className="label">Total Patients</span>
             <img src="/img/user.png" alt="Total Patients Icon" className="health-icon" />
           </div>
-          <div className="card-body">
+          <div className="card-bottom">
             <h3>284</h3>
             <p className="status">+10% from last month</p>
           </div>
         </div>
 
         <div className="health-card critical-cases">
-          <div className="card-header">
+          <div className="card-top">
             <span className="label">Critical Cases</span>
             <img src="/img/Warning.png" alt="Critical Cases Icon" className="health-icon" />
           </div>
-          <div className="card-body">
+          <div className="card-bottom">
             <h3>28</h3>
             <p className="status">+5% from last month</p>
           </div>
         </div>
 
         <div className="health-card appointments">
-          <div className="card-header">
+          <div className="card-top">
             <span className="label">Appointments</span>
             <img src="/img/appointment icon.png" alt="Appointments Icon" className="health-icon" />
           </div>
-          <div className="card-body">
+          <div className="card-bottom">
             <h3>42</h3>
             <p className="status">Today</p>
           </div>
         </div>
 
         <div className="health-card lab-results">
-          <div className="card-header">
+          <div className="card-top">
             <span className="label">Lab Results</span>
             <img src="/img/Flask.png" alt="Lab Results Icon" className="health-icon" />
           </div>
-          <div className="card-body">
+          <div className="card-bottom">
             <h3>16</h3>
             <p className="status">Pending Reviews</p>
           </div>
