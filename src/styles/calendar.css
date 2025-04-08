@@ -155,13 +155,18 @@ body {
 /* Main Content */
 .main-content {
     margin-left: 130px; /* space for sidebar */
+    padding-top:80px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Unified wrapper */
 .calendar-wrapper {
     max-width: 1000px;
-    margin: 120px auto 30px auto; /* space from navbar */
-    padding:90px 15px 0 15px;
+    margin: 0 auto 30px auto; /* space from navbar */
+    padding-top:100px;
+    padding-left: 15px;
+    padding-right: 15px;
     box-sizing: border-box;
 }
 
@@ -175,6 +180,8 @@ body {
     width: 100%;
     box-sizing: border-box;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
 }
 
 /* Month selection */

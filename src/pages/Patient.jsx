@@ -25,7 +25,7 @@ const Patient = () => {
         <div className="navbar-left">
           <div className="logo-circle"></div>
           <div className="logo-text">
-            <span className="mfu-text">MFU</span>
+            <span className="mfu-text">MFU</span>{" "}
             <span className="wellness-text">Wellness Center</span>
           </div>
         </div>
