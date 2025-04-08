@@ -1,0 +1,284 @@
+/* Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    align-items: center;
+    background: #fff;
+    padding: 15px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: fixed; /* Fixed to the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10; /* Make sure navbar stays on top */
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: url('/public/img/Ellipse\ 1.png') no-repeat center center/cover;
+}
+
+.logo-text {
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.mfu-text {
+    color: #3BA092;
+    font-weight: bold;
+}
+
+.wellness-text {
+    color: #C0B257;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* Adjust this to create space from the right */
+}
+
+.notification-btn:hover {
+    background-color: #ffffff; /* Light background on hover */
+}
+
+.icon {
+    font-size: 20px; /* Ensure the icon stays the same size */
+    color: #333; /* Color of the notification icon */
+}
+
+.notification-btn:focus {
+    outline: none; /* Remove focus outline for cleaner appearance */
+}
+.notification-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px; /* Increased padding for better clickability */
+    margin-right: 15px; /* Spacing between notification button and profile */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Adjust this to provide space between profile and notification */
+}
+/* Profile image styling */
+.profile-image {
+    width: 30px; /* Set the desired width */
+    height: 30px; /* Set the desired height */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensures the image doesn't stretch */
+    margin-right: 10px; /* Adjust to provide space between profile image and name */
+}
+
+.profile-name {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+/* Container for Sidebar and Main Content */
+.container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    margin-top: 70px; /* Space for the fixed navbar */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 130px; /* Further reduced the width of the sidebar */
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Keeps sidebar fixed */
+    top: 70px; /* Starts below the navbar */
+    left: 0;
+    bottom: 0;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow for sidebar */
+    margin-right: 20px; /* Add margin to the right of the sidebar */
+}
+
+/* Sidebar Buttons */
+.sidebar-btn {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none; /* No stroke */
+    outline: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+}
+
+.sidebar-icon {
+    width: 22px; /* Adjust size */
+    height: 22px;
+}
+
+.sidebar-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+.sidebar-btn.logout {
+    margin-top: auto;
+}
+.active-tab {
+    background: #E0F2F1;
+    color:black;
+}    
+/* Remove underline and change color for the calendar link */
+.sidebar-btn a {
+    text-decoration: none;  /* Removes the underline */
+    color: inherit;  /* Inherit color from the parent (or you can set a specific color) */
+}
+
+
+
+.sidebar-btn a:hover {
+    color: black; /* Change this to the color you want for the hover effect */
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 30px; /* Add margin to the left to space it from the sidebar */
+    margin-top: 200px; /* Add margin to the top to space it from the navbar */
+    padding: 20px; /* Padding for the content */
+}
+
+/* Schedule Container */
+.schedule-container, .calendar-container {
+    background-color:white ; /* Light background color */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1000px; /* Same width as calendar */
+    margin: 30px auto; /* Center the container */
+}
+
+/* Schedule Container */
+.schedule-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.month-selection {
+    display: flex;
+    align-items: center;
+}
+
+.month-btn {
+    font-size: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.month-text {
+    margin: 0 15px;
+    font-size: 18px;
+}
+
+
+/* Calendar Container */
+.calendar-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: #D9F2EF;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   
+}
+
+/* Calendar Header */
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.calendar-header span {
+    padding: 5px;
+}
+
+/* Calendar Days Grid */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+
+.calendar-day {
+    background-color: #f9f9f9;
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.calendar-day.empty {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* Add line separation between days */
+.calendar-day:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.date {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.day-info p {
+    margin: 5px 0;
+}
+.calendar-day .appointments,
+.calendar-day .visits,
+.calendar-day .surgeries {
+    font-size: 12px;
+    color: #555;
+}
+.appointments {
+    background-color: #c0edf1; /* Green for appointments */
+}
+
+.visits {
+    background-color: #fccdee; /* Blue for visits */
+}
+
+.surgeries {
+    background-color: #FFE8CD; /* Orange for surgeries */
+}

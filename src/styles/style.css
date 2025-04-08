@@ -1,0 +1,485 @@
+/* Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    align-items: center;
+    background: #fff;
+    padding: 15px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: fixed; /* Fixed to the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10; /* Make sure navbar stays on top */
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: url('/public/img/Ellipse\ 1.png') no-repeat center center/cover;
+}
+
+.logo-text {
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.mfu-text {
+    color: #3BA092;
+    font-weight: bold;
+}
+
+.wellness-text {
+    color: #C0B257;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* Adjust this to create space from the right */
+}
+
+.notification-btn:hover {
+    background-color: #ffffff; /* Light background on hover */
+}
+
+.icon {
+    font-size: 20px; /* Ensure the icon stays the same size */
+    color: #333; /* Color of the notification icon */
+}
+
+.notification-btn:focus {
+    outline: none; /* Remove focus outline for cleaner appearance */
+}
+.notification-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px; /* Increased padding for better clickability */
+    margin-right: 15px; /* Spacing between notification button and profile */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Adjust this to provide space between profile and notification */
+}
+/* Profile image styling */
+.profile-image {
+    width: 30px; /* Set the desired width */
+    height: 30px; /* Set the desired height */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensures the image doesn't stretch */
+    margin-right: 10px; /* Adjust to provide space between profile image and name */
+}
+
+.profile-name {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+/* Container for Sidebar and Main Content */
+.container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    margin-top: 70px; /* Space for the fixed navbar */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 160px; /* Further reduced the width of the sidebar */
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Keeps sidebar fixed */
+    top: 70px; /* Starts below the navbar */
+    left: 0;
+    bottom: 0;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow for sidebar */
+    margin-right: 20px; /* Add margin to the right of the sidebar */
+}
+
+/* Sidebar Buttons */
+.sidebar-btn {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none; /* No stroke */
+    outline: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+}
+
+.sidebar-icon {
+    width: 22px; /* Adjust size */
+    height: 22px;
+}
+
+.sidebar-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-btn.logout {
+    margin-top: auto;
+}
+.active-tab {
+    background: #E0F2F1;
+    color:black;
+    
+}
+/* Remove underline and change color for the calendar link */
+.sidebar-btn a {
+    text-decoration: none;  /* Removes the underline */
+    color: inherit;  /* Inherit color from the parent (or you can set a specific color) */
+}
+.sidebar-btn a:hover {
+    color: black; /* Change this to the color you want for the hover effect */
+}
+
+
+/* Main Content */
+.main-content {
+    margin-left: 10px; /* Adjusted margin for the smaller sidebar width */
+    padding: 20px;
+    background: #f5f5f5;
+    overflow-y: auto; /* Makes sure the content scrolls if it's too long */
+    padding-top: 20px; /* Adjusted for spacing under navbar */
+    margin-top: 200px; /* This will give space below the fixed navbar */
+    width: 1000px;
+}
+
+/* Patient Header */
+.patient-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.new-recommendation-btn {
+    display: flex; /* Use flex to align items horizontally */
+    align-items: center; /* Center the items vertically */
+    background: #1ABC9C;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.new-recommendation-btn img {
+    width: 20px; /* Adjust size of the plus sign icon */
+    height: 20px;
+    margin-right: 10px; /* Add space between the icon and the text */
+}
+
+.new-recommendation-btn span {
+    font-size: 16px; /* Adjust text size if necessary */
+}
+
+/* Health Stats */
+.health-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.health-card {
+    width: 28%; /* Reduce the width of each health card */
+    background: white;
+    padding: 15px; /* Slightly reduce padding */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: left; /* Left-align everything inside the card */
+    position: relative; /* Added for positioning the status */
+}
+
+.measurement {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left; /* Left-align the health metric title */
+}
+
+/* Status Styling */
+.status {
+    position: absolute;
+    top: 10px;  /* Distance from the top of the card */
+    right: 10px;  /* Distance from the right edge of the card */
+    font-size: 10px;
+    padding: 5px;
+    border-radius: 15px;
+}
+
+.normal {
+    background: #2ecc71;
+    color: white;
+}
+
+.high {
+    background: #e74c3c;
+    color: white;
+}
+
+/* Lab Results & AI Recommendation */
+.lab-ai-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.latest-lab {
+    width: 48%; /* Adjust width to ensure space for the right section */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.ai-recommendation, .previous-messages {
+    width: 95%; /* Adjust width to match the layout */
+    background: #F5F9FA;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.previous-messages {
+    margin-top: 20px; /* Add space between AI recommendation and previous messages */
+}
+
+/* Adjust the gap between the left and right sections if needed */
+.lab-ai-section > div {
+    margin-right: 10px; /* Optional: adds spacing between the two columns */
+}
+
+/* AI Recommendation Buttons */
+.button-group {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; /* Add spacing between buttons */
+    margin-top: 10px;
+}
+
+.accept-btn{
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.accept-btn {
+    background: #1ABC9C;
+    color: white;
+}
+.accept-btn:hover {
+    background-color: #148971;
+    transform: scale(1.05);
+}
+.modify-btn {
+   
+    color: #1ABC9C;
+    border: 1px solid #1ABC9C; /* Add border stroke */
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.modify-btn:hover {
+    background-color: #ccc;
+    transform: scale(1.05);
+}
+
+/* Previously Sent Messages */
+.previous-messages {
+    background: #ECFDFF;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.latest-lab {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.lab-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+/* Hide default checkbox */
+.lab-checkbox {
+    display: none;
+}
+
+/* Style the toggle labels (dropdown buttons) */
+.lab-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f5f5f5;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+/* Arrow indicator */
+.arrow {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    margin-right: 10px;
+}
+
+/* Hide details by default */
+.lab-details {
+    display: none;
+    padding: 10px;
+    background: white;
+}
+
+/* Show details when checkbox is checked */
+.lab-checkbox:checked + .lab-toggle + .lab-details {
+    display: block;
+}
+
+/* Rotate arrow when dropdown is open */
+.lab-checkbox:checked + .lab-toggle .arrow {
+    transform: rotate(225deg);
+}
+/* Ensure the modal covers the entire viewport */
+/* Default state - no blur */
+.blur-background {
+    filter: blur(5px); /* Apply blur */
+    pointer-events: none; /* Prevent interaction */
+}
+
+/* Ensure the modal appears above everything */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+    z-index: 1001; /* Ensure it stays above blurred content */
+}
+
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-btn:hover {
+    color:#1ABC9C;
+}
+
+
+/* Centering the Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: center; /* Centers buttons horizontally */
+    gap: 15px; /* Adds space between buttons */
+    margin-top: 15px;
+}
+.cancel-btn, .save-btn {
+    width: 100px; /* Set equal width for both buttons */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #faf8f8;
+    border: 1px solid #148971; /* Add border stroke */
+    color: #333;
+}
+
+.cancel-btn:hover {
+    background: #bbb;
+}
+
+.save-btn {
+    background: #1ABC9C;
+    color: white;
+}
+
+.save-btn:hover {
+    background: #148971;
+}
+/* Left-align the title */
+.modal-title {
+    text-align: left;
+    margin-bottom: 10px;
+}
+/* Textarea Default Style */
+textarea {
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc; /* Default border */
+    resize: vertical;
+    transition: border-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Change Border to Green When Clicked */
+textarea:focus {
+    border-color: #888686;
+    outline: none; /* Removes default blue outline */
+}
