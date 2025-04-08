@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../styles/calendar.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell} from '@fortawesome/free-solid-svg-icons';
 
 const monthNames = [
   "January", "February", "March", "April", "May", "June",
@@ -55,7 +57,7 @@ const Calendar = () => {
         </div>
         <div className="navbar-right">
           <button className="notification-btn">
-            <i className="fas fa-bell icon"></i>
+            <FontAwesomeIcon icon={faBell} className="icon" />
           </button>
           <div className="profile">
             <img src="/img/profile.png" alt="Profile" className="profile-image" />

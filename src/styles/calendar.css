@@ -3,6 +3,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f4f4f4;
+    padding-top:80px;
 }
 
 /* Navbar */
@@ -154,14 +155,13 @@ body {
 /* Main Content */
 .main-content {
     margin-left: 130px; /* space for sidebar */
-    padding: 0;
 }
 
 /* Unified wrapper */
 .calendar-wrapper {
     max-width: 1000px;
     margin: 120px auto 30px auto; /* space from navbar */
-    padding: 0 15px;
+    padding:90px 15px 0 15px;
     box-sizing: border-box;
 }
 
