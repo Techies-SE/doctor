@@ -40,10 +40,10 @@ const Dashboard = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <div className="logo-circle"></div>
-        <div className="logo-text">
-          <span className="mfu-text">MFU</span>{" "}
+        {/* <div className="logo-text"> */}
+        <span className="mfu-text">MFU </span>
           <span className="wellness-text">Wellness Center</span>
-        </div>
+        {/* </div> */}
       </div>
       <div className="navbar-right">
         <button className="notification-btn">

@@ -28,24 +28,29 @@ body {
 }
 
 .logo-circle {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: url('/public/img/Ellipse\ 1.png') no-repeat center center/cover;
 }
 
-.logo-text {
+/* .logo-text {
     font-size: 20px;
     margin-left: 10px;
-}
+} */
 
 .mfu-text {
+    margin-left: 10px;
+    font-size: 20px;
     color: #3BA092;
     font-weight: bold;
+    margin-right:5px;
 }
 
 .wellness-text {
+    font-size: 20px;
     color: #C0B257;
+    font-weight: bold;
 }
 
 .navbar-right {
@@ -82,8 +87,8 @@ body {
 }
 /* Profile image styling */
 .profile-image {
-    width: 30px; /* Set the desired width */
-    height: 30px; /* Set the desired height */
+    width: 35px; /* Set the desired width */
+    height: 35px; /* Set the desired height */
     border-radius: 50%; /* Make it circular */
     object-fit: cover; /* Ensures the image doesn't stretch */
     margin-right: 10px; /* Adjust to provide space between profile image and name */
@@ -167,7 +172,7 @@ body {
     background: #f5f5f5;
     overflow-y: auto; /* Makes sure the content scrolls if it's too long */
     padding-top: 20px; /* Adjusted for spacing under navbar */
-    margin-top: 200px; /* This will give space below the fixed navbar */
+    margin-top: 180px; /* This will give space below the fixed navbar */
     width: 1000px;
 }
 
@@ -208,6 +213,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    
 }
 
 .health-card {

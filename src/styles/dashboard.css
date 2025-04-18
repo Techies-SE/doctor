@@ -28,24 +28,31 @@ body {
 }
 
 .logo-circle {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: url('/public/img/Ellipse\ 1.png') no-repeat center center/cover;
 }
 
-.logo-text {
+/* .logo-text {
     font-size: 20px;
     margin-left: 10px;
-}
+    display: flex;
+    align-content: center;
+} */
 
 .mfu-text {
+    margin-left: 10px;
+    font-size: 20px;
     color: #3BA092;
     font-weight: bold;
+    margin-right:5px;
 }
 
 .wellness-text {
+    font-size: 20px;
     color: #C0B257;
+    font-weight: bold;
 }
 
 .navbar-right {
@@ -83,8 +90,8 @@ body {
 }
 
 .profile-image {
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
     margin-right: 10px;
@@ -163,7 +170,7 @@ body {
 /* Main Content */
 .main-content {
     margin-left: 200px !important;
-    margin-top: 330px !important;
+    margin-top: 300px !important;
     padding: 20px;
     flex-grow: 1;
 }

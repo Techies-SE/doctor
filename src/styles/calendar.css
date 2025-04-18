@@ -35,18 +35,23 @@ body {
     background: url('/public/img/Ellipse 1.png') no-repeat center center/cover;
 }
 
-.logo-text {
+/* .logo-text {
     font-size: 20px;
     margin-left: 10px;
-}
+} */
 
 .mfu-text {
+    margin-left: 10px;
+    font-size: 20px;
     color: #3BA092;
     font-weight: bold;
+    margin-right:5px;
 }
 
 .wellness-text {
+    font-size: 20px;
     color: #C0B257;
+    font-weight: bold;
 }
 
 .navbar-right {
