@@ -163,7 +163,7 @@ body {
 /* Unified wrapper */
 .calendar-wrapper {
     max-width: 1000px;
-    margin: 0 auto 30px auto; /* space from navbar */
+    margin: 0 auto 30px auto; /* space from navbar,top , right, bottom , left */
     padding-top:100px;
     padding-left: 15px;
     padding-right: 15px;

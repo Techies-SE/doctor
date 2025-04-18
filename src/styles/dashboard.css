@@ -172,7 +172,7 @@ body {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: space-between;
-    margin-top: 70px; /* 🧠 push below navbar */
+    /*margin-top: 10px; /* 🧠 push below navbar */
   }
   
   /* Card Styling */
@@ -187,8 +187,26 @@ body {
     min-height: 140px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    
   }
+
+  .health-card .card-top{
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .health-card .card-bottom{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+ .number, .info{
+    width:100%;
+
+ }
   
   /* Header row */
   .card-header {
@@ -202,6 +220,7 @@ body {
     font-size: 14px;
     color: #555;
     line-height: 1.2;
+    flex:1;
   }
   
   /* Icon */
@@ -220,31 +239,31 @@ body {
   }
   
   /* Big Number */
-  .card-body h3 {
+  /* .card-body h3 {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
-  }
+  } */
   
   /* Status text (under h3, left aligned) */
-  .card-body .status {
+  /* .card-body .status {
     margin: 0;
     font-size: 12px;
     color: inherit;
     text-align: left;
-  }
+  } */
   
   /* Color overrides */
-  .total-patients .status {
+  .total-patients .info {
     color: #3E3EB4;
   }
-  .critical-cases .status {
+  .critical-cases .info {
     color: #A42723;
   }
-  .appointments .status {
+  .appointments .info {
     color: #6C2F94;
   }
-  .lab-results .status {
+  .lab-results .info {
     color: #ff9800;
   }
   

@@ -88,8 +88,12 @@ const Dashboard = () => {
             <img src="/img/user.png" alt="Total Patients Icon" className="health-icon" />
           </div>
           <div className="card-bottom">
-            <h3>284</h3>
-            <p className="status">+10% from last month</p>
+            <div className="number">
+              <h3>284</h3>
+            </div>
+            <div className="info">
+              <p>+10% from last month</p>
+            </div>
           </div>
         </div>
 
@@ -99,8 +103,12 @@ const Dashboard = () => {
             <img src="/img/Warning.png" alt="Critical Cases Icon" className="health-icon" />
           </div>
           <div className="card-bottom">
-            <h3>28</h3>
-            <p className="status">+5% from last month</p>
+            <div className="number">
+              <h3>28</h3>
+            </div>
+            <div className="info">
+              <p>+5% from last month</p>
+            </div>
           </div>
         </div>
 
@@ -110,8 +118,12 @@ const Dashboard = () => {
             <img src="/img/appointment icon.png" alt="Appointments Icon" className="health-icon" />
           </div>
           <div className="card-bottom">
-            <h3>42</h3>
-            <p className="status">Today</p>
+            <div className="number">
+              <h3>42</h3>
+            </div>
+            <div className="info">
+              <p>Today</p>
+            </div>
           </div>
         </div>
 
@@ -121,8 +133,12 @@ const Dashboard = () => {
             <img src="/img/Flask.png" alt="Lab Results Icon" className="health-icon" />
           </div>
           <div className="card-bottom">
-            <h3>16</h3>
-            <p className="status">Pending Reviews</p>
+            <div className="number">
+              <h3>16</h3>
+            </div>
+            <div className="info">
+              <p>Pending Reviews</p>
+            </div>
           </div>
         </div>
       </div>
