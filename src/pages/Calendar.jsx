@@ -74,7 +74,7 @@ const Calendar = () => {
           </button>
           <button className="sidebar-btn">
             <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />
-            <Link to="/patients" className="doctorPanel-link">Patients</Link>
+            <Link to="/patientlists" className="doctorPanel-link">Patients</Link>
           </button>
           <button className="sidebar-btn active-tab">
             <img src="/img/Calendar.png" alt="Calendar" className="sidebar-icon" /> Calendar
