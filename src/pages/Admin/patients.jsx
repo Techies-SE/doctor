@@ -194,7 +194,7 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
         }
     try {
       const response = await fetch(
-        "http://localhost:3000/bulk/upload-lab-results",
+        "https://backend-pg-cm2b.onrender.com/bulk/upload-lab-results",
         {
           method: "POST",
           headers: {
@@ -252,7 +252,7 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
 
     setIsUploading(true);
     try {
-      const response = await fetch("http://localhost:3000/lab-data", {
+      const response = await fetch("https://backend-pg-cm2b.onrender.com/lab-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -412,7 +412,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         const token = localStorage.getItem("authToken");
         console.log("Auth Token:", token); // Debug token
         if (!token) throw new Error("No authentication token found");
-        const response = await fetch("http://localhost:3000/doctors", {
+        const response = await fetch("https://backend-pg-cm2b.onrender.com/doctors", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -428,7 +428,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
 
     const fetchLabTests = async () => {
       try {
-        const response = await fetch("http://localhost:3000/lab-tests");
+        const response = await fetch("https://backend-pg-cm2b.onrender.com/lab-tests");
         if (!response.ok) throw new Error("Failed to fetch lab tests");
         const data = await response.json();
         setLabTests(data);
@@ -536,7 +536,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         }
 
     try {
-      const response = await fetch("http://localhost:3000/upload/patients", {
+      const response = await fetch("https://backend-pg-cm2b.onrender.com/upload/patients", {
         method: "POST",
         headers: {
               Authorization: `Bearer ${token}`,
@@ -578,7 +578,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       };
-      const response = await fetch("http://localhost:3000/patients", {
+      const response = await fetch("https://backend-pg-cm2b.onrender.com/patients", {
         method: "POST",
         headers,
         body: JSON.stringify(singlePatient),
@@ -848,7 +848,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-    fetch("http://localhost:3000/patients", {
+    fetch("https://backend-pg-cm2b.onrender.com/patients", {
       headers,
     })
       .then((response) => response.json())
@@ -968,7 +968,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-    fetch("http://localhost:3000/patients", { headers })
+    fetch("https://backend-pg-cm2b.onrender.com/patients", { headers })
       .then((response) => response.json())
       .then((data) => {
         setPatients(data);
@@ -1003,7 +1003,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
       "Content-Type": "application/json",
     };
 
-    fetch(`http://localhost:3000/patients/${patientId}`, {
+    fetch(`https://backend-pg-cm2b.onrender.com/patients/${patientId}`, {
       method: "DELETE",
       headers,
     })

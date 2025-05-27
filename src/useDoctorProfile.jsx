@@ -12,7 +12,7 @@ export const useDoctorProfile = () => {
       if (!token) throw new Error('No authentication token found');
 
 
-      const response = await fetch('http://localhost:3000/doctors/profile', {
+      const response = await fetch('https://backend-pg-cm2b.onrender.com/doctors/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
 

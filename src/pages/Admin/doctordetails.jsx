@@ -62,7 +62,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
         if (!token) throw new Error("No authentication token found");
         // Fetch doctor schedules
         const scheduleResponse = await fetch(
-          `http://localhost:3000/schedule/doctor/${doctorId}`
+          `https://backend-pg-cm2b.onrender.com/schedule/doctor/${doctorId}`
         );
 
         if (!scheduleResponse.ok) {
@@ -73,7 +73,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
         // Fetch doctor details including image URL
         const doctorResponse = await fetch(
-          `http://localhost:3000/doctors/${doctorId}`,
+          `https://backend-pg-cm2b.onrender.com/doctors/${doctorId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -136,7 +136,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/image/upload/${doctorId}`,
+        `https://backend-pg-cm2b.onrender.com/image/upload/${doctorId}`,
         {
           method: "PATCH",
           body: formData,
@@ -175,7 +175,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
   const handleRemoveImage = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/image/delete/${doctorId}`,
+        `https://backend-pg-cm2b.onrender.com/image/delete/${doctorId}`,
         {
           method: "DELETE",
         }
@@ -221,7 +221,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/schedule/doctor/${doctorId}`,
+        `https://backend-pg-cm2b.onrender.com/schedule/doctor/${doctorId}`,
         {
           method: "DELETE",
           headers: {
@@ -325,7 +325,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/schedule/doctor/${doctorId}`,
+        `https://backend-pg-cm2b.onrender.com/schedule/doctor/${doctorId}`,
         {
           method: "POST",
           headers: {
@@ -398,7 +398,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/schedule/doctor/id=${doctorId}/schedule/id=${newSchedule.schedule_id}`,
+        `https://backend-pg-cm2b.onrender.com/schedule/doctor/id=${doctorId}/schedule/id=${newSchedule.schedule_id}`,
         {
           method: "PUT",
           headers: {

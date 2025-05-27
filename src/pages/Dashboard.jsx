@@ -31,16 +31,16 @@ const Dashboard = () => {
         if (!token) throw new Error("No authentication token found");
         // Fetch all data in parallel
         const [patientsRes, appointmentsRes, labResultsRes, recentPatientsRes] = await Promise.all([
-          fetch(`http://localhost:3000/doctors/patient-count`, {
+          fetch(`https://backend-pg-cm2b.onrender.com/doctors/patient-count`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          fetch(`http://localhost:3000/doctors/appointments-count`, {
+          fetch(`https://backend-pg-cm2b.onrender.com/doctors/appointments-count`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          fetch(`http://localhost:3000/doctors/pending-lab-results-count`, {
+          fetch(`https://backend-pg-cm2b.onrender.com/doctors/pending-lab-results-count`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          fetch(`http://localhost:3000/doctors/recent-lab-tests`, {
+          fetch(`https://backend-pg-cm2b.onrender.com/doctors/recent-lab-tests`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);

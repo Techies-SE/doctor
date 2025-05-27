@@ -84,7 +84,7 @@ const Departments = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3000/doctors", {
+      const response = await fetch("https://backend-pg-cm2b.onrender.com/doctors", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ const Departments = () => {
           return;
         }
         const updatedResponse = await fetch(
-          `http://localhost:3000/departments/${departmentDetails.id}`,
+          `https://backend-pg-cm2b.onrender.com/departments/${departmentDetails.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -164,7 +164,7 @@ const Departments = () => {
       console.error("No auth token found");
       return;
     }
-    fetch("http://localhost:3000/departments/doctor-counts", {
+    fetch("https://backend-pg-cm2b.onrender.com/departments/doctor-counts", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -249,7 +249,7 @@ const Departments = () => {
     const formData = new FormData();
     formData.append("image", file);
 
-    fetch(`http://localhost:3000/departments/image/upload/${departmentId}`, {
+    fetch(`https://backend-pg-cm2b.onrender.com/departments/image/upload/${departmentId}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -264,9 +264,9 @@ const Departments = () => {
         const imageUrl = data.imageUrl || data.image;
 
         // Ensure we have a full URL
-        const fullImageUrl = imageUrl.startsWith("http")
+        const fullImageUrl = imageUrl.startsWith("https")
           ? imageUrl
-          : `http://localhost:3000/${
+          : `https://backend-pg-cm2b.onrender.com/${
               imageUrl.startsWith("/") ? imageUrl.substring(1) : imageUrl
             }`;
 
@@ -310,7 +310,7 @@ const Departments = () => {
       return;
     }
 
-    fetch(`http://localhost:3000/departments/image/delete/${departmentId}`, {
+    fetch(`https://backend-pg-cm2b.onrender.com/departments/image/delete/${departmentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -363,7 +363,7 @@ const Departments = () => {
         console.error("No auth token found");
         return;
       }
-      const response = await fetch("http://localhost:3000/departments", {
+      const response = await fetch("https://backend-pg-cm2b.onrender.com/departments", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -496,7 +496,7 @@ const Departments = () => {
     }
 
     // Fetch department details including doctors
-    fetch(`http://localhost:3000/departments/${department.id}`, {
+    fetch(`https://backend-pg-cm2b.onrender.com/departments/${department.id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -513,8 +513,8 @@ const Departments = () => {
           data.image = data.imageUrl;
         }
         // If only a relative path is provided, construct the full URL
-        else if (data.image && !data.image.startsWith("http")) {
-          data.image = `http://localhost:3000/${
+        else if (data.image && !data.image.startsWith("https")) {
+          data.image = `https://backend-pg-cm2b.onrender.com/${
             data.image.startsWith("/") ? data.image.substring(1) : data.image
           }`;
         }
@@ -537,7 +537,7 @@ const Departments = () => {
     );
     if (!confirmDelete) return;
 
-    fetch(`http://localhost:3000/departments/${departmentId}`, {
+    fetch(`https://backend-pg-cm2b.onrender.com/departments/${departmentId}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -977,7 +977,7 @@ const Departments = () => {
                                   departmentDetails.image.startsWith("http")
                                     ? departmentDetails.image
                                     : departmentDetails.image
-                                    ? `http://localhost:3000/${
+                                    ? `https://backend-pg-cm2b.onrender.com/${
                                         departmentDetails.image.startsWith("/")
                                           ? departmentDetails.image.substring(1)
                                           : departmentDetails.image

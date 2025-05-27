@@ -57,7 +57,7 @@ const Doctors = () => {
       "Content-Type": "application/json",
     };
 
-    fetch("http://localhost:3000/doctors-with-departments", { headers })
+    fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", { headers })
       .then((response) => {
         if (!response.ok) throw new Error("Failed to fetch doctors");
         return response.json();
@@ -67,7 +67,7 @@ const Doctors = () => {
       })
       .catch((error) => console.error("Error fetching doctors data:", error));
 
-    fetch("http://localhost:3000/departments", { headers })
+    fetch("https://backend-pg-cm2b.onrender.com/departments", { headers })
       .then((response) => {
         if (!response.ok) throw new Error("Failed to fetch departments");
         return response.json();
@@ -90,7 +90,7 @@ const Doctors = () => {
     console.log("Auth Token", token);
     if (!token) throw new Error("No Authentication token found");
 
-    fetch("http://localhost:3000/doctors", {
+    fetch("https://backend-pg-cm2b.onrender.com/doctors", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const Doctors = () => {
     })
       .then((response) => response.json())
       .then(() => {
-        return fetch("http://localhost:3000/doctors-with-departments", {
+        return fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -238,7 +238,7 @@ const Doctors = () => {
     console.log("Auth Token:", token);
     if (!token) throw new Error("No authentication token found");
     fetch(
-      `http://localhost:3000/doctors/${doctorID}`,
+      `https://backend-pg-cm2b.onrender.com/doctors/${doctorID}`,
       {
         method: "DELETE",
         headers: {

@@ -12,7 +12,7 @@ export const useAdminProfile = () => {
       if (!token) throw new Error('No authentication token found');
 
 
-      const response = await fetch('http://localhost:3000/profile/admin', {
+      const response = await fetch('https://backend-pg-cm2b.onrender.com/admins/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
 

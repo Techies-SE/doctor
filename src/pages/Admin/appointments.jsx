@@ -57,7 +57,7 @@ const Appointments = () => {
 
       try {
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/complete/count",
+          "https://backend-pg-cm2b.onrender.com/appointments/complete/count",
           {
             method: "GET",
             headers: {
@@ -84,7 +84,7 @@ const Appointments = () => {
           return;
         }
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/cancel/count",
+          "https://backend-pg-cm2b.onrender.com/appointments/cancel/count",
           {
             method: "GET",
             headers: {
@@ -111,7 +111,7 @@ const Appointments = () => {
           return;
         }
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/reschedule/count",
+          "https://backend-pg-cm2b.onrender.com/appointments/reschedule/count",
           {
             method: "GET",
             headers: {
@@ -138,7 +138,7 @@ const Appointments = () => {
           return;
         }
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/pending/count",
+          "https://backend-pg-cm2b.onrender.com/appointments/pending/count",
           {
             method: "GET",
             headers: {
@@ -165,7 +165,7 @@ const Appointments = () => {
           return;
         }
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/confirm/count",
+          "https://backend-pg-cm2b.onrender.com/appointments/confirm/count",
           {
             method: "GET",
             headers: {
@@ -186,8 +186,20 @@ const Appointments = () => {
 
     const fetchAppointmentCount = async () => {
       try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No auth token found");
+          return;
+        }
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/count"
+          "https://backend-pg-cm2b.onrender.com/appointments/count",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (!countResponse.ok) {
           throw new Error("Failed to fetch total appointments count");
@@ -212,7 +224,7 @@ const Appointments = () => {
       };
       try {
         const response = await fetch(
-          "http://localhost:3000/appointments/pending",
+          "https://backend-pg-cm2b.onrender.com/appointments/pending",
           {
             method: "GET",
             headers: {
@@ -275,7 +287,7 @@ const Appointments = () => {
         return;
       }
       const response = await fetch(
-        `http://localhost:3000/appointments/approve/${appointmentId}`,
+        `https://backend-pg-cm2b.onrender.com/appointments/approve/${appointmentId}`,
         {
           method: "PATCH",
           headers: {
@@ -318,7 +330,7 @@ const Appointments = () => {
         return;
       }
       const response = await fetch(
-        `http://localhost:3000/appointments/cancel/${appointmentId}`,
+        `https://backend-pg-cm2b.onrender.com/appointments/cancel/${appointmentId}`,
         {
           method: "PATCH",
           headers: {
@@ -357,7 +369,7 @@ const Appointments = () => {
           return;
         }
       const response = await fetch(
-        `http://localhost:3000/appointments/available-slots/${doctorId}/${formattedDate}`,
+        `https://backend-pg-cm2b.onrender.com/appointments/available-slots/${doctorId}/${formattedDate}`,
         {
             method: "GET",
             headers: {
@@ -434,7 +446,7 @@ const Appointments = () => {
           return;
         }
       const response = await fetch(
-        `http://localhost:3000/appointments/${selectedAppointment.appointmentId}/reschedule`,
+        `https://backend-pg-cm2b.onrender.com/appointments/${selectedAppointment.appointmentId}/reschedule`,
         {
           method: "PATCH",
           headers: {

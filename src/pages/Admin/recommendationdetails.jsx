@@ -28,7 +28,7 @@ const RecommendationDetails = ({ recommendationId, onBack }) => {
           return;
         }
         const response = await fetch(
-          `http://localhost:3000/recommendations/${recommendationId}`,
+          `https://backend-pg-cm2b.onrender.com/recommendations/${recommendationId}`,
           {
              method: "GET",
           headers: {
@@ -64,7 +64,7 @@ const RecommendationDetails = ({ recommendationId, onBack }) => {
           return;
         }
       const response = await fetch(
-        "http://localhost:3000/recommendations/send-recommendation",
+        "https://backend-pg-cm2b.onrender.com/recommendations/send-recommendation",
         {
           method: "POST",
           headers: {

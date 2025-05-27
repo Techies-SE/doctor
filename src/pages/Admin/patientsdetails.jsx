@@ -45,7 +45,7 @@ const PatientDetails = ({ hn_number, onBack }) => {
           "Content-Type": "application/json",
         };
         const response = await fetch(
-          `http://localhost:3000/patients/${hn_number}`,
+          `https://backend-pg-cm2b.onrender.com/patients/${hn_number}`,
           {
             method: "GET",
             headers: {
@@ -148,7 +148,7 @@ const PatientDetails = ({ hn_number, onBack }) => {
         "Content-Type": "application/json",
       };
       const response = await fetch(
-        `http://localhost:3000/patients/${hn_number}`,
+        `https://backend-pg-cm2b.onrender.com/patients/${hn_number}`,
         {
           method: "PUT",
           headers,
@@ -161,7 +161,7 @@ const PatientDetails = ({ hn_number, onBack }) => {
       }
 
       const refetchResponse = await fetch(
-        `http://localhost:3000/patients/${hn_number}`,
+        `https://backend-pg-cm2b.onrender.com/patients/${hn_number}`,
         {
           method: "GET",
           headers: {

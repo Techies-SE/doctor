@@ -25,7 +25,7 @@ const DetailsPage = () => {
         if (!token) throw new Error("No authentication token found");
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3000/doctors/${hn_number}/lab-test/${lab_test_id}`,
+          `https://backend-pg-cm2b.onrender.com/doctors/${hn_number}/lab-test/${lab_test_id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const DetailsPage = () => {
       if (!token) throw new Error("No authentication token found");
       if (!lab_test_id) throw new Error("lab_test_id is missing");
       const response = await fetch(
-        `http://localhost:3000/recommendations/${lab_test_id}`,
+        `https://backend-pg-cm2b.onrender.com/recommendations/${lab_test_id}`,
         {
           method: "PATCH",
           headers: {
@@ -119,7 +119,7 @@ const DetailsPage = () => {
       console.log("Auth Token:", token); // Debug token
       if (!token) throw new Error("No authentication token found");
       const response = await fetch(
-        `http://localhost:3000/recommendations/${lab_test_id}/approve`,
+        `https://backend-pg-cm2b.onrender.com/recommendations/${lab_test_id}/approve`,
         {
           method: "PATCH",
           headers: {

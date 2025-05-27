@@ -34,7 +34,7 @@ const Schedules = () => {
           console.error("No auth token found");
           return;
         }
-        const response = await fetch('http://localhost:3000/schedule/doctors',
+        const response = await fetch('https://backend-pg-cm2b.onrender.com/schedule/doctors',
           {
             method: "GET",
             headers: {

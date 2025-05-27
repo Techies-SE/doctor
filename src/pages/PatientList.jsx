@@ -122,7 +122,7 @@ const PatientList = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:3000/doctors/patients-lab-tests`,
+          `https://backend-pg-cm2b.onrender.com/doctors/patients-lab-tests`,
           {
             headers: {
           "Content-Type": "application/json",

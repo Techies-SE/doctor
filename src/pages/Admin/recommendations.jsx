@@ -164,7 +164,7 @@ const Recommendations = () => {
         console.error("No auth token found");
         return;
       }
-      const response = await fetch("http://localhost:3000/recommendations", {
+      const response = await fetch("https://backend-pg-cm2b.onrender.com/recommendations", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -292,7 +292,7 @@ const Recommendations = () => {
           return;
         }
       const response = await fetch(
-        "http://localhost:3000/recommendations/send-recommendation",
+        "https://backend-pg-cm2b.onrender.com/recommendations/send-recommendation",
         {
           method: "POST",
           headers: {

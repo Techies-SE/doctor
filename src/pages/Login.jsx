@@ -19,7 +19,7 @@ const Login = () => {
     }
     setIsLoading(true);
     try{
-      const endpoint = isDoctor ? "http://localhost:3000/login/doctors" : "http://localhost:3000/login/admins";
+      const endpoint = isDoctor ? "https://backend-pg-cm2b.onrender.com/login/doctors" : "https://backend-pg-cm2b.onrender.com/login/admins";
       
       const response = await fetch(endpoint, {
         method: "POST",
