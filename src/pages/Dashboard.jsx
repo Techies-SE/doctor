@@ -125,22 +125,22 @@ const Dashboard = () => {
     <div>
       {/* Navbar */}
       <nav id="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
-          <span className="mfu-text">MFU </span>
-          <span className="wellness-text">Wellness Center</span>
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU </span>
+          <span id="wellness-text">Wellness Center</span>
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
+          <div id="profile">
             <img 
               src={doctorData?.image || "/img/profile.png"} 
               alt="Profile" 
-              className="profile-image" 
+              id="profile-image" 
             />
-            <span className="profile-name">
+            <span id="profile-name">
               {doctorData ? `${doctorData.name}` : 'Loading...'}
             </span>
           </div>
@@ -148,7 +148,7 @@ const Dashboard = () => {
       </nav>
 
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn active-tab">
             <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" /> Dashboard
@@ -170,7 +170,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content">
+      <div id="main-content">
         {/* Health Overview */}
         <div className="health-overview">
           <div className="health-card total-patients">

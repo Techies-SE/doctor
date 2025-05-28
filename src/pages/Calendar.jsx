@@ -47,21 +47,21 @@ const Calendar = () => {
 
   return (
     <div className="calendar-page">
-      <div className="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
+      <div id="navbar">
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
           {/* <div className="logo-text"> */}
-            <span className="mfu-text">MFU</span>{" "}
-            <span className="wellness-text">Wellness Center</span>
+            <span id="mfu-text">MFU</span>{" "}
+            <span id="wellness-text">Wellness Center</span>
           {/* </div> */}
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
-            <img src="/img/profile.png" alt="Profile" className="profile-image" />
-            <span className="profile-name">Dr. Smith</span>
+          <div id="profile">
+            <img src="/img/profile.png" alt="Profile" id="profile-image" />
+            <span id="profile-name">Dr. Smith</span>
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ body {
 }
 
 /* Navbar */
-.navbar {
+#navbar {
     display: flex;
     justify-content: space-between;
     height: 50px;
@@ -23,12 +23,12 @@ body {
     z-index: 10;
 }
 
-.navbar-left {
+#navbar-left {
     display: flex;
     align-items: center;
 }
 
-.logo-circle {
+#logo-circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -40,7 +40,7 @@ body {
     margin-left: 10px;
 } */
 
-.mfu-text {
+#mfu-text {
     margin-left: 10px;
     font-size: 20px;
     color: #3BA092;
@@ -48,19 +48,19 @@ body {
     margin-right:5px;
 }
 
-.wellness-text {
+#wellness-text {
     font-size: 20px;
     color: #C0B257;
     font-weight: bold;
 }
 
-.navbar-right {
+#navbar-right {
     display: flex;
     align-items: center;
     margin-right: 20px;
 }
 
-.notification-btn {
+#notification-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -69,26 +69,26 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.notification-btn:hover {
+#notification-btn:hover {
     background-color: #ffffff;
 }
 
-.icon {
+#icon {
     font-size: 20px;
     color: #333;
 }
 
-.notification-btn:focus {
+#notification-btn:focus {
     outline: none;
 }
 
-.profile {
+#profile {
     display: flex;
     align-items: center;
     margin-right: 10px;
 }
 
-.profile-image {
+#profile-image {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -96,7 +96,7 @@ body {
     margin-right: 10px;
 }
 
-.profile-name {
+#profile-name {
     margin-left: 5px;
     font-weight: bold;
 }
