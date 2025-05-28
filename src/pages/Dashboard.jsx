@@ -124,7 +124,7 @@ const Dashboard = () => {
   return (
     <div>
       {/* Navbar */}
-      <nav className="navbar">
+      <nav id="navbar">
         <div className="navbar-left">
           <div className="logo-circle"></div>
           <span className="mfu-text">MFU </span>

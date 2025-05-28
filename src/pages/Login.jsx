@@ -51,11 +51,12 @@ const Login = () => {
   };
 
   return (
+    <div id="body">
     <div className="login-container">
-      <div className="logo-circle"></div>
-      <div className="logo-text">
-        <span style={{ color: "#3BA092", fontWeight: "bold" }}>MFU</span>{" "}
-        <span style={{ color: "#C0B257" }}>Wellness Center</span>
+      <div id="logo-circle"></div>
+      <div id="logo-text">
+        <span style={{ color: "#3BA092", fontWeight: "bold",fontSize:"30px" }}>MFU</span>{" "}
+        <span style={{ color: "#C0B257", fontWeight: "bold",fontSize:"30px" }}>Wellness Center</span>
       </div>
 
       {/* Toggle Switch */}
@@ -78,7 +79,7 @@ const Login = () => {
         <input
           type="text"
           name="staffid"
-          placeholder="Staff-ID"
+          placeholder="Email"
           className="input-field"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -101,6 +102,7 @@ const Login = () => {
         </button>
         
       </form>
+    </div>
     </div>
   );
 };

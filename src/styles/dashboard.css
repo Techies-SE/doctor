@@ -6,10 +6,10 @@ body {
 }
 
 /* Navbar */
-.navbar {
+#navbar {
     display: flex;
     justify-content: space-between;
-    height: 50px;
+    height: 40px;
     align-items: center;
     background: #fff;
     padding: 15px 20px;

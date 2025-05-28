@@ -1,4 +1,4 @@
-body {
+#body {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,9 +23,9 @@ body {
     width: 90%; /* Makes it responsive */
 }
 
-.logo-circle {
-    width: 100px;
-    height: 100px;
+#logo-circle {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background: url('/public/img/Ellipse\ 1.png') no-repeat center center/cover;
     margin: 0 auto 0;
