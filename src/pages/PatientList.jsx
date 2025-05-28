@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -102,6 +103,7 @@ const PatientList = () => {
   const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
   const [popupIndex, setPopupIndex] = useState(null);
   const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
   const [sortConfig, setSortConfig] = useState({
@@ -162,7 +164,15 @@ const PatientList = () => {
 
     fetchPatients();
   }, [doctorData?.id]);
-
+const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("lastActiveTime");
+    navigate('/');
+    window.location.reload();
+  };
   const sortedPatients = React.useMemo(() => {
     let sortablePatients = [...patients];
     sortablePatients.sort((a, b) => {
@@ -272,23 +282,23 @@ const PatientList = () => {
   return (
     <div className="app">
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
-          <span className="mfu-text">MFU </span>
-          <span className="wellness-text">Wellness Center</span>
+      <nav id="navbar">
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU </span>
+          <span id="wellness-text">Wellness Center</span>
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
+          <div id="profile">
             <img
               src={doctorData?.image || "/img/profile.png"}
               alt="Profile"
-              className="profile-image"
+              id="profile-image"
             />
-            <span className="profile-name">
+            <span id="profile-name">
               {doctorData ? `${doctorData.name}` : "Loading..."}
             </span>
           </div>
@@ -296,52 +306,29 @@ const PatientList = () => {
       </nav>
 
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
-            <img
-              src="/img/ChartLineUp.png"
-              alt="Dashboard Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/dashboard" className="dashboard-link">
-              Dashboard
-            </Link>
+            <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" /> 
+            <Link to="/dashboard" className="dashboard-link">Dashboard</Link>
           </button>
           <button className="sidebar-btn active-tab">
-            <img
-              src="/img/UsersThree.png"
-              alt="Patients Icon"
-              className="sidebar-icon"
-            />{" "}
-            Patients
+            <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />Patients
           </button>
           <button className="sidebar-btn">
-            <img
-              src="/img/Calendar.png"
-              alt="Calendar Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/calendar" className="calendar-link">
-              Calendar
-            </Link>
+            <img src="/img/Calendar.png" alt="Calendar Icon" className="sidebar-icon" />
+                <Link to="/calendar" className="calendar-link">Calendar</Link>
           </button>
         </div>
-
-        <button className="sidebar-btn logout">
-          <img
-            src="/img/material-symbols_logout.png"
-            alt="Logout Icon"
-            className="sidebar-icon"
-          />
-          <Link to="/" className="login-link">
-            Logout
-          </Link>
-        </button>
+      
+          <button className="sidebar-btn logout" onClick={logout}>
+            <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
+              <span className="login-link">Logout</span>
+          </button>
       </aside>
 
       {/* Main Content */}
-      <div className="main-content">
+      <div id="main-content">
         <div className="table-container font-sans">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-black">Patient List</h1>

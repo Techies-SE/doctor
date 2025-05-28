@@ -6,7 +6,7 @@ body {
 }
 
 /* Navbar */
-.navbar {
+#navbar {
     display: flex;
     justify-content: space-between;
     height: 50px;
@@ -22,12 +22,12 @@ body {
     z-index: 10; /* Make sure navbar stays on top */
 }
 
-.navbar-left {
+#navbar-left {
     display: flex;
     align-items: center;
 }
 
-.logo-circle {
+#logo-circle {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -39,7 +39,7 @@ body {
     margin-left: 10px;
 } */
 
-.mfu-text {
+#mfu-text {
     margin-left: 10px;
     font-size: 20px;
     color: #3BA092;
@@ -47,13 +47,13 @@ body {
     margin-right:5px;
 }
 
-.wellness-text {
+#wellness-text {
     font-size: 20px;
     color: #C0B257;
     font-weight: bold;
 }
 
-.navbar-right {
+#navbar-right {
     display: flex;
     align-items: center;
     margin-right: 20px; /* Adjust this to create space from the right */
@@ -63,15 +63,15 @@ body {
     background-color: #ffffff; /* Light background on hover */
 }
 
-.icon {
+#icon {
     font-size: 20px; /* Ensure the icon stays the same size */
     color: #333; /* Color of the notification icon */
 }
 
-.notification-btn:focus {
+#notification-btn:focus {
     outline: none; /* Remove focus outline for cleaner appearance */
 }
-.notification-btn {
+#notification-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -80,13 +80,13 @@ body {
     transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-.profile {
+#profile {
     display: flex;
     align-items: center;
     margin-right: 10px; /* Adjust this to provide space between profile and notification */
 }
 /* Profile image styling */
-.profile-image {
+#profile-image {
     width: 35px; /* Set the desired width */
     height: 35px; /* Set the desired height */
     border-radius: 50%; /* Make it circular */
@@ -94,7 +94,7 @@ body {
     margin-right: 10px; /* Adjust to provide space between profile image and name */
 }
 
-.profile-name {
+#profile-name {
     margin-left: 5px;
     font-weight: bold;
 }
@@ -108,26 +108,25 @@ body {
 }
 
 /* Sidebar */
-.sidebar {
-    width: 160px; /* Further reduced the width of the sidebar */
+#sidebar {
+    width: 150px;
     background: #fff;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    position: fixed; /* Keeps sidebar fixed */
-    top: 70px; /* Starts below the navbar */
+    position: fixed;
+    top: 70px;
     left: 0;
     bottom: 0;
-    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow for sidebar */
-    margin-right: 20px; /* Add margin to the right of the sidebar */
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
 }
 
-/* Sidebar Buttons */
 .sidebar-btn {
     width: 100%;
     text-align: left;
     background: none;
-    border: none; /* No stroke */
+    border: none;
     outline: none;
     font-size: 14px;
     cursor: pointer;
@@ -139,7 +138,7 @@ body {
 }
 
 .sidebar-icon {
-    width: 22px; /* Adjust size */
+    width: 22px;
     height: 22px;
 }
 
@@ -150,24 +149,24 @@ body {
 .sidebar-btn.logout {
     margin-top: auto;
 }
+
 .active-tab {
     background: #E0F2F1;
     color:black;
-    
-}
-/* Remove underline and change color for the calendar link */
-.sidebar-btn a {
-    text-decoration: none;  /* Removes the underline */
-    color: inherit;  /* Inherit color from the parent (or you can set a specific color) */
-}
-.sidebar-btn a:hover {
-    color: black; /* Change this to the color you want for the hover effect */
 }
 
+.sidebar-btn a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sidebar-btn a:hover {
+    color: black;
+}
 
 /* Main Content */
-.main-content {
-    margin-left: 10px; /* Adjusted margin for the smaller sidebar width */
+#main-content {
+    margin-left: 100px; /* Adjusted margin for the smaller sidebar width */
     padding: 20px;
     background: #f5f5f5;
     overflow-y: auto; /* Makes sure the content scrolls if it's too long */
