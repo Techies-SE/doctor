@@ -186,8 +186,20 @@ const Appointments = () => {
 
     const fetchAppointmentCount = async () => {
       try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("No auth token found");
+          return;
+        }
         const countResponse = await fetch(
-          "http://localhost:3000/appointments/count"
+          "http://localhost:3000/appointments/count",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (!countResponse.ok) {
           throw new Error("Failed to fetch total appointments count");
