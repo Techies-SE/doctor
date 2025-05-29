@@ -1,7 +1,24 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../styles/doctorDashboard.css";
+import "../Admin/styles/appointments.css";
 import { useNavigate } from 'react-router-dom';
+import {
+  Search,
+  Filter,
+  ChevronUp,
+  ChevronDown,
+  Eye,
+  Trash2,
+  X,
+  Upload,
+  User,
+  Mail,
+  Phone,
+  Award,
+  PlusIcon,
+  PenBox,
+}from "lucide-react";
 import {
   faBell,
   faUser,
@@ -369,10 +386,10 @@ const Doctors = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content-doctor" style={{ marginTop: "250px" }}>
-        <div className="table-container p-6 font-sans">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-black">Doctor Info</h1>
+      <div id="main-content">
+        <div className="bg-white rounded-lg p-6 shadow font-sans">
+          <div className="flex justify-between items-center mb-">
+            <h1 className="text-black text-2xl font-semibold">Doctor Info</h1>
             <div className="flex gap-4">
               <button onClick={() => setShowModal(true)} className="uButton">
                 + New Doctor
@@ -380,25 +397,23 @@ const Doctors = () => {
             </div>
           </div>
 
+          {/* Search and Filter */}
           <div className="flex items-center mb-6">
-            <div className="flex items-center border border-gray-300 rounded-full w-[200px] h-8 px-3 py-2 mr-4 bg-[#E8F9F1]">
-              <FontAwesomeIcon icon={faSearch} className="text-[#3BA092]" />
+            <div id="search-container">
+              <Search size={18} className="search-icon" />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="ml-2 outline-none bg-transparent w-full placeholder-[#969696] text-[#969696]"
+                id="search-input"
               />
             </div>
-            <button className="flex items-center bg-transparent border rounded-full border-[#3BA092] w-[158px] h-8 px-4 py-2 rounded hover:bg-gray-50 text-xs text-[#969696]">
-              <FontAwesomeIcon
-                icon={faFilter}
-                className="mr-2 text-[#3BA092]"
-              />{" "}
-              Filter by Date
+            <button id="filter-button">
+              <Filter size={18} className="filter-icon" /> Filter by Date
             </button>
           </div>
+
 
           <div className="table-wrapper">
             <table className="table-content" style={{ marginTop: "0px" }}>
