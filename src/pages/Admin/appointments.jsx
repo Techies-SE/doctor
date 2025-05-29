@@ -875,66 +875,47 @@ const Appointments = () => {
           </div>
 
           {/* Stats Cards */}
-          <div style={{ overflowX: "auto", width: "100%" }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(6, minmax(150px, 1fr))",
-                gap: "16px",
-                minWidth: "900px",
-                marginBottom: "1.5rem",
-              }}
-            >
-              <div className="bg-white shadow rounded-lg">
-                <div className="p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-700">
-                    {appointmentCount}
-                  </div>
-                  <div className="text-sm text-gray-500">Total Bookings</div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-lg">
-                <div className="p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-700">
-                    {pendingCount}
-                  </div>
-                  <div className="text-sm text-gray-500">Pending</div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-lg">
-                <div className="p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-700">
-                    {confirmCount}
-                  </div>
-                  <div className="text-sm text-gray-500">Confirmed</div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-lg">
-                <div className="p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-700">
-                    {rescheduleCount}
-                  </div>
-                  <div className="text-sm text-gray-500">Rescheduled</div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-lg">
-                <div className="p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-700">
-                    {completeCount}
-                  </div>
-                  <div className="text-sm text-gray-500">Completed</div>
-                </div>
-              </div>
-              <div className="bg-white shadow rounded-lg">
-                <div className="p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-700">
-                    {cancelCount}
-                  </div>
-                  <div className="text-sm text-gray-500">Canceled</div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div className="stats-scroll-container">
+  <div className="stats-grid">
+    <div className="stats-card">
+      <div className="stats-card-content">
+        <div className="stats-card-number">{appointmentCount}</div>
+        <div className="stats-card-label">Total Bookings</div>
+      </div>
+    </div>
+    <div className="stats-card">
+      <div className="stats-card-content">
+        <div className="stats-card-number">{pendingCount}</div>
+        <div className="stats-card-label">Pending</div>
+      </div>
+    </div>
+    <div className="stats-card">
+      <div className="stats-card-content">
+        <div className="stats-card-number">{confirmCount}</div>
+        <div className="stats-card-label">Confirmed</div>
+      </div>
+    </div>
+    <div className="stats-card">
+      <div className="stats-card-content">
+        <div className="stats-card-number">{rescheduleCount}</div>
+        <div className="stats-card-label">Rescheduled</div>
+      </div>
+    </div>
+    <div className="stats-card">
+      <div className="stats-card-content">
+        <div className="stats-card-number">{completeCount}</div>
+        <div className="stats-card-label">Completed</div>
+      </div>
+    </div>
+    <div className="stats-card">
+      <div className="stats-card-content">
+        <div className="stats-card-number">{cancelCount}</div>
+        <div className="stats-card-label">Canceled</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
           {/* Search and Filter */}
           <div className="flex items-center mb-6">
@@ -1026,39 +1007,35 @@ const Appointments = () => {
                           {appointment.status}
                         </span>
                       </td>
-                      <td className="p-4">
-                        <div className="flex space-x-3">
-                          <button
-                            onClick={() =>
-                              handleApproveAppointment(
-                                appointment.appointmentId
-                              )
-                            }
-                            className="border rounded p-1 hover:bg-gray-100"
-                            title="Approve"
-                          >
-                            <Check className="h-4 w-4 text-green-500" />
-                          </button>
-                          <button
-                            className="border rounded p-1 hover:bg-gray-100"
-                            onClick={() =>
-                              handleCancelAppointment(appointment.appointmentId)
-                            }
-                            title="Cancel"
-                          >
-                            <X className="h-4 w-4 text-red-500" />
-                          </button>
-                          <button
-                            className="border rounded p-1 hover:bg-gray-100"
-                            onClick={() =>
-                              handleOpenRescheduleModal(appointment)
-                            }
-                            title="Reschedule"
-                          >
-                            <Calendar className="h-4 w-4 text-blue-500" />
-                          </button>
-                        </div>
-                      </td>
+                      <td style={{ padding: "1rem" }}>
+  <div className="action-buttons">
+    <button
+      onClick={() => handleApproveAppointment(appointment.appointmentId)}
+      className="icon-button"
+      title="Approve"
+    >
+      <Check className="icon-green" />
+    </button>
+
+    <button
+      onClick={() => handleCancelAppointment(appointment.appointmentId)}
+      className="icon-button"
+      title="Cancel"
+    >
+      <X className="icon-red" />
+    </button>
+
+    <button
+      onClick={() => handleOpenRescheduleModal(appointment)}
+      className="icon-button"
+      title="Reschedule"
+    >
+      <Calendar className="icon-blue" />
+    </button>
+  </div>
+</td>
+
+
                     </tr>
                   ))
                 )}
@@ -1100,128 +1077,108 @@ const Appointments = () => {
               </button>
             </div>
           )}
-          {/* Reschedule Modal */}
-          {showRescheduleModal && selectedAppointment && (
-            <div className="fixed inset-0 flex items-center justify-center z-50">
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                  background: "rgba(0, 0, 0, 0.5)",
-                  backdropFilter: "blur(2px)",
-                  WebkitBackdropFilter: "blur(2px)",
-                }}
-                onClick={handleCloseRescheduleModal}
-              />
-              <div className="bg-white rounded-lg shadow-lg w-full max-w-md z-10">
-                {/* Modal Header */}
-                <div className="flex justify-between items-center p-4 border-b">
-                  <h2 className="text-xl font-bold text-gray-800">
-                    Reschedule Appointment
-                  </h2>
-                  <button
-                    onClick={handleCloseRescheduleModal}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
+          {showRescheduleModal && selectedAppointment ? (
+  <div className="reschedule-modal">
+    <div className="modal-overlay" onClick={handleCloseRescheduleModal}></div>
+    <div className="modal-container">
+      {/* Modal Header */}
+      <div className="modal-header">
+        <h2 className="modal-title">Reschedule Appointment</h2>
+        <button onClick={handleCloseRescheduleModal} className="modal-close">
+          <X className="icon" />
+        </button>
+      </div>
 
-                {/* Modal Content */}
-                <div className="p-6">
-                  <div className="mb-4">
-                    <h3 className="font-semibold text-gray-800">
-                      {selectedAppointment.doctor}
-                    </h3>
-                    <p className="text-gray-500">
-                      {selectedAppointment.specialty}
-                    </p>
-                  </div>
+      <form onSubmit={handleRescheduleAppointment}>
+        {/* Modal Content */}
+        <div className="modal-body">
+          <div className="section">
+            <h3 className="section-title">{selectedAppointment.doctor}</h3>
+            <p className="section-subtitle">{selectedAppointment.specialty}</p>
+          </div>
 
-                  <div className="mb-4">
-                    <h3 className="font-medium mb-2 text-gray-800">Patient</h3>
-                    <p className="text-gray-600">
-                      {selectedAppointment.patientName}
-                    </p>
-                  </div>
+          <div className="section">
+            <label className="section-label">Patient</label>
+            <p>{selectedAppointment.patientName}</p>
+          </div>
 
-                  <div className="mb-4">
-                    <h3 className="font-medium mb-2 text-gray-800">
-                      Current Appointment
-                    </h3>
-                    <p className="text-gray-600">
-                      {selectedAppointment.date} at {selectedAppointment.time}
-                    </p>
-                  </div>
+          <div className="section">
+            <label className="section-label">Current Appointment</label>
+            <p>
+              {selectedAppointment.date} at {selectedAppointment.time}
+            </p>
+          </div>
 
-                  <div className="mb-4">
-                    <h3 className="font-medium mb-2 text-gray-800">
-                      Select New Date
-                    </h3>
-                    <div className="relative">
-                      <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        className="w-full p-2 border rounded-md text-gray-800"
-                      />
+          <div className="section">
+            <label className="section-label" htmlFor="newDate">
+              Select New Date
+            </label>
+            <input
+              id="newDate"
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              className="date-input"
+              required
+            />
+          </div>
+
+          <div className="section">
+            <label className="section-label">Available Time Slots</label>
+            {availableTimeSlots.length > 0 ? (
+              <div className="time-slot-grid">
+                {availableTimeSlots.map((time) => (
+                  <label key={time} className="time-slot-label">
+                    <input
+                      type="radio"
+                      name="timeSlot"
+                      value={time}
+                      checked={selectedTimeSlot === time}
+                      onChange={() => setSelectedTimeSlot(time)}
+                      className="hidden"
+                      required
+                    />
+                    <div
+                      className={`time-slot ${
+                        selectedTimeSlot === time ? "selected" : ""
+                      }`}
+                    >
+                      {time}
                     </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-medium mb-2 text-gray-800">
-                      Available Time Slots
-                    </h3>
-                    {availableTimeSlots.length > 0 ? (
-                      <div className="grid grid-cols-3 gap-2">
-                        {availableTimeSlots.map((time) => (
-                          <button
-                            key={time}
-                            className={`p-2 text-center rounded-md border text-sm ${
-                              selectedTimeSlot === time
-                                ? "bg-blue-100 text-blue-600 border-blue-300"
-                                : "hover:bg-gray-50 text-gray-600"
-                            }`}
-                            onClick={() => setSelectedTimeSlot(time)}
-                          >
-                            {time}
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500">
-                        No available time slots for this date
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Modal Footer */}
-                <div className="flex justify-end p-4 border-t">
-                  <button
-                    onClick={handleCloseRescheduleModal}
-                    className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleRescheduleAppointment}
-                    disabled={!selectedTimeSlot}
-                    className={`px-4 py-2 rounded-md ${
-                      selectedTimeSlot
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
-                  >
-                    Confirm Reschedule
-                  </button>
-                </div>
+                  </label>
+                ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <p className="no-slots">No available time slots for this date</p>
+            )}
+          </div>
+        </div>
+
+        {/* Modal Footer */}
+        <div className="modal-footer">
+          <button
+            type="button"
+            onClick={handleCloseRescheduleModal}
+            className="btn-cancel"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className={`btn-confirm ${
+              !selectedTimeSlot ? "disabled" : ""
+            }`}
+            disabled={!selectedTimeSlot}
+          >
+            Confirm Reschedule
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+): null}
+
+
         </div>
       </div>
     </div>
