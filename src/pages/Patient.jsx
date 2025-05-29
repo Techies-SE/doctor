@@ -42,7 +42,7 @@ const Patient = () => {
       </nav>
 
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
             <img src="img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" />

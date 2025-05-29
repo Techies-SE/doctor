@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useDoctorProfile } from "../useDoctorProfile";
-// import "../styles/patientlist.css";
+import "../styles/style.css";
 
 const DetailsPage = () => {
   const { hn_number, lab_test_id } = useParams();
@@ -17,6 +18,7 @@ const DetailsPage = () => {
   const [isApproved, setIsApproved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -52,7 +54,15 @@ const DetailsPage = () => {
 
     fetchPatientDetails();
   }, [hn_number, lab_test_id]);
-
+  const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("lastActiveTime");
+    navigate('/');
+    window.location.reload();
+  };
   const handleModify = () => {
     setIsEditing(true);
   };
@@ -189,23 +199,23 @@ const DetailsPage = () => {
   return (
     <div className="app">
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
-          <span className="mfu-text">MFU</span>{" "}
-          <span className="wellness-text">Wellness Center</span>
+      <nav id="navbar">
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU</span>{" "}
+          <span id="wellness-text">Wellness Center</span>
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
+          <div id="profile">
             <img
               src={doctorData?.image || "/img/profile.png"}
               alt="Profile"
-              className="profile-image"
+              id="profile-image"
             />
-            <span className="profile-name">
+            <span id="profile-name">
               {doctorData ? `Dr. ${doctorData.name}` : "Loading..."}
             </span>
           </div>
@@ -213,47 +223,24 @@ const DetailsPage = () => {
       </nav>
 
       {/* Sidebar */}
-      <aside className="sidebar">
+      <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
-            <img
-              src="/img/ChartLineUp.png"
-              alt="Dashboard Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/dashboard" className="dashboard-link">
-              Dashboard
-            </Link>
+            <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" /> 
+              <Link to="/dashboard" className="dashboard-link">Dashboard</Link>
           </button>
           <button className="sidebar-btn active-tab">
-            <img
-              src="/img/UsersThree.png"
-              alt="Patients Icon"
-              className="sidebar-icon"
-            />{" "}
-            Patients
+            <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />Patients
           </button>
           <button className="sidebar-btn">
-            <img
-              src="/img/Calendar.png"
-              alt="Calendar Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/calendar" className="calendar-link">
-              Calendar
-            </Link>
+            <img src="/img/Calendar.png" alt="Calendar Icon" className="sidebar-icon" />
+            <Link to="/calendar" className="calendar-link">Calendar</Link>
           </button>
         </div>
-
-        <button className="sidebar-btn logout">
-          <img
-            src="/img/material-symbols_logout.png"
-            alt="Logout Icon"
-            className="sidebar-icon"
-          />
-          <Link to="/" className="login-link">
-            Logout
-          </Link>
+            
+        <button className="sidebar-btn logout" onClick={logout}>
+          <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
+            <span className="login-link">Logout</span>
         </button>
       </aside>
 

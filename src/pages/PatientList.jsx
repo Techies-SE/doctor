@@ -280,7 +280,7 @@ const logout = (e) => {
   };
 
   return (
-    <div className="app">
+    <div id="app">
       {/* Navbar */}
       <nav id="navbar">
         <div id="navbar-left">

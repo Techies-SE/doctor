@@ -1,5 +1,5 @@
 /* General layout */
-.app {
+#app {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -7,80 +7,100 @@
   }
   
   /* Navbar styles */
-  .navbar {
+  /* Navbar */
+#navbar {
     display: flex;
     justify-content: space-between;
+    height: 50px;
     align-items: center;
-    background-color: white;
-    padding: 0.5rem 2rem;
-    height: 4rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    position: fixed;
+    background: #fff;
+    padding: 15px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: fixed; /* Fixed to the top */
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
-  }
-  
-  .navbar-left {
+    z-index: 10; /* Make sure navbar stays on top */
+}
+
+#navbar-left {
     display: flex;
     align-items: center;
-  }
-  
-  .logo-circle {
-    width: 36px;
-    height: 36px;
-    background-color: #3BA092;
+}
+
+#logo-circle {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .logo-text {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .mfu-text {
-    font-weight: bold;
+    background: url('/public/img/Ellipse\ 1.png') no-repeat center center/cover;
+}
+
+/* .logo-text {
+    font-size: 20px;
+    margin-left: 10px;
+} */
+
+#mfu-text {
+    margin-left: 10px;
+    font-size: 20px;
     color: #3BA092;
-    line-height: 1;
-  }
-  
-  .wellness-text {
-    font-size: 12px;
-    color: #595959;
-  }
-  
-  .navbar-right {
+    font-weight: bold;
+    margin-right:5px;
+}
+
+#wellness-text {
+    font-size: 20px;
+    color: #C0B257;
+    font-weight: bold;
+}
+
+#navbar-right {
     display: flex;
     align-items: center;
-  }
-  
-  .notification-btn {
+    margin-right: 20px; /* Adjust this to create space from the right */
+}
+
+.notification-btn:hover {
+    background-color: #ffffff; /* Light background on hover */
+}
+
+#icon {
+    font-size: 20px; /* Ensure the icon stays the same size */
+    color: #333; /* Color of the notification icon */
+}
+
+#notification-btn:focus {
+    outline: none; /* Remove focus outline for cleaner appearance */
+}
+#notification-btn {
     background: none;
     border: none;
-    color: #595959;
-    margin-right: 20px;
     cursor: pointer;
-  }
-  
-  .profile {
+    padding: 10px; /* Increased padding for better clickability */
+    margin-right: 15px; /* Spacing between notification button and profile */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+#profile {
     display: flex;
     align-items: center;
-  }
-  
-  .profile-image {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 8px;
-  }
-  
-  .profile-name {
-    color: #595959;
-    font-size: 14px;
-  }
+    margin-right: 10px; /* Adjust this to provide space between profile and notification */
+}
+/* Profile image styling */
+#profile-image {
+    width: 35px; /* Set the desired width */
+    height: 35px; /* Set the desired height */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensures the image doesn't stretch */
+    margin-right: 10px; /* Adjust to provide space between profile image and name */
+}
+
+#profile-name {
+    margin-left: 5px;
+    font-weight: bold;
+}
+
   
   /* Sidebar styles */
   .sidebar {
