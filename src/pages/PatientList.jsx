@@ -272,12 +272,12 @@ const logout = (e) => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const handleViewDetails = (patient) => {
-    // Navigate to patient details page
-    //window.location.href = `/patient-details/${patient.id}`;
-    //window.location.href = `/patient-details/${patient.id}`;
-    // window.location.href = `/patient-details/${patient.hn_number}`;
-  };
+  // const handleViewDetails = (patient) => {
+  //   // Navigate to patient details page
+  //   //window.location.href = `/patient-details/${patient.id}`;
+  //   //window.location.href = `/patient-details/${patient.id}`;
+  //   // window.location.href = `/patient-details/${patient.hn_number}`;
+  // };
 
   return (
     <div id="app">
@@ -329,38 +329,37 @@ const logout = (e) => {
 
       {/* Main Content */}
       <div id="main-content">
-        <div className="table-container font-sans">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-black">Patient List</h1>
+       <div className="bg-white rounded-lg p-6 shadow font-sans">
+          <div className="flex justify-between items-center mb-">
+            <h1 className="text-black text-2xl font-semibold">Patient List</h1>
           </div>
-
           <div className="flex items-center mb-6">
-            <div className="search-container">
+            <div id="search-container">
               <Search size={18} className="search-icon" />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
+                id="search-input"
               />
             </div>
-            <button className="filter-button">
+            <button id="filter-button">
               <Filter size={18} className="filter-icon" /> Filter by Date
             </button>
           </div>
 
-          <div className="table-wrapper">
+          <div id="table-wrapper">
             {loading ? (
-              <div className="loading-message">Loading patient data...</div>
+              <div id="loading-message">Loading patient data...</div>
             ) : error ? (
-              <div className="error-message">
+              <div id="error-message">
                 Error loading patients: {error}
               </div>
             ) : (
-              <table className="table-content">
+              <table id="table-content">
                 <thead>
-                  <tr className="table-header">
+                  <tr id="table-header">
                     {[
                       { key: "name", label: "Patient Name", width: "25%" },
                       { key: "hn_number", label: "HN Number", width: "20%" },
@@ -374,21 +373,21 @@ const logout = (e) => {
                       <th
                         key={column.key}
                         onClick={() => handleSort(column.key)}
-                        className="table-header-cell"
+                        id="table-header-cell"
                         style={{ width: column.width }}
                       >
-                        <div className="table-header-content">
+                        <div id="table-header-content">
                           {column.label}
                           {sortConfig.key === column.key &&
                             (sortConfig.direction === "ascending" ? (
-                              <ChevronUp size={16} className="sort-icon" />
+                              <ChevronUp size={16} id="sort-icon" />
                             ) : (
-                              <ChevronDown size={16} className="sort-icon" />
+                              <ChevronDown size={16} id="sort-icon" />
                             ))}
                         </div>
                       </th>
                     ))}
-                    <th className="table-header-cell" style={{ width: "15%" }}>
+                    <th id="table-header-cell" style={{ width: "15%" }}>
                       Action
                     </th>
                   </tr>
@@ -396,18 +395,18 @@ const logout = (e) => {
                 <tbody>
                   {currentPatients.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="empty-table-message">
+                      <td colSpan="5" id="empty-table-message">
                         No patients found.
                       </td>
                     </tr>
                   ) : (
                     currentPatients.map((patient, index) => (
-                      <tr key={patient.id} className="table-row">
-                        <td className="table-cell">{patient.name}</td>
-                        <td className="table-cell">{patient.hn_number}</td>
-                        <td className="table-cell">{patient.lab_test}</td>
-                        <td className="table-cell">{patient.lab_test_date}</td>
-                        <td className="table-cell relative">
+                      <tr key={patient.id} id="table-row">
+                        <td id="table-cell">{patient.name}</td>
+                        <td id="table-cell">{patient.hn_number}</td>
+                        <td id="table-cell">{patient.lab_test}</td>
+                        <td id="table-cell">{patient.lab_test_date}</td>
+                        <td id="table-cell relative">
                           <MoreVertical
                             size={25}
                             data-action-icon
@@ -461,18 +460,18 @@ const logout = (e) => {
           </div>
 
           {!loading && !error && filteredPatients.length > 0 && (
-            <div className="pagination-container">
+            <div id="pagination-container">
               <button
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
-                className="pButton"
+                id="pButton"
               >
                 First
               </button>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="pButton"
+                id="pButton"
               >
                 Previous
               </button>
@@ -480,14 +479,14 @@ const logout = (e) => {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="pButton"
+                id="pButton"
               >
                 Next
               </button>
               <button
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages}
-                className="pButton"
+                id="pButton"
               >
                 Last
               </button>

@@ -165,14 +165,13 @@ body {
 }
 
 /* Main Content */
-#main-content {
-    margin-left: 100px; /* Adjusted margin for the smaller sidebar width */
+.main-content {
+    margin-left: 200px !important;
+    margin-top: 100px !important;
     padding: 20px;
-    background: #f5f5f5;
-    overflow-y: auto; /* Makes sure the content scrolls if it's too long */
-    padding-top: 20px; /* Adjusted for spacing under navbar */
-    margin-top: 180px; /* This will give space below the fixed navbar */
-    width: 1000px;
+    flex-grow: 1;
+    background-color: #ffffff;
+    border-radius: 10px;
 }
 
 /* Patient Header */
@@ -253,34 +252,34 @@ body {
 
 /* Lab Results & AI Recommendation */
 .lab-ai-section {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+  display: flex;
+  gap: 20px; /* Add space between columns */
+  margin-top: 20px;
 }
 
-.latest-lab {
-    width: 48%; /* Adjust width to ensure space for the right section */
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+.latest-lab,
+.ai-recommendation-container {
+  flex: 1; /* Makes both take equal space */
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.ai-recommendation, .previous-messages {
-    width: 95%; /* Adjust width to match the layout */
-    background: #F5F9FA;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
+/* Remove width: 95% from .ai-recommendation and .previous-messages */
+.ai-recommendation,
 .previous-messages {
-    margin-top: 20px; /* Add space between AI recommendation and previous messages */
+  background: #f5f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Adjust the gap between the left and right sections if needed */
-.lab-ai-section > div {
-    margin-right: 10px; /* Optional: adds spacing between the two columns */
+/* Consistent spacing below AI recommendation */
+.previous-messages {
+  background: #ecfdff;
+  margin-top: 20px;
 }
 
 /* AI Recommendation Buttons */
