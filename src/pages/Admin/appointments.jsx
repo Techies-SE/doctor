@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import "../../styles/doctorDashboard.css";
 import {
   ChevronLeft,
@@ -26,6 +27,7 @@ import {
 
 
 const Appointments = () => {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [pendingCount, setPendingCount] = useState(0);
   const [confirmCount, setConfirmCount] = useState(0);
@@ -49,6 +51,7 @@ const Appointments = () => {
   });
 
   useEffect(() => {
+    
     const fetchCompleteCount = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -76,7 +79,7 @@ const Appointments = () => {
         console.error("Error fetching completed count:", err);
       }
     };
-
+    
     const fetchCancelCount = async () => {
       try {
         const token = localStorage.getItem("authToken");
@@ -279,7 +282,7 @@ const Appointments = () => {
     fetchPendingCount();
     fetchAppointments();
   }, []);
-
+  
   const handleApproveAppointment = async (appointmentId) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -589,42 +592,286 @@ const Appointments = () => {
         return "text-gray-500";
     }
   };
+  const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("lastActiveTime");
+    navigate('/');
+    window.location.reload();
+  };
 
   if (loading) {
     return (
+    <div>
+      {/* Navbar */}
+      <nav id="navbar">
+    <div id="navbar-left">
+      <div id="logo-circle"></div>
+      <span id="mfu-text">MFU </span>
+      <span id="wellness-text">Wellness Center</span>
+    </div>
+    <div id="navbar-right">
+      <button id="notification-btn">
+        <FontAwesomeIcon icon={faBell} id="icon" />
+      </button>
+      <div id="profile">
+        <img src="/img/profile.png" alt="Profile" id="profile-image" />
+        <span id="profile-name">Admin</span>
+      </div>
+    </div>
+  </nav>
+      {/* Sidebar */}
+      <aside id="sidebar">
+    <div className="sidebar-container">
+      <button className="sidebar-btn">
+        <img
+          src="/img/ChartLineUp.png"
+          alt="Dashboard Icon"
+          id="sidebar-icon"
+        />
+        <Link to="/admindashboard" className="sidebar-link">
+          Dashboard
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+        <Link to="/patient" className="sidebar-link">
+          Patients
+        </Link>
+      </button>
+
+      <button className="sidebar-btn active-tab">
+        <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+        <Link to="/appointments" className="sidebar-link">
+          Appointments
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+        <Link to="/doctors" className="sidebar-link">
+          Doctors
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+        <Link to="/recommendations" className="sidebar-link">
+          Recommendations
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+        <Link to="/departments" className="sidebar-link">
+          Departments
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+        <Link to="/schedules" className="sidebar-link">
+          Schedules
+        </Link>
+      </button>
+    </div>
+
+    <button className="sidebar-btn logout" onClick={logout}>
+          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+          <span className="login-link">Logout</span>
+    </button>
+  </aside>
       <div className="main-content">
-        <Navbar />
-        <Sidebar />
         <div className="content-area">
           <div className="w-full h-screen p-8 bg-white">Loading...</div>
         </div>
       </div>
+    </div>
     );
   }
 
   if (error) {
     return (
-      
+      <div>
+      {/* Navbar */}
+      <nav id="navbar">
+    <div id="navbar-left">
+      <div id="logo-circle"></div>
+      <span id="mfu-text">MFU </span>
+      <span id="wellness-text">Wellness Center</span>
+    </div>
+    <div id="navbar-right">
+      <button id="notification-btn">
+        <FontAwesomeIcon icon={faBell} id="icon" />
+      </button>
+      <div id="profile">
+        <img src="/img/profile.png" alt="Profile" id="profile-image" />
+        <span id="profile-name">Admin</span>
+      </div>
+    </div>
+  </nav>
+      {/* Sidebar */}
+      <aside id="sidebar">
+    <div className="sidebar-container">
+      <button className="sidebar-btn">
+        <img
+          src="/img/ChartLineUp.png"
+          alt="Dashboard Icon"
+          id="sidebar-icon"
+        />
+        <Link to="/admindashboard" className="sidebar-link">
+          Dashboard
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+        <Link to="/patient" className="sidebar-link">
+          Patients
+        </Link>
+      </button>
+
+      <button className="sidebar-btn active-tab">
+        <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+        <Link to="/appointments" className="sidebar-link">
+          Appointments
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+        <Link to="/doctors" className="sidebar-link">
+          Doctors
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+        <Link to="/recommendations" className="sidebar-link">
+          Recommendations
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+        <Link to="/departments" className="sidebar-link">
+          Departments
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+        <Link to="/schedules" className="sidebar-link">
+          Schedules
+        </Link>
+      </button>
+    </div>
+
+    <button className="sidebar-btn logout" onClick={logout}>
+          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+          <span className="login-link">Logout</span>
+    </button>
+  </aside>
       <div className="main-content">
-        <Navbar />
-        <Sidebar />
         <div className="content-area">
           <div className="w-full h-screen p-8 bg-white text-red-500">
             Error: {error}
           </div>
         </div>
       </div>
+     </div>
     );
   }
 
   return (
-    
+    <div>
+      {/* Navbar */}
+      <nav id="navbar">
+    <div id="navbar-left">
+      <div id="logo-circle"></div>
+      <span id="mfu-text">MFU </span>
+      <span id="wellness-text">Wellness Center</span>
+    </div>
+    <div id="navbar-right">
+      <button id="notification-btn">
+        <FontAwesomeIcon icon={faBell} id="icon" />
+      </button>
+      <div id="profile">
+        <img src="/img/profile.png" alt="Profile" id="profile-image" />
+        <span id="profile-name">Admin</span>
+      </div>
+    </div>
+  </nav>
+      {/* Sidebar */}
+      <aside id="sidebar">
+    <div className="sidebar-container">
+      <button className="sidebar-btn">
+        <img
+          src="/img/ChartLineUp.png"
+          alt="Dashboard Icon"
+          id="sidebar-icon"
+        />
+        <Link to="/admindashboard" className="sidebar-link">
+          Dashboard
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+        <Link to="/patient" className="sidebar-link">
+          Patients
+        </Link>
+      </button>
+
+      <button className="sidebar-btn active-tab">
+        <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+        <Link to="/appointments" className="sidebar-link">
+          Appointments
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+        <Link to="/doctors" className="sidebar-link">
+          Doctors
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+        <Link to="/recommendations" className="sidebar-link">
+          Recommendations
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+        <Link to="/departments" className="sidebar-link">
+          Departments
+        </Link>
+      </button>
+
+      <button className="sidebar-btn">
+        <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+        <Link to="/schedules" className="sidebar-link">
+          Schedules
+        </Link>
+      </button>
+    </div>
+
+    <button className="sidebar-btn logout" onClick={logout}>
+          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+          <span className="login-link">Logout</span>
+    </button>
+  </aside>
     <div
       className="main-content-appointment"
       style={{ marginLeft: "250px", marginTop: "150px" }}
     >
-      <Navbar />
-      <Sidebar />
+      
       <div className="content-area">
         <div
           className="table-container p-6 font-sans ml-0"
@@ -988,96 +1235,8 @@ const Appointments = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
-
-const Navbar = () => (
-  <nav className="navbar">
-    <div className="navbar-left">
-      <div className="logo-circle"></div>
-      <span className="mfu-text">MFU </span>
-      <span className="wellness-text">Wellness Center</span>
-    </div>
-    <div className="navbar-right">
-      <button className="notification-btn">
-        <FontAwesomeIcon icon={faBell} className="icon" />
-      </button>
-      <div className="profile">
-        <img src="/img/profile.png" alt="Profile" className="profile-image" />
-        <span className="profile-name">Admin</span>
-      </div>
-    </div>
-  </nav>
-);
-
-const Sidebar = () => (
-  <aside className="sidebar">
-    <div className="sidebar-container">
-      <button className="sidebar-btn">
-        <img
-          src="/img/ChartLineUp.png"
-          alt="Dashboard Icon"
-          className="sidebar-icon"
-        />
-        <Link to="/admindashboard" className="sidebar-link">
-          Dashboard
-        </Link>
-      </button>
-
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUser} className="sidebar-icon" />
-        <Link to="/patient" className="sidebar-link">
-          Patients
-        </Link>
-      </button>
-
-      <button className="sidebar-btn active-tab">
-        <FontAwesomeIcon icon={faCalendarAlt} className="sidebar-icon" />
-        <Link to="/appointments" className="sidebar-link">
-          Appointments
-        </Link>
-      </button>
-
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUserMd} className="sidebar-icon" />
-        <Link to="/doctors" className="sidebar-link">
-          Doctors
-        </Link>
-      </button>
-
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faFileMedical} className="sidebar-icon" />
-        <Link to="/recommendations" className="sidebar-link">
-          Recommendations
-        </Link>
-      </button>
-
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faHospital} className="sidebar-icon" />
-        <Link to="/departments" className="sidebar-link">
-          Departments
-        </Link>
-      </button>
-
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faCalendarDay} className="sidebar-icon" />
-        <Link to="/schedules" className="sidebar-link">
-          Schedules
-        </Link>
-      </button>
-    </div>
-
-    <button className="sidebar-btn logout">
-      <img
-        src="/img/material-symbols_logout.png"
-        alt="Logout Icon"
-        className="sidebar-icon"
-      />
-      <Link to="/" className="login-link">
-        Logout
-      </Link>
-    </button>
-  </aside>
-);
 
 export default Appointments;
