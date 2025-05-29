@@ -17,8 +17,9 @@ import {
   faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "./styles/doctordetails.css";
-
+import { useNavigate } from 'react-router-dom';
 const DoctorDetails = ({ doctorId, onBack }) => {
+  const navigate = useNavigate();
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -169,6 +170,15 @@ const DoctorDetails = ({ doctorId, onBack }) => {
       console.error("Error uploading image:", error);
       setImageUploadError(error.message);
     }
+  };
+const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("lastActiveTime");
+    navigate('/');
+    window.location.reload();
   };
 
   // Method to remove profile image
@@ -475,99 +485,94 @@ const DoctorDetails = ({ doctorId, onBack }) => {
   return (
     <div>
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
-          <span className="mfu-text">MFU </span>
-          <span className="wellness-text">Wellness Center</span>
+      <nav id="navbar">
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU </span>
+          <span id="wellness-text">Wellness Center</span>
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
+          <div id="profile">
             <img
               src="/img/profile.png"
               alt="Profile"
-              className="profile-image"
+              id="profile-image"
             />
-            <span className="profile-name">Admin</span>
+            <span id="profile-name">Admin</span>
           </div>
         </div>
       </nav>
 
       {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-container">
-          <button className="sidebar-btn">
-            <img
-              src="/img/ChartLineUp.png"
-              alt="Dashboard Icon"
-              className="sidebar-icon"
-            />{" "}
-            <Link to="/admindashboard" className="sidebar-link">
-              Dashboard
-            </Link>
+            <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+              <Link to="/recommendations" className="sidebar-link">
+                Recommendations
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+              <Link to="/schedules" className="sidebar-link">
+                Schedules
+              </Link>
+            </button>
+          </div>
+      
+          <button className="sidebar-btn logout" onClick={logout}>
+                <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+                <span className="login-link">Logout</span>
           </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faUser} className="sidebar-icon" />
-            <Link to="/patient" className="sidebar-link">
-              Patients
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faCalendarAlt} className="sidebar-icon" />
-            <Link to="/appointments" className="sidebar-link">
-              Appointments
-            </Link>
-          </button>
-
-          <button className="sidebar-btn active-tab">
-            <FontAwesomeIcon icon={faUserMd} className="sidebar-icon" />
-            <Link to="/doctors" className="sidebar-link">
-              Doctors
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faFileMedical} className="sidebar-icon" />
-            <Link to="/recommendations" className="sidebar-link">
-              Recommendations
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faHospital} className="sidebar-icon" />
-            <Link to="/departments" className="sidebar-link">
-              Departments
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faCalendarDay} className="sidebar-icon" />
-            <Link to="/schedules" className="sidebar-link">
-              Schedules
-            </Link>
-          </button>
-        </div>
-
-        <button className="sidebar-btn logout">
-          <img
-            src="/img/material-symbols_logout.png"
-            alt="Logout Icon"
-            className="sidebar-icon"
-          />
-          <Link to="/" className="login-link">
-            Logout
-          </Link>
-        </button>
-      </aside>
+        </aside>
 
       {/* Main Content */}
-      <div className="main-content">
-        <div className="doctor-details-container">
+      <div id="main-content">
+        <div className="bg-white rounded-lg p-6 shadow font-sans">
+          
           {/* Back Button */}
           <button onClick={handleBack} className="back-button">
             <FontAwesomeIcon icon={faArrowLeft} className="back-button-icon" />
