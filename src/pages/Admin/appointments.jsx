@@ -1044,39 +1044,40 @@ const Appointments = () => {
           </div>
 
           {/* Pagination */}
-          {!loading && !error && filteredAppointments.length > 0 && (
-            <div id="pagination-container">
-              <button
-                onClick={() => handlePageChange(1)}
-                disabled={currentPage === 1}
-                id="pButton"
-              >
-                First
-              </button>
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                id="pButton"
-              >
-                Previous
-              </button>
-              {renderPagination()}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                id="pButton"
-              >
-                Next
-              </button>
-              <button
-                onClick={() => handlePageChange(totalPages)}
-                disabled={currentPage === totalPages}
-                id="pButton"
-              >
-                Last
-              </button>
-            </div>
-          )}
+{!loading && !error && filteredAppointments.length > 0 && (
+  <div className="pagination-container">
+    <button
+      onClick={() => handlePageChange(1)}
+      disabled={currentPage === 1}
+      className="pButton"
+    >
+      First
+    </button>
+    <button
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+      className="pButton"
+    >
+      Previous
+    </button>
+    {renderPagination()}
+    <button
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="pButton"
+    >
+      Next
+    </button>
+    <button
+      onClick={() => handlePageChange(totalPages)}
+      disabled={currentPage === totalPages}
+      className="pButton"
+    >
+      Last
+    </button>
+  </div>
+)}
+
           {showRescheduleModal && selectedAppointment ? (
   <div className="reschedule-modal">
     <div className="modal-overlay" onClick={handleCloseRescheduleModal}></div>
