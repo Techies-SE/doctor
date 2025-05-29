@@ -159,3 +159,321 @@
 .sidebar-btn a:hover {
     color: black;
 }
+/* Main Content */
+#main-content {
+    margin-left: 200px !important;
+    margin-top: 100px !important;
+    padding: 20px;
+    flex-grow: 1;
+}
+.health-overview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    /*margin-top: 10px; /* 🧠 push below navbar */
+  }
+  
+  /* Card Styling */
+  .health-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    flex: 1 1 200px;
+    max-width: 250px;
+    min-width: 200px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  .health-card .card-top{
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .health-card .card-bottom{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+ .number, .info{
+    width:100%;
+
+ }
+  
+  /* Header row */
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  /* Label Text */
+  .label {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.2;
+    flex:1;
+  }
+  
+  /* Icon */
+  .health-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  
+  /* Card Body Content */
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* ✅ left align */
+    gap: 4px;
+  }
+  
+  /* Big Number */
+  /* .card-body h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+  } */
+  
+  /* Status text (under h3, left aligned) */
+  /* .card-body .status {
+    margin: 0;
+    font-size: 12px;
+    color: inherit;
+    text-align: left;
+  } */
+  
+  /* Color overrides */
+  .total-patients .info {
+    color: #3E3EB4;
+  }
+  .critical-cases .info {
+    color: #A42723;
+  }
+  .appointments .info {
+    color: #6C2F94;
+  }
+  .lab-results .info {
+    color: #ff9800;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .health-overview {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .health-card {
+      max-width: 100%;
+    }
+  } 
+    /*patient*/
+.patient-list-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-width: 300px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    height: 100%; /* Ensure card takes up available height */
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-header {
+    display: flex;
+    justify-content: space-between; /* Align title and controls with space between */
+    align-items: center; /* Vertically center content */
+    margin-bottom: 15px;
+}
+
+.patient-header h3 {
+    flex: 0 1 auto; /* Allow shrinking */
+    white-space: nowrap; /* Prevent line break */
+    display: inline-block; /* Avoid block-level wrapping */
+    margin-right: 10px; /* Space between title and controls */
+}
+
+.patient-controls {
+    display: flex;
+    align-items: center; /* Vertically center the search bar and button */
+    gap: 10px; /* Space between the input and button */
+    justify-content: flex-end; /* Align controls to the right */
+    width: 100%; /* Take up the remaining width of the header */
+}
+
+.patient-controls input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 200px; /* Set a width for the search bar */
+}
+
+.patient-controls .filter-btn {
+    padding: 8px 12px;
+    background-color: #3BA092;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px; /* Ensure text size is consistent */
+    align-items: center; /* Align icon and text in the center */
+    gap: 5px; /* Space between icon and text */
+}
+.filter-btn img {
+    width: 18px; /* Adjust icon size */
+    height: 18px;
+    display: inline-block; /* Prevent any misalignment */
+    vertical-align: middle; /* Align with text */
+}
+.patient-controls .filter-btn:hover {
+    background-color: #287e72;
+}
+
+.table-container {
+    flex-grow: 1; /* Make the table container take the remaining height */
+    overflow-y: auto; /* Enable scrolling if content exceeds the available space */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f1f1f1;
+}
+
+.view-btn:hover {
+    background-color: #218838;
+}
+
+
+/* Container for health trends and conditions cards */
+.health-trends-container {
+    display: flex;
+    justify-content: space-between; /* Distribute the space between the cards */
+    gap: 20px; /* Add some space between the cards */
+    flex-wrap: wrap; /* Allow wrapping if the screen size is smaller */
+}
+
+/* Trends Card Style */
+.trends-card {
+    flex: 1; /* Allow the trends card to take available space */
+    padding: 20px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+/* Trends Card Header (Title + Month Select in a row) */
+.trends-header {
+    display: flex;
+    justify-content: space-between; /* Distribute space between the title and select */
+    align-items: center; /* Vertically align the items */
+    margin-bottom: 15px; /* Add space below the header */
+}
+
+.trends-header h3 {
+    margin: 0; /* Remove default margin */
+    font-size: 18px; /* Set font size */
+}
+
+.month-select {
+    padding: 5px 10px; /* Add some padding to the select box */
+    font-size: 14px; /* Set font size */
+    border-radius: 5px; /* Round corners */
+    border: 1px solid #ddd; /* Add border to the select box */
+}
+
+
+/* Conditions Card Style */
+.conditions-card {
+    flex: 1; /* Allow the conditions card to take available space */
+    padding: 20px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+/* Conditions Card Header (Title + View All in a row) */
+.conditions-header {
+    display: flex;
+    justify-content: space-between; /* Distribute space between the title and link */
+    align-items: center; /* Vertically align the items */
+    margin-bottom: 15px; /* Add space below the header */
+}
+
+.conditions-header h3 {
+    margin: 0; /* Remove default margin */
+    font-size: 18px; /* Set font size */
+}
+
+.view-all {
+    font-size: 14px; /* Set font size */
+    color: #3BA092; /* Set link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.view-all:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+/* Container for condition items */
+.condition-items {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 20px; /* Add space between items */
+    margin-top: 20px; /* Add margin between the header and the items */
+}
+
+/* Style for each condition item */
+.condition-item {
+    background: #f0f0f0; /* Light gray background for each box */
+    padding: 15px; /* Add padding inside the box */
+    border-radius: 8px; /* Rounded corners */
+    display: flex; /* Use flexbox for aligning icon and text */
+    align-items: center; /* Vertically align items */
+    justify-content: flex-start; /* Align items to the left */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+/* Icon and text in each condition item */
+.condition-item i {
+    margin-right: 10px; /* Add space between icon and text */
+    font-size: 24px; /* Adjust icon size */
+}
+
+.condition-item p {
+    margin: 0; /* Remove margin */
+    font-size: 14px; /* Adjust text size */
+    text-align: right; /* Right align the text inside <p> */
+    flex-grow: 1; /* Make the <p> tag take the remaining space */
+}

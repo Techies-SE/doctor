@@ -140,7 +140,7 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content">
+      <div id="main-content">
         {/* Health Overview */}
         <div className="health-overview">
           <div className="health-card total-patients">
