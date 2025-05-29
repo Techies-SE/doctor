@@ -188,18 +188,18 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     const formData = new FormData();
     formData.append("file", file); // Changed from "csvFile" to "file"
     const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No auth token found");
-          return;
-        }
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
     try {
       const response = await fetch(
         "http://localhost:3000/bulk/upload-lab-results",
         {
           method: "POST",
           headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            Authorization: `Bearer ${token}`,
+          },
           body: formData,
         }
       );
@@ -397,9 +397,9 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
     hn_number: "",
     name: "",
     citizen_id: "",
+    gender: "",
+    date_of_birth: "",
     phone_no: "",
-    doctor_id: "",
-    lab_test_master_id: "",
   });
   const [doctors, setDoctors] = useState([]);
   const [labTests, setLabTests] = useState([]);
@@ -455,8 +455,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         name: "",
         citizen_id: "",
         phone_no: "",
-        doctor_id: "",
-        lab_test_master_id: "",
+        date_of_birth: "",
+        gender: "",
       });
     }
   }, [show]);
@@ -530,17 +530,17 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
     const formData = new FormData();
     formData.append("csvFile", file);
     const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No auth token found");
-          return;
-        }
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:3000/upload/patients", {
         method: "POST",
         headers: {
-              Authorization: `Bearer ${token}`,
-            },
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 
@@ -560,8 +560,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
       !singlePatient.name ||
       !singlePatient.citizen_id ||
       !singlePatient.phone_no ||
-      !singlePatient.doctor_id || // Add this line
-      !singlePatient.lab_test_master_id
+      !singlePatient.date_of_birth ||
+      !singlePatient.gender
     ) {
       alert("Please fill in all required fields.");
       return;
@@ -727,6 +727,37 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  name="date_of_birth"
+                  value={singlePatient.date_of_birth}
+                  onChange={handleSinglePatientChange}
+                  className="w-full p-2 border rounded-md text-sm text-gray-700"
+                  disabled={!!file}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gender
+                </label>
+                <select
+                  name="gender"
+                  value={singlePatient.gender || ""}
+                  onChange={handleSinglePatientChange}
+                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
+                  disabled={!!file}
+                >
+                  <option value="" disabled>
+                    Choose Gender
+                  </option>
+                  <option value="male">male</option>
+                  <option value="female">female</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Phone Number
                 </label>
                 <input
@@ -739,7 +770,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                   disabled={!!file}
                 />
               </div>
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Doctor
                 </label>
@@ -757,8 +788,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                     </option> // Display doctor name instead of ID
                   ))}
                 </select>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Lab Test
                 </label>
@@ -776,7 +807,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                     </option>
                   ))}
                 </select>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
