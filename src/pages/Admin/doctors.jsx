@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../../styles/doctorDashboard.css";
 import {
   faBell,
   faUser,
@@ -271,23 +272,23 @@ const Doctors = () => {
   return (
     <div>
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
-          <span className="mfu-text">MFU </span>
-          <span className="wellness-text">Wellness Center</span>
+      <nav id="navbar">
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU </span>
+          <span id="wellness-text">Wellness Center</span>
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
+          <div id="profile">
             <img
               src="/img/profile.png"
               alt="Profile"
-              className="profile-image"
+              id="profile-image"
             />
-            <span className="profile-name">Admin</span>
+            <span id="profile-name">Admin</span>
           </div>
         </div>
       </nav>

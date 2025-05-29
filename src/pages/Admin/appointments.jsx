@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "../../styles/doctorDashboard.css";
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,7 +23,7 @@ import {
   faHospital,
   faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
-import "../../styles/style.css";
+
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -603,6 +604,7 @@ const Appointments = () => {
 
   if (error) {
     return (
+      
       <div className="main-content">
         <Navbar />
         <Sidebar />
@@ -616,6 +618,7 @@ const Appointments = () => {
   }
 
   return (
+    
     <div
       className="main-content-appointment"
       style={{ marginLeft: "250px", marginTop: "150px" }}
