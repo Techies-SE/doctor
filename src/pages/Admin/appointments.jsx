@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import "../../styles/doctorDashboard.css";
+import "../Admin/styles/appointments.css";
 import {
   ChevronLeft,
   ChevronRight,
@@ -684,7 +685,7 @@ const Appointments = () => {
           <span className="login-link">Logout</span>
     </button>
   </aside>
-      <div className="main-content">
+      <div id="main-content">
         <div className="content-area">
           <div className="w-full h-screen p-8 bg-white">Loading...</div>
         </div>
@@ -775,7 +776,7 @@ const Appointments = () => {
           <span className="login-link">Logout</span>
     </button>
   </aside>
-      <div className="main-content">
+      <div id="main-content">
         <div className="content-area">
           <div className="w-full h-screen p-8 bg-white text-red-500">
             Error: {error}
@@ -867,21 +868,10 @@ const Appointments = () => {
           <span className="login-link">Logout</span>
     </button>
   </aside>
-    <div
-      className="main-content-appointment"
-      style={{ marginLeft: "250px", marginTop: "150px" }}
-    >
-      
-      <div className="content-area">
-        <div
-          className="table-container p-6 font-sans ml-0"
-          style={{ marginLeft: "10px" }}
-        >
-          <div
-            className="flex justify-between items-center "
-            style={{ marginBottom: "20px" }}
-          >
-            <h1 className="text-black">Appointment Management</h1>
+    <div id="main-content">
+        <div className="bg-white rounded-lg p-6 shadow font-sans">
+          <div className="flex justify-between items-center mb-">
+            <h1 className="text-black text-2xl font-semibold">Appointment List</h1>
           </div>
 
           {/* Stats Cards */}
@@ -948,19 +938,18 @@ const Appointments = () => {
 
           {/* Search and Filter */}
           <div className="flex items-center mb-6">
-            <div className="flex items-center border border-gray-300 rounded-full w-[200px] h-8 px-3 py-2 mr-4 bg-[#E8F9F1]">
-              <Search size={18} className="text-[#3BA092]" />
+            <div id="search-container">
+              <Search size={18} className="search-icon" />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="ml-2 outline-none bg-transparent w-full placeholder-[#969696] text-[#969696]"
+                id="search-input"
               />
             </div>
-            <button className="flex items-center bg-transparent border rounded-full border-[#3BA092] w-[158px] h-8 px-4 py-2 rounded hover:bg-gray-50 text-xs text-[#969696]">
-              <Filter size={18} className="mr-2 text-[#3BA092]" /> Filter by
-              Date
+            <button id="filter-button">
+              <Filter size={18} className="filter-icon" /> Filter by Date
             </button>
           </div>
 
@@ -1078,38 +1067,39 @@ const Appointments = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-end mt-6 gap-2">
-            <button
-              onClick={() => handlePageChange(1)}
-              disabled={currentPage === 1}
-              className="border rounded px-3 py-1 hover:bg-gray-100 disabled:opacity-50"
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="border rounded px-3 py-1 hover:bg-gray-100 disabled:opacity-50"
-            >
-              Previous
-            </button>
-            {renderPagination()}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="border rounded px-3 py-1 hover:bg-gray-100 disabled:opacity-50"
-            >
-              Next
-            </button>
-            <button
-              onClick={() => handlePageChange(totalPages)}
-              disabled={currentPage === totalPages}
-              className="border rounded px-3 py-1 hover:bg-gray-100 disabled:opacity-50"
-            >
-              Last
-            </button>
-          </div>
-
+          {!loading && !error && filteredAppointments.length > 0 && (
+            <div id="pagination-container">
+              <button
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                id="pButton"
+              >
+                First
+              </button>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                id="pButton"
+              >
+                Previous
+              </button>
+              {renderPagination()}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                id="pButton"
+              >
+                Next
+              </button>
+              <button
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                id="pButton"
+              >
+                Last
+              </button>
+            </div>
+          )}
           {/* Reschedule Modal */}
           {showRescheduleModal && selectedAppointment && (
             <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -1235,8 +1225,10 @@ const Appointments = () => {
         </div>
       </div>
     </div>
-  </div>
+  
   );
 };
+
+
 
 export default Appointments;
