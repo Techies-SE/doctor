@@ -34,44 +34,127 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
   const [uploadError, setUploadError] = useState("");
   const [singleLabData, setSingleLabData] = useState({
     hn_number: "",
-    gender: "",
-    blood_type: "",
-    age: "",
-    date_of_birth: "",
-    weight: "",
-    height: "",
-    bmi: "",
-    systolic: "",
-    diastolic: "",
-    order_date: "",
+    doctor_id: "",
   });
+  const [selectedLabTests, setSelectedLabTests] = useState([]);
+  const [labTestsData, setLabTestsData] = useState({});
+  const [doctors, setDoctors] = useState([]);
+  const [labTests, setLabTests] = useState([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        console.log("Auth Token:", token);
+        if (!token) throw new Error("No authentication token found");
+        const response = await fetch("http://localhost:3000/doctors", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) throw new Error("Failed to fetch doctors");
+        const data = await response.json();
+        setDoctors(data);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+
+    const fetchLabTests = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/lab-tests");
+        if (!response.ok) throw new Error("Failed to fetch lab tests");
+        const data = await response.json();
+        setLabTests(data);
+      } catch (error) {
+        console.error("Error fetching lab tests:", error);
+      }
+    };
+
+    fetchDoctors();
+    fetchLabTests();
+  }, []);
 
   // Reset all fields when popup is shown
   useEffect(() => {
     if (show) {
-      // Reset file
       setFile(null);
       setUploadError("");
       setIsUploading(false);
       const fileInput = document.getElementById("labFileUpload");
       if (fileInput) fileInput.value = "";
 
-      // Reset form fields
       setSingleLabData({
         hn_number: "",
-        gender: "",
-        blood_type: "",
-        age: "",
-        date_of_birth: "",
-        weight: "",
-        height: "",
-        bmi: "",
-        systolic: "",
-        diastolic: "",
-        order_date: "",
+        doctor_id: "",
       });
+      setSelectedLabTests([]);
+      setLabTestsData({});
     }
   }, [show]);
+
+  // Fetch lab items when lab tests are selected
+  const fetchLabItems = async (labTestId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/lab-tests/${labTestId}/items`
+      );
+      if (!response.ok) throw new Error("Failed to fetch lab items");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching lab items:", error);
+      return [];
+    }
+  };
+
+  const handleLabTestSelection = async (labTestId, isSelected) => {
+    if (isSelected) {
+      // Add lab test
+      const labTest = labTests.find((test) => test.id === parseInt(labTestId));
+      if (labTest && !selectedLabTests.find((test) => test.id === labTest.id)) {
+        const labItems = await fetchLabItems(labTestId);
+        const newLabTest = {
+          ...labTest,
+          items: labItems,
+        };
+
+        setSelectedLabTests((prev) => [...prev, newLabTest]);
+
+        // Initialize lab test data with empty values
+        const initialData = {};
+        labItems.forEach((item) => {
+          initialData[item.lab_item_id] = "";
+        });
+
+        setLabTestsData((prev) => ({
+          ...prev,
+          [labTestId]: initialData,
+        }));
+      }
+    } else {
+      // Remove lab test
+      setSelectedLabTests((prev) =>
+        prev.filter((test) => test.id !== parseInt(labTestId))
+      );
+      setLabTestsData((prev) => {
+        const newData = { ...prev };
+        delete newData[labTestId];
+        return newData;
+      });
+    }
+  };
+
+  const handleLabItemValueChange = (labTestId, labItemId, value) => {
+    setLabTestsData((prev) => ({
+      ...prev,
+      [labTestId]: {
+        ...prev[labTestId],
+        [labItemId]: value,
+      },
+    }));
+  };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -84,17 +167,10 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
       setUploadError("");
       setSingleLabData({
         hn_number: "",
-        gender: "",
-        blood_type: "",
-        age: "",
-        date_of_birth: "",
-        weight: "",
-        height: "",
-        bmi: "",
-        systolic: "",
-        diastolic: "",
-        order_date: "",
+        doctor_id: "",
       });
+      setSelectedLabTests([]);
+      setLabTestsData({});
     }
   };
 
@@ -124,17 +200,10 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
       setUploadError("");
       setSingleLabData({
         hn_number: "",
-        gender: "",
-        blood_type: "",
-        age: "",
-        date_of_birth: "",
-        weight: "",
-        height: "",
-        bmi: "",
-        systolic: "",
-        diastolic: "",
-        order_date: "",
+        doctor_id: "",
       });
+      setSelectedLabTests([]);
+      setLabTestsData({});
     } else {
       setUploadError("Only CSV files are supported.");
     }
@@ -144,37 +213,10 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     const { name, value } = e.target;
     if (file) setFile(null);
 
-    // Calculate BMI if weight or height changes
-    if (name === "weight" || name === "height") {
-      const weight =
-        name === "weight"
-          ? parseFloat(value)
-          : parseFloat(singleLabData.weight);
-      const height =
-        name === "height"
-          ? parseFloat(value)
-          : parseFloat(singleLabData.height);
-
-      if (weight && height) {
-        const heightInMeters = height / 100;
-        const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
-        setSingleLabData((prev) => ({
-          ...prev,
-          [name]: value,
-          bmi: bmi,
-        }));
-      } else {
-        setSingleLabData((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }
-    } else {
-      setSingleLabData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+    setSingleLabData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleBulkUpload = async () => {
@@ -186,7 +228,7 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     setIsUploading(true);
     setUploadError("");
     const formData = new FormData();
-    formData.append("file", file); // Changed from "csvFile" to "file"
+    formData.append("file", file);
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("No auth token found");
@@ -229,35 +271,64 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     }
 
     // Validate required fields
-    const requiredFields = [
-      "hn_number",
-      "gender",
-      "blood_type",
-      "age",
-      "date_of_birth",
-      "weight",
-      "height",
-      "systolic",
-      "diastolic",
-      "order_date",
-    ];
-    const missingFields = requiredFields.filter(
-      (field) => !singleLabData[field]
-    );
-
-    if (missingFields.length > 0) {
-      alert(`Please fill in all required fields: ${missingFields.join(", ")}`);
+    if (!singleLabData.doctor_id) {
+      alert("Please select a doctor.");
       return;
+    }
+
+    if (selectedLabTests.length === 0) {
+      alert("Please select at least one lab test.");
+      return;
+    }
+
+    // Validate that all lab items have values
+    for (const labTest of selectedLabTests) {
+      const testData = labTestsData[labTest.id];
+      if (!testData) {
+        alert(`Please fill in values for ${labTest.test_name}.`);
+        return;
+      }
+
+      for (const item of labTest.items) {
+        if (
+          !testData[item.lab_item_id] ||
+          testData[item.lab_item_id].trim() === ""
+        ) {
+          alert(
+            `Please fill in value for ${item.lab_item_name} in ${labTest.test_name}.`
+          );
+          return;
+        }
+      }
     }
 
     setIsUploading(true);
     try {
+      // Prepare the data structure for submission - matching backend expectations
+      const submissionData = {
+        hn_number: singleLabData.hn_number,
+        doctor_id: singleLabData.doctor_id,
+        lab_tests: selectedLabTests.map((labTest) => ({
+          lab_test_id: labTest.id,
+          lab_items: labTest.items.map((item) => ({
+            lab_item_id: item.lab_item_id,
+            lab_item_value: labTestsData[labTest.id][item.lab_item_id],
+          })),
+        })),
+      };
+
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
       const response = await fetch("http://localhost:3000/lab-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(singleLabData),
+        body: JSON.stringify(submissionData),
       });
 
       const result = await response.json();
@@ -279,40 +350,41 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
 
   if (!show) return null;
 
-  const isFormFilled = Object.values(singleLabData).some(
-    (value) => value !== ""
-  );
+  const isFormFilled =
+    singleLabData.hn_number !== "" ||
+    singleLabData.doctor_id !== "" ||
+    selectedLabTests.length > 0;
 
   return (
     <div className="modal-container1">
-      <div className="bg-white rounded-lg w-full max-w-lg max-h-[80vh] flex flex-col">
+      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="p-4 flex justify-between items-center">
+        <div className="p-4 flex justify-between items-center border-b">
           <h2 className="text-xl font-bold">Add Lab Data</h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
-            <X size={16} />
+            <X size={20} />
           </button>
         </div>
 
         {/* Content - Scrollable */}
-        <div className="overflow-y-auto flex-1 p-4">
+        <div className="overflow-y-auto flex-1 p-6">
           {/* Bulk Upload Section */}
-          <div className="container1">
+          <div className="container1 mb-6">
             <h3 className="text-lg font-semibold mb-3 text-[#242222]">
               Bulk Upload
             </h3>
             <div
-              className={`border-2 border-dashed rounded-lg p-4 text-center ${
+              className={`border-2 border-dashed rounded-lg p-6 text-center ${
                 isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
               } ${file || isFormFilled ? "opacity-50 cursor-not-allowed" : ""}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <p className="mb-2 text-[#969696]">
+              <p className="mb-3 text-[#969696]">
                 📁 Drop your CSV file here or
               </p>
               <button
@@ -331,14 +403,14 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
                 disabled={isFormFilled}
               />
               {file && (
-                <div className="mt-2">
+                <div className="mt-3">
                   <div className="flex items-center justify-center space-x-2">
                     <p className="text-green-600 text-sm">{file.name}</p>
                     <button
                       onClick={handleRemoveFile}
                       className="text-red-500 hover:text-red-700 p-1"
                     >
-                      <X size={14} />
+                      <X size={16} />
                     </button>
                   </div>
                 </div>
@@ -354,37 +426,169 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
             )}
           </div>
 
-          {/* Footer */}
-          <div className="p-4 flex justify-end space-x-3">
-            {file ? (
-              <button
-                onClick={handleBulkUpload}
-                className={`bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-600 ${
-                  isUploading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                disabled={isUploading}
+          {/* OR Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-3 bg-white text-gray-500">OR</span>
+            </div>
+          </div>
+
+          {/* Single Lab Data Form */}
+          <div className="container1">
+            <h3 className="text-lg font-semibold mb-4 text-[#242222]">
+              Add Single Lab Data
+            </h3>
+
+            {/* Basic Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {/* HN Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  HN Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="hn_number"
+                  placeholder="Enter 9-digit HN Number"
+                  value={singleLabData.hn_number || ""}
+                  onChange={handleSingleLabDataChange}
+                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696]"
+                  disabled={!!file}
+                  maxLength="9"
+                />
+              </div>
+
+              {/* Doctor */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Assign to Doctor <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="doctor_id"
+                  value={singleLabData.doctor_id}
+                  onChange={handleSingleLabDataChange}
+                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
+                  disabled={!!file}
+                >
+                  <option value="">Select Doctor</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor.id} value={doctor.id}>
+                      {doctor.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Lab Tests Selection */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Lab Tests <span className="text-red-500">*</span>
+              </label>
+              <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
+                {labTests.map((test) => (
+                  <div key={test.id} className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      id={`test-${test.id}`}
+                      checked={selectedLabTests.some(
+                        (selectedTest) => selectedTest.id === test.id
+                      )}
+                      onChange={(e) =>
+                        handleLabTestSelection(test.id, e.target.checked)
+                      }
+                      disabled={!!file}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor={`test-${test.id}`}
+                      className="text-sm text-gray-700"
+                    >
+                      {test.test_name}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dynamic Lab Items Forms */}
+            {selectedLabTests.map((labTest) => (
+              <div
+                key={labTest.id}
+                className="mb-6 p-4 border rounded-lg bg-gray-50"
               >
-                {isUploading ? "Uploading..." : "Upload CSV"}
-              </button>
-            ) : isFormFilled ? (
-              <button
-                onClick={handleSingleLabDataSubmit}
-                className={`bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-600 ${
-                  isUploading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                disabled={isUploading}
-              >
-                {isUploading ? "Uploading..." : "Add Lab Data"}
-              </button>
-            ) : null}
+                <h4 className="text-md font-semibold mb-3 text-[#242222]">
+                  {labTest.test_name}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {labTest.items?.map((item) => (
+                    <div key={item.lab_item_id}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {item.lab_item_name}
+                        {item.unit && (
+                          <span className="text-gray-500 ml-1">
+                            ({item.unit})
+                          </span>
+                        )}
+                        <span className="text-red-500 ml-1">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={`Enter ${item.lab_item_name}`}
+                        value={
+                          labTestsData[labTest.id]?.[item.lab_item_id] || ""
+                        }
+                        onChange={(e) =>
+                          handleLabItemValueChange(
+                            labTest.id,
+                            item.lab_item_id,
+                            e.target.value
+                          )
+                        }
+                        className="w-full p-2 border rounded-md text-sm placeholder-[#969696]"
+                        disabled={!!file}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t flex justify-end space-x-3">
+          {file ? (
             <button
-              onClick={onClose}
-              className="cancel-button"
+              onClick={handleBulkUpload}
+              className={`bg-green-600 text-white px-6 py-2 rounded text-sm hover:bg-green-700 ${
+                isUploading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               disabled={isUploading}
             >
-              Cancel
+              {isUploading ? "Uploading..." : "Upload CSV"}
             </button>
-          </div>
+          ) : isFormFilled ? (
+            <button
+              onClick={handleSingleLabDataSubmit}
+              className={`bg-green-600 text-white px-6 py-2 rounded text-sm hover:bg-green-700 ${
+                isUploading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isUploading}
+            >
+              {isUploading ? "Adding..." : "Add Lab Data"}
+            </button>
+          ) : null}
+          <button
+            onClick={onClose}
+            className="cancel-button"
+            disabled={isUploading}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -401,45 +605,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
     date_of_birth: "",
     phone_no: "",
   });
-  const [doctors, setDoctors] = useState([]);
-  const [labTests, setLabTests] = useState([]);
+
   const [isDragActive, setIsDragActive] = useState(false);
-
-  // Fetch doctors when the component mounts
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        console.log("Auth Token:", token); // Debug token
-        if (!token) throw new Error("No authentication token found");
-        const response = await fetch("http://localhost:3000/doctors", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }); // Fetching doctors from the API
-        if (!response.ok) throw new Error("Failed to fetch doctors"); // Error handling for failed fetch
-        const data = await response.json(); // Parsing the response to JSON
-        setDoctors(data); // Setting the fetched doctors to state
-      } catch (error) {
-        console.error("Error fetching doctors:", error); // Logging any errors
-      }
-    };
-
-    const fetchLabTests = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/lab-tests");
-        if (!response.ok) throw new Error("Failed to fetch lab tests");
-        const data = await response.json();
-        setLabTests(data);
-      } catch (error) {
-        console.error("Error fetching lab tests:", error);
-      }
-    };
-
-    fetchDoctors(); // Call the fetch function when the component mounts
-    fetchLabTests();
-  }, []); // Empty dependency array means this runs once when the component mounts
 
   // Reset all fields when popup is shown
   useEffect(() => {
