@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import "../../styles/doctorDashboard.css";
+import "../Admin/styles/appointments.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -649,13 +650,10 @@ const Departments = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="main-content-department">
-        <div
-          className="table-container p-6 font-sans"
-          style={{ marginTop: "150px" }}
-        >
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-black">Department Info</h1>
+      <div id="main-content">
+        <div className="bg-white rounded-lg p-6 shadow font-sans">
+          <div className="flex justify-between items-center mb-">
+            <h1 className="text-black text-2xl font-semibold">Department Info</h1>
             <div className="flex gap-4">
               <button onClick={() => setShowModal(true)} className="uButton">
                 + Department
@@ -663,22 +661,22 @@ const Departments = () => {
             </div>
           </div>
 
-          <div className="flex items-center mb-6">
-            <div className="flex items-center border border-gray-300 rounded-full w-[200px] h-8 px-3 py-2 mr-4 bg-[#E8F9F1]">
-              <Search size={18} className="text-[#3BA092]" />
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="ml-2 outline-none bg-transparent w-full placeholder-[#969696] text-[#969696]"
-              />
-            </div>
-            <button className="flex items-center bg-transparent border rounded-full border-[#3BA092] w-[158px] h-8 px-4 py-2 rounded hover:bg-gray-50 text-xs text-[#969696]">
-              <Filter size={18} className="mr-2 text-[#3BA092]" /> Filter by
-              Date
-            </button>
-          </div>
+          {/* Search and Filter */}
+                    <div className="flex items-center mb-6">
+                      <div id="search-container">
+                        <Search size={18} className="search-icon" />
+                        <input
+                          type="text"
+                          placeholder="Search"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          id="search-input"
+                        />
+                      </div>
+                      <button id="filter-button">
+                        <Filter size={18} className="filter-icon" /> Filter by Date
+                      </button>
+                    </div>
 
           <div className="table-wrapper">
             <table className="table-content" style={{ marginTop: "0px" }}>
