@@ -823,18 +823,13 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const logout = (e) => {
-    // Clear all auth-related items from localStorage
-
+   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    // Redirect to login page
-    console.log("logged out");
-    navigate("/");
-    // Force full page reload to clear any state
+    navigate('/');
     window.location.reload();
   };
 
@@ -1057,101 +1052,96 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
   return (
     <div>
       {/* Navbar */}
-      <nav className="navbar">
-        <div className="navbar-left">
-          <div className="logo-circle"></div>
-          <span className="mfu-text">MFU </span>
-          <span className="wellness-text">Wellness Center</span>
+      <nav id="navbar">
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU </span>
+          <span id="wellness-text">Wellness Center</span>
         </div>
-        <div className="navbar-right">
-          <button className="notification-btn">
-            <FontAwesomeIcon icon={faBell} className="icon" />
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
-          <div className="profile">
+          <div id="profile">
             <img
               src="/img/profile.png"
               alt="Profile"
-              className="profile-image"
+              id="profile-image"
             />
-            <span className="profile-name">Admin</span>
+            <span id="profile-name">Admin</span>
           </div>
         </div>
       </nav>
 
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-container">
-          <button className="sidebar-btn">
-            <img
-              src="/img/ChartLineUp.png"
-              alt="Dashboard Icon"
-              className="sidebar-icon"
-            />{" "}
-            <Link to="/admindashboard" className="sidebar-link">
-              Dashboard
-            </Link>
+       {/* Sidebar */}
+            <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+              <Link to="/recommendations" className="sidebar-link">
+                Recommendations
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
+      
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+              <Link to="/schedules" className="sidebar-link">
+                Schedules
+              </Link>
+            </button>
+          </div>
+      
+          <button className="sidebar-btn logout" onClick={logout}>
+                <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+                <span className="login-link">Logout</span>
           </button>
-
-          <button className="sidebar-btn active-tab">
-            <FontAwesomeIcon icon={faUser} className="sidebar-icon" />
-            <Link to="/patient" className="sidebar-link">
-              Patients
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faCalendarAlt} className="sidebar-icon" />
-            <Link to="/appointments" className="sidebar-link">
-              Appointments
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faUserMd} className="sidebar-icon" />
-            <Link to="/doctors" className="sidebar-link">
-              Doctors
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faFileMedical} className="sidebar-icon" />
-            <Link to="/recommendations" className="sidebar-link">
-              Recommendations
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faHospital} className="sidebar-icon" />
-            <Link to="/departments" className="sidebar-link">
-              Departments
-            </Link>
-          </button>
-
-          <button className="sidebar-btn">
-            <FontAwesomeIcon icon={faCalendarDay} className="sidebar-icon" />
-            <Link to="/schedules" className="sidebar-link">
-              Schedules
-            </Link>
-          </button>
-        </div>
-
-        <button className="sidebar-btn logout" onClick={logout}>
-          <img
-            src="/img/material-symbols_logout.png"
-            alt="Logout Icon"
-            className="sidebar-icon"
-          />
-          <Link to="/" className="login-link">
-            Logout
-          </Link>
-        </button>
-      </aside>
+        </aside>
 
       {/* Main Content */}
-      <div className="table-container font-sans">
-        <div className="flex justify-between items-center mb-6 mt-6">
-          <h1 className="text-black">Patient Info</h1>
-          <div className="flex gap-10">
+      <div id="main-content">
+        <div className="bg-white rounded-lg p-6 shadow font-sans">
+          <div className="flex justify-between items-center mb-">
+            <h1 className="text-black text-2xl font-semibold">Patient Info</h1>
+            <div className="flex gap-10">
             <button
               onClick={() => setShowLabUploadPopup(true)}
               className="uButton"
@@ -1168,21 +1158,22 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
           </div>
         </div>
 
-        <div className="flex items-center mb-6">
-          <div className="flex items-center border border-gray-300 rounded-full w-[200px] h-8 px-3 py-2 mr-4 bg-[#E8F9F1]">
-            <Search size={18} className="text-[#3BA092]" />
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="ml-2 outline-none bg-transparent w-full placeholder-[#969696] text-[#969696]"
-            />
-          </div>
-          <button className="flex items-center bg-transparent border rounded-full border-[#3BA092] w-[158px] h-8 px-4 py-2 rounded hover:bg-gray-50 text-xs text-[#969696]">
-            <Filter size={18} className="mr-2 text-[#3BA092]" /> Filter by Date
-          </button>
-        </div>
+        {/* Search and Filter */}
+                  <div className="flex items-center mb-6">
+                    <div id="search-container">
+                      <Search size={18} className="search-icon" />
+                      <input
+                        type="text"
+                        placeholder="Search"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        id="search-input"
+                      />
+                    </div>
+                    <button id="filter-button">
+                      <Filter size={18} className="filter-icon" /> Filter by Date
+                    </button>
+                  </div>
 
         <div className="table-wrapper">
           <table className="table-content">
@@ -1323,6 +1314,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
           onClose={() => setShowPatientUploadPopup(false)}
           onUpload={handlePatientUploadSuccess}
         />
+      </div>
       </div>
     </div>
   );
