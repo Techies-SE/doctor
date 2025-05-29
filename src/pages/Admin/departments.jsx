@@ -643,7 +643,7 @@ const Departments = () => {
         </div>
 
          <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
+          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
           <span className="login-link">Logout</span>
         </button>
       </aside>
