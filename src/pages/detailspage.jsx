@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +18,7 @@ const DetailsPage = () => {
   const [isApproved, setIsApproved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
+  const [recommendationId, setRecommendationId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const DetailsPage = () => {
         if (!token) throw new Error("No authentication token found");
         setLoading(true);
         const response = await fetch(
-          `https://backend-pg-cm2b.onrender.com/doctors/${hn_number}/lab-test/${lab_test_id}`,
+          `https://backend-pg-cm2b.onrender.com/doctors/${hn_number}/lab-test`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -44,6 +45,15 @@ const DetailsPage = () => {
         setPatientData(data);
         setRecommendation(data.lab_test?.generated_recommendation || "");
         setIsApproved(data.lab_test?.recommendation_status === "approved");
+
+        // Extract and store recommendation_id
+        if (data.lab_test?.recommendation_id) {
+          setRecommendationId(data.lab_test.recommendation_id);
+          console.log(
+            "Recommendation ID captured:",
+            data.lab_test.recommendation_id
+          );
+        }
       } catch (err) {
         console.error("Error fetching patient details:", err);
         setError(err.message);
@@ -54,15 +64,17 @@ const DetailsPage = () => {
 
     fetchPatientDetails();
   }, [hn_number, lab_test_id]);
+  
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
+  
   const handleModify = () => {
     setIsEditing(true);
   };
@@ -72,18 +84,27 @@ const DetailsPage = () => {
       setIsSaving(true);
       setError(null);
       const token = localStorage.getItem("authToken");
-      console.log("Auth Token:", token); // Debug token
+      console.log("Auth Token:", token);
+      console.log("Using recommendation_id:", recommendationId);
+      
       if (!token) throw new Error("No authentication token found");
-      if (!lab_test_id) throw new Error("lab_test_id is missing");
+      if (!recommendationId) throw new Error("recommendation_id is missing");
+      
+      const requestBody = {
+        generated_recommendation: recommendation
+      };
+      
+      console.log("Request body:", requestBody);
+      
       const response = await fetch(
-        `https://backend-pg-cm2b.onrender.com/recommendations/${lab_test_id}`,
+        `https://backend-pg-cm2b.onrender.com/recommendations/${recommendationId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ generated_recommendation: recommendation }),
+          body: JSON.stringify(requestBody),
         }
       );
 
@@ -126,10 +147,14 @@ const DetailsPage = () => {
     try {
       setIsApproving(true);
       const token = localStorage.getItem("authToken");
-      console.log("Auth Token:", token); // Debug token
+      console.log("Auth Token:", token);
+      console.log("Using recommendation_id for approval:", recommendationId);
+      
       if (!token) throw new Error("No authentication token found");
+      if (!recommendationId) throw new Error("recommendation_id is missing");
+      
       const response = await fetch(
-        `https://backend-pg-cm2b.onrender.com/recommendations/${lab_test_id}/approve`,
+        `https://backend-pg-cm2b.onrender.com/recommendations/${recommendationId}/approve`,
         {
           method: "PATCH",
           headers: {
@@ -164,7 +189,6 @@ const DetailsPage = () => {
     } catch (err) {
       console.error("Error approving recommendation:", err);
       setError(err.message);
-      // You might want to show an error message to the user here
     } finally {
       setIsApproving(false);
     }
@@ -226,21 +250,42 @@ const DetailsPage = () => {
       <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
-            <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" /> 
-              <Link to="/dashboard" className="dashboard-link">Dashboard</Link>
+            <img
+              src="/img/ChartLineUp.png"
+              alt="Dashboard Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/dashboard" className="dashboard-link">
+              Dashboard
+            </Link>
           </button>
           <button className="sidebar-btn active-tab">
-            <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />Patients
+            <img
+              src="/img/UsersThree.png"
+              alt="Patients Icon"
+              className="sidebar-icon"
+            />
+            Patients
           </button>
           <button className="sidebar-btn">
-            <img src="/img/Calendar.png" alt="Calendar Icon" className="sidebar-icon" />
-            <Link to="/calendar" className="calendar-link">Calendar</Link>
+            <img
+              src="/img/Calendar.png"
+              alt="Calendar Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/calendar" className="calendar-link">
+              Calendar
+            </Link>
           </button>
         </div>
-            
+
         <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
-            <span className="login-link">Logout</span>
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            className="sidebar-icon"
+          />
+          <span className="login-link">Logout</span>
         </button>
       </aside>
 

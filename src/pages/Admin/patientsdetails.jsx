@@ -210,41 +210,41 @@ const PatientDetails = ({ hn_number, onBack }) => {
     }));
   };
 
-  const StatusBadge = ({ status }) => {
-    const statusConfig = {
-      pending: {
-        color: "bg-amber-100 text-amber-800",
-        icon: <Clock size={14} className="mr-1" />,
-      },
-      completed: {
-        color: "bg-green-100 text-green-800",
-        icon: <CheckCircle size={14} className="mr-1" />,
-      },
-      canceled: {
-        color: "bg-red-100 text-red-800",
-        icon: <XCircle size={14} className="mr-1" />,
-      },
-      scheduled: {
-        color: "bg-blue-100 text-blue-800",
-        icon: <Calendar size={14} className="mr-1" />,
-      },
-      rescheduled: {
-        color: "bg-purple-100 text-purple-800",
-        icon: <Calendar size={14} className="mr-1" />,
-      },
-    };
+  // const StatusBadge = ({ status }) => {
+  //   const statusConfig = {
+  //     pending: {
+  //       color: "bg-amber-100 text-amber-800",
+  //       icon: <Clock size={14} className="mr-1" />,
+  //     },
+  //     completed: {
+  //       color: "bg-green-100 text-green-800",
+  //       icon: <CheckCircle size={14} className="mr-1" />,
+  //     },
+  //     canceled: {
+  //       color: "bg-red-100 text-red-800",
+  //       icon: <XCircle size={14} className="mr-1" />,
+  //     },
+  //     scheduled: {
+  //       color: "bg-blue-100 text-blue-800",
+  //       icon: <Calendar size={14} className="mr-1" />,
+  //     },
+  //     rescheduled: {
+  //       color: "bg-purple-100 text-purple-800",
+  //       icon: <Calendar size={14} className="mr-1" />,
+  //     },
+  //   };
 
-    return (
-      <span
-        className={`status-badge ${
-          statusConfig[status]?.color || "bg-gray-100 text-gray-800"
-        }`}
-      >
-        {statusConfig[status]?.icon}
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </span>
-    );
-  };
+  //   return (
+  //     <span
+  //       className={`status-badge ${
+  //         statusConfig[status]?.color || "bg-gray-100 text-gray-800"
+  //       }`}
+  //     >
+  //       {statusConfig[status]?.icon}
+  //       {status.charAt(0).toUpperCase() + status.slice(1)}
+  //     </span>
+  //   );
+  // };
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -563,7 +563,7 @@ const PatientDetails = ({ hn_number, onBack }) => {
                       <span className="test-name">
                         {test.test_name || "Unnamed Test"}
                       </span>
-                      <StatusBadge status={test.status} />
+                      {/* <StatusBadge status={test.status} /> */}
                     </div>
                     <div className="test-date">
                       <span className="date-text">
@@ -686,7 +686,7 @@ const PatientDetails = ({ hn_number, onBack }) => {
                               <td>{appointment.doctor?.department || "-"}</td>
                               {status === "canceled" && (
                                 <td>
-                                  <StatusBadge status={appointment.status} />
+                                  {/* <StatusBadge status={appointment.status} /> */}
                                 </td>
                               )}
                             </tr>

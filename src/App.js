@@ -31,7 +31,7 @@ function App() {
       <Route path="/schedules" element={<Schedules/>}/>
       <Route path="/docdetails" element={<DoctorDetails/>}/>
       <Route path="/patientlists" element={<PatientList/>}/>
-      <Route path="/details/:hn_number/lab-test/:lab_test_id" element={<DetailsPage />}/>
+      <Route path="/details/:hn_number/lab-test" element={<DetailsPage />}/>
     </Routes>
   );
 }

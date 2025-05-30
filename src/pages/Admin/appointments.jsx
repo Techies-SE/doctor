@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import "../../styles/doctorDashboard.css";
 import "../Admin/styles/appointments.css";
 import {
@@ -25,7 +25,6 @@ import {
   faHospital,
   faCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
-
 
 const Appointments = () => {
   const navigate = useNavigate();
@@ -52,7 +51,6 @@ const Appointments = () => {
   });
 
   useEffect(() => {
-    
     const fetchCompleteCount = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -80,7 +78,7 @@ const Appointments = () => {
         console.error("Error fetching completed count:", err);
       }
     };
-    
+
     const fetchCancelCount = async () => {
       try {
         const token = localStorage.getItem("authToken");
@@ -283,7 +281,7 @@ const Appointments = () => {
     fetchPendingCount();
     fetchAppointments();
   }, []);
-  
+
   const handleApproveAppointment = async (appointmentId) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -369,19 +367,19 @@ const Appointments = () => {
     try {
       const formattedDate = date;
       const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No auth token found");
-          return;
-        }
+      if (!token) {
+        console.error("No auth token found");
+        return;
+      }
       const response = await fetch(
         `https://backend-pg-cm2b.onrender.com/appointments/available-slots/${doctorId}/${formattedDate}`,
         {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       if (!response.ok) {
@@ -446,18 +444,18 @@ const Appointments = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No auth token found");
-          return;
-        }
+      if (!token) {
+        console.error("No auth token found");
+        return;
+      }
       const response = await fetch(
         `https://backend-pg-cm2b.onrender.com/appointments/${selectedAppointment.appointmentId}/reschedule`,
         {
           method: "PATCH",
           headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             new_date: selectedDate,
             new_time: `${selectedTimeSlot}:00`,
@@ -599,191 +597,199 @@ const Appointments = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
 
   if (loading) {
     return (
-    <div>
-      {/* Navbar */}
-      <nav id="navbar">
-    <div id="navbar-left">
-      <div id="logo-circle"></div>
-      <span id="mfu-text">MFU </span>
-      <span id="wellness-text">Wellness Center</span>
-    </div>
-    <div id="navbar-right">
-      <button id="notification-btn">
-        <FontAwesomeIcon icon={faBell} id="icon" />
-      </button>
-      <div id="profile">
-        <img src="/img/profile.png" alt="Profile" id="profile-image" />
-        <span id="profile-name">Admin</span>
-      </div>
-    </div>
-  </nav>
-      {/* Sidebar */}
-      <aside id="sidebar">
-    <div className="sidebar-container">
-      <button className="sidebar-btn">
-        <img
-          src="/img/ChartLineUp.png"
-          alt="Dashboard Icon"
-          id="sidebar-icon"
-        />
-        <Link to="/admindashboard" className="sidebar-link">
-          Dashboard
-        </Link>
-      </button>
+      <div>
+        {/* Navbar */}
+        <nav id="navbar">
+          <div id="navbar-left">
+            <div id="logo-circle"></div>
+            <span id="mfu-text">MFU </span>
+            <span id="wellness-text">Wellness Center</span>
+          </div>
+          <div id="navbar-right">
+            <button id="notification-btn">
+              <FontAwesomeIcon icon={faBell} id="icon" />
+            </button>
+            <div id="profile">
+              <img src="/img/profile.png" alt="Profile" id="profile-image" />
+              <span id="profile-name">Admin</span>
+            </div>
+          </div>
+        </nav>
+        {/* Sidebar */}
+        <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
-        <Link to="/patient" className="sidebar-link">
-          Patients
-        </Link>
-      </button>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
 
-      <button className="sidebar-btn active-tab">
-        <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
-        <Link to="/appointments" className="sidebar-link">
-          Appointments
-        </Link>
-      </button>
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
-        <Link to="/doctors" className="sidebar-link">
-          Doctors
-        </Link>
-      </button>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
-        <Link to="/recommendations" className="sidebar-link">
-          Recommendations
-        </Link>
-      </button>
+            {/* <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+              <Link to="/recommendations" className="sidebar-link">
+                Recommendations
+              </Link>
+            </button> */}
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
-        <Link to="/departments" className="sidebar-link">
-          Departments
-        </Link>
-      </button>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
-        <Link to="/schedules" className="sidebar-link">
-          Schedules
-        </Link>
-      </button>
-    </div>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+              <Link to="/schedules" className="sidebar-link">
+                Schedules
+              </Link>
+            </button>
+          </div>
 
-    <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
-          <span className="login-link">Logout</span>
-    </button>
-  </aside>
-      <div id="main-content">
-        <div className="content-area">
-          <div className="w-full h-screen p-8 bg-white">Loading...</div>
+          <button className="sidebar-btn logout" onClick={logout}>
+            <img
+              src="/img/material-symbols_logout.png"
+              alt="Logout Icon"
+              id="sidebar-icon"
+            />
+            <span className="login-link">Logout</span>
+          </button>
+        </aside>
+        <div id="main-content">
+          <div className="content-area">
+            <div className="w-full h-screen p-8 bg-white">Loading...</div>
+          </div>
         </div>
       </div>
-    </div>
     );
   }
 
   if (error) {
     return (
       <div>
-      {/* Navbar */}
-      <nav id="navbar">
-    <div id="navbar-left">
-      <div id="logo-circle"></div>
-      <span id="mfu-text">MFU </span>
-      <span id="wellness-text">Wellness Center</span>
-    </div>
-    <div id="navbar-right">
-      <button id="notification-btn">
-        <FontAwesomeIcon icon={faBell} id="icon" />
-      </button>
-      <div id="profile">
-        <img src="/img/profile.png" alt="Profile" id="profile-image" />
-        <span id="profile-name">Admin</span>
-      </div>
-    </div>
-  </nav>
-      {/* Sidebar */}
-      <aside id="sidebar">
-    <div className="sidebar-container">
-      <button className="sidebar-btn">
-        <img
-          src="/img/ChartLineUp.png"
-          alt="Dashboard Icon"
-          id="sidebar-icon"
-        />
-        <Link to="/admindashboard" className="sidebar-link">
-          Dashboard
-        </Link>
-      </button>
+        {/* Navbar */}
+        <nav id="navbar">
+          <div id="navbar-left">
+            <div id="logo-circle"></div>
+            <span id="mfu-text">MFU </span>
+            <span id="wellness-text">Wellness Center</span>
+          </div>
+          <div id="navbar-right">
+            <button id="notification-btn">
+              <FontAwesomeIcon icon={faBell} id="icon" />
+            </button>
+            <div id="profile">
+              <img src="/img/profile.png" alt="Profile" id="profile-image" />
+              <span id="profile-name">Admin</span>
+            </div>
+          </div>
+        </nav>
+        {/* Sidebar */}
+        <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
-        <Link to="/patient" className="sidebar-link">
-          Patients
-        </Link>
-      </button>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
 
-      <button className="sidebar-btn active-tab">
-        <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
-        <Link to="/appointments" className="sidebar-link">
-          Appointments
-        </Link>
-      </button>
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
-        <Link to="/doctors" className="sidebar-link">
-          Doctors
-        </Link>
-      </button>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
-        <Link to="/recommendations" className="sidebar-link">
-          Recommendations
-        </Link>
-      </button>
+            {/* <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+              <Link to="/recommendations" className="sidebar-link">
+                Recommendations
+              </Link>
+            </button> */}
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
-        <Link to="/departments" className="sidebar-link">
-          Departments
-        </Link>
-      </button>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
-        <Link to="/schedules" className="sidebar-link">
-          Schedules
-        </Link>
-      </button>
-    </div>
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+              <Link to="/schedules" className="sidebar-link">
+                Schedules
+              </Link>
+            </button>
+          </div>
 
-    <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
-          <span className="login-link">Logout</span>
-    </button>
-  </aside>
-      <div id="main-content">
-        <div className="content-area">
-          <div className="w-full h-screen p-8 bg-white text-red-500">
-            Error: {error}
+          <button className="sidebar-btn logout" onClick={logout}>
+            <img
+              src="/img/material-symbols_logout.png"
+              alt="Logout Icon"
+              id="sidebar-icon"
+            />
+            <span className="login-link">Logout</span>
+          </button>
+        </aside>
+        <div id="main-content">
+          <div className="content-area">
+            <div className="w-full h-screen p-8 bg-white text-red-500">
+              Error: {error}
+            </div>
           </div>
         </div>
       </div>
-     </div>
     );
   }
 
@@ -791,131 +797,136 @@ const Appointments = () => {
     <div>
       {/* Navbar */}
       <nav id="navbar">
-    <div id="navbar-left">
-      <div id="logo-circle"></div>
-      <span id="mfu-text">MFU </span>
-      <span id="wellness-text">Wellness Center</span>
-    </div>
-    <div id="navbar-right">
-      <button id="notification-btn">
-        <FontAwesomeIcon icon={faBell} id="icon" />
-      </button>
-      <div id="profile">
-        <img src="/img/profile.png" alt="Profile" id="profile-image" />
-        <span id="profile-name">Admin</span>
-      </div>
-    </div>
-  </nav>
+        <div id="navbar-left">
+          <div id="logo-circle"></div>
+          <span id="mfu-text">MFU </span>
+          <span id="wellness-text">Wellness Center</span>
+        </div>
+        <div id="navbar-right">
+          <button id="notification-btn">
+            <FontAwesomeIcon icon={faBell} id="icon" />
+          </button>
+          <div id="profile">
+            <img src="/img/profile.png" alt="Profile" id="profile-image" />
+            <span id="profile-name">Admin</span>
+          </div>
+        </div>
+      </nav>
       {/* Sidebar */}
       <aside id="sidebar">
-    <div className="sidebar-container">
-      <button className="sidebar-btn">
-        <img
-          src="/img/ChartLineUp.png"
-          alt="Dashboard Icon"
-          id="sidebar-icon"
-        />
-        <Link to="/admindashboard" className="sidebar-link">
-          Dashboard
-        </Link>
-      </button>
+        <div className="sidebar-container">
+          <button className="sidebar-btn">
+            <img
+              src="/img/ChartLineUp.png"
+              alt="Dashboard Icon"
+              id="sidebar-icon"
+            />
+            <Link to="/admindashboard" className="sidebar-link">
+              Dashboard
+            </Link>
+          </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
-        <Link to="/patient" className="sidebar-link">
-          Patients
-        </Link>
-      </button>
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+            <Link to="/patient" className="sidebar-link">
+              Patients
+            </Link>
+          </button>
 
-      <button className="sidebar-btn active-tab">
-        <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
-        <Link to="/appointments" className="sidebar-link">
-          Appointments
-        </Link>
-      </button>
+          <button className="sidebar-btn active-tab">
+            <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+            <Link to="/appointments" className="sidebar-link">
+              Appointments
+            </Link>
+          </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
-        <Link to="/doctors" className="sidebar-link">
-          Doctors
-        </Link>
-      </button>
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+            <Link to="/doctors" className="sidebar-link">
+              Doctors
+            </Link>
+          </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
-        <Link to="/recommendations" className="sidebar-link">
-          Recommendations
-        </Link>
-      </button>
+          {/* <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+            <Link to="/recommendations" className="sidebar-link">
+              Recommendations
+            </Link>
+          </button> */}
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
-        <Link to="/departments" className="sidebar-link">
-          Departments
-        </Link>
-      </button>
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+            <Link to="/departments" className="sidebar-link">
+              Departments
+            </Link>
+          </button>
 
-      <button className="sidebar-btn">
-        <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
-        <Link to="/schedules" className="sidebar-link">
-          Schedules
-        </Link>
-      </button>
-    </div>
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+            <Link to="/schedules" className="sidebar-link">
+              Schedules
+            </Link>
+          </button>
+        </div>
 
-    <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+        <button className="sidebar-btn logout" onClick={logout}>
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            id="sidebar-icon"
+          />
           <span className="login-link">Logout</span>
-    </button>
-  </aside>
-    <div id="main-content">
+        </button>
+      </aside>
+      <div id="main-content">
         <div className="bg-white rounded-lg p-6 shadow font-sans">
           <div className="flex justify-between items-center mb-">
-            <h1 className="text-black text-2xl font-semibold">Appointment List</h1>
+            <h1 className="text-black text-2xl font-semibold">
+              Appointment List
+            </h1>
           </div>
 
           {/* Stats Cards */}
-<div className="stats-scroll-container">
-  <div className="stats-grid">
-    <div className="stats-card">
-      <div className="stats-card-content">
-        <div className="stats-card-number">{appointmentCount}</div>
-        <div className="stats-card-label">Total Bookings</div>
-      </div>
-    </div>
-    <div className="stats-card">
-      <div className="stats-card-content">
-        <div className="stats-card-number">{pendingCount}</div>
-        <div className="stats-card-label">Pending</div>
-      </div>
-    </div>
-    <div className="stats-card">
-      <div className="stats-card-content">
-        <div className="stats-card-number">{confirmCount}</div>
-        <div className="stats-card-label">Confirmed</div>
-      </div>
-    </div>
-    <div className="stats-card">
-      <div className="stats-card-content">
-        <div className="stats-card-number">{rescheduleCount}</div>
-        <div className="stats-card-label">Rescheduled</div>
-      </div>
-    </div>
-    <div className="stats-card">
-      <div className="stats-card-content">
-        <div className="stats-card-number">{completeCount}</div>
-        <div className="stats-card-label">Completed</div>
-      </div>
-    </div>
-    <div className="stats-card">
-      <div className="stats-card-content">
-        <div className="stats-card-number">{cancelCount}</div>
-        <div className="stats-card-label">Canceled</div>
-      </div>
-    </div>
-  </div>
-</div>
-
+          <div className="stats-scroll-container">
+            <div className="stats-grid">
+              <div className="stats-card">
+                <div className="stats-card-content">
+                  <div className="stats-card-number">{appointmentCount}</div>
+                  <div className="stats-card-label">Total Bookings</div>
+                </div>
+              </div>
+              <div className="stats-card">
+                <div className="stats-card-content">
+                  <div className="stats-card-number">{pendingCount}</div>
+                  <div className="stats-card-label">Pending</div>
+                </div>
+              </div>
+              <div className="stats-card">
+                <div className="stats-card-content">
+                  <div className="stats-card-number">{confirmCount}</div>
+                  <div className="stats-card-label">Confirmed</div>
+                </div>
+              </div>
+              <div className="stats-card">
+                <div className="stats-card-content">
+                  <div className="stats-card-number">{rescheduleCount}</div>
+                  <div className="stats-card-label">Rescheduled</div>
+                </div>
+              </div>
+              <div className="stats-card">
+                <div className="stats-card-content">
+                  <div className="stats-card-number">{completeCount}</div>
+                  <div className="stats-card-label">Completed</div>
+                </div>
+              </div>
+              <div className="stats-card">
+                <div className="stats-card-content">
+                  <div className="stats-card-number">{cancelCount}</div>
+                  <div className="stats-card-label">Canceled</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Search and Filter */}
           <div className="flex items-center mb-6">
@@ -1008,34 +1019,40 @@ const Appointments = () => {
                         </span>
                       </td>
                       <td style={{ padding: "1rem" }}>
-  <div className="action-buttons">
-    <button
-      onClick={() => handleApproveAppointment(appointment.appointmentId)}
-      className="icon-button"
-      title="Approve"
-    >
-      <Check className="icon-green" />
-    </button>
+                        <div className="action-buttons">
+                          <button
+                            onClick={() =>
+                              handleApproveAppointment(
+                                appointment.appointmentId
+                              )
+                            }
+                            className="icon-button"
+                            title="Approve"
+                          >
+                            <Check className="icon-green" />
+                          </button>
 
-    <button
-      onClick={() => handleCancelAppointment(appointment.appointmentId)}
-      className="icon-button"
-      title="Cancel"
-    >
-      <X className="icon-red" />
-    </button>
+                          <button
+                            onClick={() =>
+                              handleCancelAppointment(appointment.appointmentId)
+                            }
+                            className="icon-button"
+                            title="Cancel"
+                          >
+                            <X className="icon-red" />
+                          </button>
 
-    <button
-      onClick={() => handleOpenRescheduleModal(appointment)}
-      className="icon-button"
-      title="Reschedule"
-    >
-      <Calendar className="icon-blue" />
-    </button>
-  </div>
-</td>
-
-
+                          <button
+                            onClick={() =>
+                              handleOpenRescheduleModal(appointment)
+                            }
+                            className="icon-button"
+                            title="Reschedule"
+                          >
+                            <Calendar className="icon-blue" />
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -1044,149 +1061,160 @@ const Appointments = () => {
           </div>
 
           {/* Pagination */}
-{!loading && !error && filteredAppointments.length > 0 && (
-  <div className="pagination-container">
-    <button
-      onClick={() => handlePageChange(1)}
-      disabled={currentPage === 1}
-      className="pButton"
-    >
-      First
-    </button>
-    <button
-      onClick={() => handlePageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-      className="pButton"
-    >
-      Previous
-    </button>
-    {renderPagination()}
-    <button
-      onClick={() => handlePageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-      className="pButton"
-    >
-      Next
-    </button>
-    <button
-      onClick={() => handlePageChange(totalPages)}
-      disabled={currentPage === totalPages}
-      className="pButton"
-    >
-      Last
-    </button>
-  </div>
-)}
+          {!loading && !error && filteredAppointments.length > 0 && (
+            <div className="pagination-container">
+              <button
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="pButton"
+              >
+                First
+              </button>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="pButton"
+              >
+                Previous
+              </button>
+              {renderPagination()}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="pButton"
+              >
+                Next
+              </button>
+              <button
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="pButton"
+              >
+                Last
+              </button>
+            </div>
+          )}
 
           {showRescheduleModal && selectedAppointment ? (
-  <div className="reschedule-modal">
-    <div className="modal-overlay" onClick={handleCloseRescheduleModal}></div>
-    <div className="modal-container">
-      {/* Modal Header */}
-      <div className="modal-header">
-        <h2 className="modal-title">Reschedule Appointment</h2>
-        <button onClick={handleCloseRescheduleModal} className="modal-close">
-          <X className="icon" />
-        </button>
-      </div>
+            <div className="reschedule-modal">
+              <div
+                className="modal-overlay"
+                onClick={handleCloseRescheduleModal}
+              ></div>
+              <div className="modal-container">
+                {/* Modal Header */}
+                <div className="modal-header">
+                  <h2 className="modal-title">Reschedule Appointment</h2>
+                  <button
+                    onClick={handleCloseRescheduleModal}
+                    className="modal-close"
+                  >
+                    <X className="icon" />
+                  </button>
+                </div>
 
-      <form onSubmit={handleRescheduleAppointment}>
-        {/* Modal Content */}
-        <div className="modal-body">
-          <div className="section">
-            <h3 className="section-title">{selectedAppointment.doctor}</h3>
-            <p className="section-subtitle">{selectedAppointment.specialty}</p>
-          </div>
-
-          <div className="section">
-            <label className="section-label">Patient</label>
-            <p>{selectedAppointment.patientName}</p>
-          </div>
-
-          <div className="section">
-            <label className="section-label">Current Appointment</label>
-            <p>
-              {selectedAppointment.date} at {selectedAppointment.time}
-            </p>
-          </div>
-
-          <div className="section">
-            <label className="section-label" htmlFor="newDate">
-              Select New Date
-            </label>
-            <input
-              id="newDate"
-              type="date"
-              value={selectedDate}
-              onChange={handleDateChange}
-              className="date-input"
-              required
-            />
-          </div>
-
-          <div className="section">
-            <label className="section-label">Available Time Slots</label>
-            {availableTimeSlots.length > 0 ? (
-              <div className="time-slot-grid">
-                {availableTimeSlots.map((time) => (
-                  <label key={time} className="time-slot-label">
-                    <input
-                      type="radio"
-                      name="timeSlot"
-                      value={time}
-                      checked={selectedTimeSlot === time}
-                      onChange={() => setSelectedTimeSlot(time)}
-                      className="hidden"
-                      required
-                    />
-                    <div
-                      className={`time-slot ${
-                        selectedTimeSlot === time ? "selected" : ""
-                      }`}
-                    >
-                      {time}
+                <form onSubmit={handleRescheduleAppointment}>
+                  {/* Modal Content */}
+                  <div className="modal-body">
+                    <div className="section">
+                      <h3 className="section-title">
+                        {selectedAppointment.doctor}
+                      </h3>
+                      <p className="section-subtitle">
+                        {selectedAppointment.specialty}
+                      </p>
                     </div>
-                  </label>
-                ))}
+
+                    <div className="section">
+                      <label className="section-label">Patient</label>
+                      <p>{selectedAppointment.patientName}</p>
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label">
+                        Current Appointment
+                      </label>
+                      <p>
+                        {selectedAppointment.date} at {selectedAppointment.time}
+                      </p>
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label" htmlFor="newDate">
+                        Select New Date
+                      </label>
+                      <input
+                        id="newDate"
+                        type="date"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        className="date-input"
+                        required
+                      />
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label">
+                        Available Time Slots
+                      </label>
+                      {availableTimeSlots.length > 0 ? (
+                        <div className="time-slot-grid">
+                          {availableTimeSlots.map((time) => (
+                            <label key={time} className="time-slot-label">
+                              <input
+                                type="radio"
+                                name="timeSlot"
+                                value={time}
+                                checked={selectedTimeSlot === time}
+                                onChange={() => setSelectedTimeSlot(time)}
+                                className="hidden"
+                                required
+                              />
+                              <div
+                                className={`time-slot ${
+                                  selectedTimeSlot === time ? "selected" : ""
+                                }`}
+                              >
+                                {time}
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="no-slots">
+                          No available time slots for this date
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      onClick={handleCloseRescheduleModal}
+                      className="btn-cancel"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className={`btn-confirm ${
+                        !selectedTimeSlot ? "disabled" : ""
+                      }`}
+                      disabled={!selectedTimeSlot}
+                    >
+                      Confirm Reschedule
+                    </button>
+                  </div>
+                </form>
               </div>
-            ) : (
-              <p className="no-slots">No available time slots for this date</p>
-            )}
-          </div>
-        </div>
-
-        {/* Modal Footer */}
-        <div className="modal-footer">
-          <button
-            type="button"
-            onClick={handleCloseRescheduleModal}
-            className="btn-cancel"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className={`btn-confirm ${
-              !selectedTimeSlot ? "disabled" : ""
-            }`}
-            disabled={!selectedTimeSlot}
-          >
-            Confirm Reschedule
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-): null}
-
-
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
-  
   );
 };
-
-
 
 export default Appointments;

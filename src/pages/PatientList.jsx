@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -127,9 +127,9 @@ const PatientList = () => {
           `https://backend-pg-cm2b.onrender.com/doctors/patients-lab-tests`,
           {
             headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        }
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
@@ -164,13 +164,13 @@ const PatientList = () => {
 
     fetchPatients();
   }, [doctorData?.id]);
-const logout = (e) => {
+  const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
   const sortedPatients = React.useMemo(() => {
@@ -309,27 +309,48 @@ const logout = (e) => {
       <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
-            <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" /> 
-            <Link to="/dashboard" className="dashboard-link">Dashboard</Link>
+            <img
+              src="/img/ChartLineUp.png"
+              alt="Dashboard Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/dashboard" className="dashboard-link">
+              Dashboard
+            </Link>
           </button>
           <button className="sidebar-btn active-tab">
-            <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />Patients
+            <img
+              src="/img/UsersThree.png"
+              alt="Patients Icon"
+              className="sidebar-icon"
+            />
+            Patients
           </button>
           <button className="sidebar-btn">
-            <img src="/img/Calendar.png" alt="Calendar Icon" className="sidebar-icon" />
-                <Link to="/calendar" className="calendar-link">Calendar</Link>
+            <img
+              src="/img/Calendar.png"
+              alt="Calendar Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/calendar" className="calendar-link">
+              Calendar
+            </Link>
           </button>
         </div>
-      
-          <button className="sidebar-btn logout" onClick={logout}>
-            <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
-              <span className="login-link">Logout</span>
-          </button>
+
+        <button className="sidebar-btn logout" onClick={logout}>
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            className="sidebar-icon"
+          />
+          <span className="login-link">Logout</span>
+        </button>
       </aside>
 
       {/* Main Content */}
       <div id="main-content">
-       <div className="bg-white rounded-lg p-6 shadow font-sans">
+        <div className="bg-white rounded-lg p-6 shadow font-sans">
           <div className="flex justify-between items-center mb-">
             <h1 className="text-black text-2xl font-semibold">Patient List</h1>
           </div>
@@ -353,9 +374,7 @@ const logout = (e) => {
             {loading ? (
               <div id="loading-message">Loading patient data...</div>
             ) : error ? (
-              <div id="error-message">
-                Error loading patients: {error}
-              </div>
+              <div id="error-message">Error loading patients: {error}</div>
             ) : (
               <table id="table-content">
                 <thead>
@@ -435,7 +454,7 @@ const logout = (e) => {
                                 }}
                               >
                                 <Link
-                                  to={`/details/${patient.hn_number}/lab-test/${patient.lab_test_id}`}
+                                  to={`/details/${patient.hn_number}/lab-test`}
                                   // state={{
                                   //   patientId: patient.id,
                                   //   patientName: patient.name,

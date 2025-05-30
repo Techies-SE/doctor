@@ -35,17 +35,52 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
   const [uploadError, setUploadError] = useState("");
   const [singleLabData, setSingleLabData] = useState({
     hn_number: "",
-    gender: "",
-    blood_type: "",
-    age: "",
-    date_of_birth: "",
-    weight: "",
-    height: "",
-    bmi: "",
-    systolic: "",
-    diastolic: "",
-    order_date: "",
+    doctor: "",
   });
+  const [selectedLabTests, setSelectedLabTests] = useState([]);
+  const [labTestsData, setLabTestsData] = useState({});
+  const [doctors, setDoctors] = useState([]);
+  const [labTests, setLabTests] = useState([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        console.log("Auth Token:", token);
+        if (!token) throw new Error("No authentication token found");
+        const response = await fetch(
+          "https://backend-pg-cm2b.onrender.com/doctors",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) throw new Error("Failed to fetch doctors");
+        const data = await response.json();
+        setDoctors(data);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+
+    const fetchLabTests = async () => {
+      try {
+        const response = await fetch(
+          "https://backend-pg-cm2b.onrender.com/lab-tests"
+        );
+        if (!response.ok) throw new Error("Failed to fetch lab tests");
+        const data = await response.json();
+        setLabTests(data);
+      } catch (error) {
+        console.error("Error fetching lab tests:", error);
+      }
+    };
+
+    fetchDoctors();
+    fetchLabTests();
+  }, []);
 
   // Reset all fields when popup is shown
   useEffect(() => {
@@ -60,19 +95,72 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
       // Reset form fields
       setSingleLabData({
         hn_number: "",
-        gender: "",
-        blood_type: "",
-        age: "",
-        date_of_birth: "",
-        weight: "",
-        height: "",
-        bmi: "",
-        systolic: "",
-        diastolic: "",
-        order_date: "",
+        doctor_id: "",
       });
     }
   }, [show]);
+
+  // Fetch lab items when lab tests are selected
+  const fetchLabItems = async (labTestId) => {
+    try {
+      const response = await fetch(
+        `https://backend-pg-cm2b.onrender.com/lab-tests/${labTestId}/items`
+      );
+      if (!response.ok) throw new Error("Failed to fetch lab items");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching lab items:", error);
+      return [];
+    }
+  };
+
+  const handleLabTestSelection = async (labTestId, isSelected) => {
+    if (isSelected) {
+      // Add lab test
+      const labTest = labTests.find((test) => test.id === parseInt(labTestId));
+      if (labTest && !selectedLabTests.find((test) => test.id === labTest.id)) {
+        const labItems = await fetchLabItems(labTestId);
+        const newLabTest = {
+          ...labTest,
+          items: labItems,
+        };
+
+        setSelectedLabTests((prev) => [...prev, newLabTest]);
+
+        // Initialize lab test data with empty values
+        const initialData = {};
+        labItems.forEach((item) => {
+          initialData[item.lab_item_id] = "";
+        });
+
+        setLabTestsData((prev) => ({
+          ...prev,
+          [labTestId]: initialData,
+        }));
+      }
+    } else {
+      // Remove lab test
+      setSelectedLabTests((prev) =>
+        prev.filter((test) => test.id !== parseInt(labTestId))
+      );
+      setLabTestsData((prev) => {
+        const newData = { ...prev };
+        delete newData[labTestId];
+        return newData;
+      });
+    }
+  };
+
+  const handleLabItemValueChange = (labTestId, labItemId, value) => {
+    setLabTestsData((prev) => ({
+      ...prev,
+      [labTestId]: {
+        ...prev[labTestId],
+        [labItemId]: value,
+      },
+    }));
+  };
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -85,17 +173,10 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
       setUploadError("");
       setSingleLabData({
         hn_number: "",
-        gender: "",
-        blood_type: "",
-        age: "",
-        date_of_birth: "",
-        weight: "",
-        height: "",
-        bmi: "",
-        systolic: "",
-        diastolic: "",
-        order_date: "",
+        doctor_id: "",
       });
+      setSelectedLabTests([]);
+      setLabTestsData({});
     }
   };
 
@@ -125,17 +206,10 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
       setUploadError("");
       setSingleLabData({
         hn_number: "",
-        gender: "",
-        blood_type: "",
-        age: "",
-        date_of_birth: "",
-        weight: "",
-        height: "",
-        bmi: "",
-        systolic: "",
-        diastolic: "",
-        order_date: "",
+        doctor_id: "",
       });
+      setSelectedLabTests([]);
+      setLabTestsData({});
     } else {
       setUploadError("Only CSV files are supported.");
     }
@@ -189,18 +263,18 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     const formData = new FormData();
     formData.append("file", file); // Changed from "csvFile" to "file"
     const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No auth token found");
-          return;
-        }
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
     try {
       const response = await fetch(
         "https://backend-pg-cm2b.onrender.com/bulk/upload-lab-results",
         {
           method: "POST",
           headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            Authorization: `Bearer ${token}`,
+          },
           body: formData,
         }
       );
@@ -230,36 +304,68 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     }
 
     // Validate required fields
-    const requiredFields = [
-      "hn_number",
-      "gender",
-      "blood_type",
-      "age",
-      "date_of_birth",
-      "weight",
-      "height",
-      "systolic",
-      "diastolic",
-      "order_date",
-    ];
-    const missingFields = requiredFields.filter(
-      (field) => !singleLabData[field]
-    );
-
-    if (missingFields.length > 0) {
-      alert(`Please fill in all required fields: ${missingFields.join(", ")}`);
+    if (!singleLabData.doctor_id) {
+      alert("Please select a doctor.");
       return;
+    }
+
+    if (selectedLabTests.length === 0) {
+      alert("Please select at least one lab test.");
+      return;
+    }
+
+    // Validate that all lab items have values
+    for (const labTest of selectedLabTests) {
+      const testData = labTestsData[labTest.id];
+      if (!testData) {
+        alert(`Please fill in values for ${labTest.test_name}.`);
+        return;
+      }
+
+      for (const item of labTest.items) {
+        if (
+          !testData[item.lab_item_id] ||
+          testData[item.lab_item_id].trim() === ""
+        ) {
+          alert(
+            `Please fill in value for ${item.lab_item_name} in ${labTest.test_name}.`
+          );
+          return;
+        }
+      }
     }
 
     setIsUploading(true);
     try {
-      const response = await fetch("https://backend-pg-cm2b.onrender.com/lab-data", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(singleLabData),
-      });
+      // Prepare the data structure for submission - matching backend expectations
+      const submissionData = {
+        hn_number: singleLabData.hn_number,
+        doctor_id: singleLabData.doctor_id,
+        lab_tests: selectedLabTests.map((labTest) => ({
+          lab_test_id: labTest.id,
+          lab_items: labTest.items.map((item) => ({
+            lab_item_id: item.lab_item_id,
+            lab_item_value: labTestsData[labTest.id][item.lab_item_id],
+          })),
+        })),
+      };
+
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await fetch(
+        "https://backend-pg-cm2b.onrender.com/lab-data",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(submissionData),
+        }
+      );
 
       const result = await response.json();
 
@@ -280,9 +386,10 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
 
   if (!show) return null;
 
-  const isFormFilled = Object.values(singleLabData).some(
-    (value) => value !== ""
-  );
+  const isFormFilled =
+    singleLabData.hn_number !== "" ||
+    singleLabData.doctor_id !== "" ||
+    selectedLabTests.length > 0;
 
   return (
     <div className="modal-container1">
@@ -355,6 +462,143 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
             )}
           </div>
 
+          {/* OR Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-3 bg-white text-gray-500">OR</span>
+            </div>
+          </div>
+
+          {/* Single Lab Data Form */}
+          <div className="container1">
+            <h3 className="text-lg font-semibold mb-4 text-[#242222]">
+              Add Single Lab Data
+            </h3>
+
+            {/* Basic Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {/* HN Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  HN Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="hn_number"
+                  placeholder="Enter 9-digit HN Number"
+                  value={singleLabData.hn_number || ""}
+                  onChange={handleSingleLabDataChange}
+                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696]"
+                  disabled={!!file}
+                  maxLength="9"
+                />
+              </div>
+
+              {/* Doctor */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Assign to Doctor <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="doctor_id"
+                  value={singleLabData.doctor_id}
+                  onChange={handleSingleLabDataChange}
+                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
+                  disabled={!!file}
+                >
+                  <option value="">Select Doctor</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor.id} value={doctor.id}>
+                      {doctor.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Lab Tests Selection */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Lab Tests <span className="text-red-500">*</span>
+              </label>
+              <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
+                {labTests.map((test) => (
+                  <div key={test.id} className="flex items-center mb-2">
+                    <input
+                      type="checkbox"
+                      id={`test-${test.id}`}
+                      checked={selectedLabTests.some(
+                        (selectedTest) => selectedTest.id === test.id
+                      )}
+                      onChange={(e) =>
+                        handleLabTestSelection(test.id, e.target.checked)
+                      }
+                      disabled={!!file}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor={`test-${test.id}`}
+                      className="text-sm text-gray-700"
+                    >
+                      {test.test_name}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dynamic Lab Items Forms */}
+            {selectedLabTests.map((labTest) => (
+              <div
+                key={labTest.id}
+                className="mb-4 sm:mb-6 p-3 sm:p-4 border rounded-lg bg-gray-50 shadow-sm"
+              >
+                <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[#242222]">
+                  {labTest.test_name}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                  {labTest.items?.map((item) => (
+                    <div key={item.lab_item_id} className="min-w-0">
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+                        <span className="block truncate pr-2">
+                          {item.lab_item_name}
+                        </span>
+                        {item.unit && (
+                          <span className="text-gray-500 text-xs">
+                            ({item.unit})
+                          </span>
+                        )}
+                        <span className="text-red-500 ml-1">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={`Enter ${item.lab_item_name}`}
+                        value={
+                          labTestsData[labTest.id]?.[item.lab_item_id] || ""
+                        }
+                        onChange={(e) =>
+                          handleLabItemValueChange(
+                            labTest.id,
+                            item.lab_item_id,
+                            e.target.value
+                          )
+                        }
+                        className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-md text-sm placeholder-[#969696] 
+                     focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none
+                     disabled:bg-gray-100 disabled:cursor-not-allowed
+                     transition-all duration-200 hover:border-gray-400"
+                        disabled={!!file}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
           {/* Footer */}
           <div className="p-4 flex justify-end space-x-3">
             {file ? (
@@ -398,49 +642,11 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
     hn_number: "",
     name: "",
     citizen_id: "",
+    gender: "",
+    date_of_birth: "",
     phone_no: "",
-    doctor_id: "",
-    lab_test_master_id: "",
   });
-  const [doctors, setDoctors] = useState([]);
-  const [labTests, setLabTests] = useState([]);
   const [isDragActive, setIsDragActive] = useState(false);
-
-  // Fetch doctors when the component mounts
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        console.log("Auth Token:", token); // Debug token
-        if (!token) throw new Error("No authentication token found");
-        const response = await fetch("https://backend-pg-cm2b.onrender.com/doctors", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }); // Fetching doctors from the API
-        if (!response.ok) throw new Error("Failed to fetch doctors"); // Error handling for failed fetch
-        const data = await response.json(); // Parsing the response to JSON
-        setDoctors(data); // Setting the fetched doctors to state
-      } catch (error) {
-        console.error("Error fetching doctors:", error); // Logging any errors
-      }
-    };
-
-    const fetchLabTests = async () => {
-      try {
-        const response = await fetch("https://backend-pg-cm2b.onrender.com/lab-tests");
-        if (!response.ok) throw new Error("Failed to fetch lab tests");
-        const data = await response.json();
-        setLabTests(data);
-      } catch (error) {
-        console.error("Error fetching lab tests:", error);
-      }
-    };
-
-    fetchDoctors(); // Call the fetch function when the component mounts
-    fetchLabTests();
-  }, []); // Empty dependency array means this runs once when the component mounts
 
   // Reset all fields when popup is shown
   useEffect(() => {
@@ -456,8 +662,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         name: "",
         citizen_id: "",
         phone_no: "",
-        doctor_id: "",
-        lab_test_master_id: "",
+        date_of_birth: "",
+        gender: "",
       });
     }
   }, [show]);
@@ -471,8 +677,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         name: "",
         citizen_id: "",
         phone_no: "",
-        doctor_id: "",
-        lab_test_master_id: "",
+        date_of_birth: "",
+        gender: "",
       });
     }
   };
@@ -506,8 +712,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         name: "",
         citizen_id: "",
         phone_no: "",
-        doctor_id: "",
-        lab_test_master_id: "",
+        date_of_birth: "",
+        gender: "",
       });
     }
   };
@@ -531,19 +737,22 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
     const formData = new FormData();
     formData.append("csvFile", file);
     const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("No auth token found");
-          return;
-        }
+    if (!token) {
+      console.error("No auth token found");
+      return;
+    }
 
     try {
-      const response = await fetch("https://backend-pg-cm2b.onrender.com/upload/patients", {
-        method: "POST",
-        headers: {
-              Authorization: `Bearer ${token}`,
-            },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://backend-pg-cm2b.onrender.com/upload/patients",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       const result = await response.text();
       alert(result || "Upload successful!");
@@ -561,8 +770,8 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
       !singlePatient.name ||
       !singlePatient.citizen_id ||
       !singlePatient.phone_no ||
-      !singlePatient.doctor_id || // Add this line
-      !singlePatient.lab_test_master_id
+      !singlePatient.date_of_birth ||
+      !singlePatient.gender
     ) {
       alert("Please fill in all required fields.");
       return;
@@ -579,11 +788,14 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       };
-      const response = await fetch("https://backend-pg-cm2b.onrender.com/patients", {
-        method: "POST",
-        headers,
-        body: JSON.stringify(singlePatient),
-      });
+      const response = await fetch(
+        "https://backend-pg-cm2b.onrender.com/patients",
+        {
+          method: "POST",
+          headers,
+          body: JSON.stringify(singlePatient),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json(); // Get the error message from the response
@@ -728,6 +940,37 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  name="date_of_birth"
+                  value={singlePatient.date_of_birth}
+                  onChange={handleSinglePatientChange}
+                  className="w-full p-2 border rounded-md text-sm text-gray-700"
+                  disabled={!!file}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Gender
+                </label>
+                <select
+                  name="gender"
+                  value={singlePatient.gender || ""}
+                  onChange={handleSinglePatientChange}
+                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
+                  disabled={!!file}
+                >
+                  <option value="" disabled>
+                    Choose Gender
+                  </option>
+                  <option value="male">male</option>
+                  <option value="female">female</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Phone Number
                 </label>
                 <input
@@ -739,44 +982,6 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                   className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
                   disabled={!!file}
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Doctor
-                </label>
-                <select
-                  name="doctor_id"
-                  value={singlePatient.doctor_id}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
-                  disabled={!!file}
-                >
-                  <option value="">Select Doctor</option>
-                  {doctors.map((doctor) => (
-                    <option key={doctor.id} value={doctor.id}>
-                      {doctor.name}
-                    </option> // Display doctor name instead of ID
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lab Test
-                </label>
-                <select
-                  name="lab_test_master_id"
-                  value={singlePatient.lab_test_master_id}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
-                  disabled={!!file}
-                >
-                  <option value="">Select Lab Test</option>
-                  {labTests.map((test) => (
-                    <option key={test.id} value={test.id}>
-                      {test.test_name}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
           </div>
@@ -823,13 +1028,13 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
-   const logout = (e) => {
+  const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
 
@@ -1063,78 +1268,78 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
             <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
           <div id="profile">
-            <img
-              src="/img/profile.png"
-              alt="Profile"
-              id="profile-image"
-            />
+            <img src="/img/profile.png" alt="Profile" id="profile-image" />
             <span id="profile-name">Admin</span>
           </div>
         </div>
       </nav>
 
-       {/* Sidebar */}
-            <aside id="sidebar">
-          <div className="sidebar-container">
-            <button className="sidebar-btn">
-              <img
-                src="/img/ChartLineUp.png"
-                alt="Dashboard Icon"
-                id="sidebar-icon"
-              />
-              <Link to="/admindashboard" className="sidebar-link">
-                Dashboard
-              </Link>
-            </button>
-      
-            <button className="sidebar-btn active-tab">
-              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
-              <Link to="/patient" className="sidebar-link">
-                Patients
-              </Link>
-            </button>
-      
-            <button className="sidebar-btn">
-              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
-              <Link to="/appointments" className="sidebar-link">
-                Appointments
-              </Link>
-            </button>
-      
-            <button className="sidebar-btn">
-              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
-              <Link to="/doctors" className="sidebar-link">
-                Doctors
-              </Link>
-            </button>
-      
-            <button className="sidebar-btn">
-              <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
-              <Link to="/recommendations" className="sidebar-link">
-                Recommendations
-              </Link>
-            </button>
-      
-            <button className="sidebar-btn">
-              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
-              <Link to="/departments" className="sidebar-link">
-                Departments
-              </Link>
-            </button>
-      
-            <button className="sidebar-btn">
-              <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
-              <Link to="/schedules" className="sidebar-link">
-                Schedules
-              </Link>
-            </button>
-          </div>
-      
-          <button className="sidebar-btn logout" onClick={logout}>
-                <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
-                <span className="login-link">Logout</span>
+      {/* Sidebar */}
+      <aside id="sidebar">
+        <div className="sidebar-container">
+          <button className="sidebar-btn">
+            <img
+              src="/img/ChartLineUp.png"
+              alt="Dashboard Icon"
+              id="sidebar-icon"
+            />
+            <Link to="/admindashboard" className="sidebar-link">
+              Dashboard
+            </Link>
           </button>
-        </aside>
+
+          <button className="sidebar-btn active-tab">
+            <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+            <Link to="/patient" className="sidebar-link">
+              Patients
+            </Link>
+          </button>
+
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+            <Link to="/appointments" className="sidebar-link">
+              Appointments
+            </Link>
+          </button>
+
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+            <Link to="/doctors" className="sidebar-link">
+              Doctors
+            </Link>
+          </button>
+
+          {/* <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+            <Link to="/recommendations" className="sidebar-link">
+              Recommendations
+            </Link>
+          </button> */}
+
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+            <Link to="/departments" className="sidebar-link">
+              Departments
+            </Link>
+          </button>
+
+          <button className="sidebar-btn">
+            <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+            <Link to="/schedules" className="sidebar-link">
+              Schedules
+            </Link>
+          </button>
+        </div>
+
+        <button className="sidebar-btn logout" onClick={logout}>
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            id="sidebar-icon"
+          />
+          <span className="login-link">Logout</span>
+        </button>
+      </aside>
 
       {/* Main Content */}
       <div id="main-content">
@@ -1142,179 +1347,182 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
           <div className="flex justify-between items-center mb-">
             <h1 className="text-black text-2xl font-semibold">Patient Info</h1>
             <div className="flex gap-10">
-            <button
-              onClick={() => setShowLabUploadPopup(true)}
-              className="uButton"
-              style={{ marginRight: "10px" }}
-            >
-              + Lab Data
-            </button>
-            <button
-              onClick={() => setShowPatientUploadPopup(true)}
-              className="uButton"
-            >
-              + New Patient
+              <button
+                onClick={() => setShowLabUploadPopup(true)}
+                className="uButton"
+                style={{ marginRight: "10px" }}
+              >
+                + Lab Data
+              </button>
+              <button
+                onClick={() => setShowPatientUploadPopup(true)}
+                className="uButton"
+              >
+                + New Patient
+              </button>
+            </div>
+          </div>
+
+          {/* Search and Filter */}
+          <div className="flex items-center mb-6">
+            <div id="search-container">
+              <Search size={18} className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                id="search-input"
+              />
+            </div>
+            <button id="filter-button">
+              <Filter size={18} className="filter-icon" /> Filter by Date
             </button>
           </div>
-        </div>
 
-        {/* Search and Filter */}
-                  <div className="flex items-center mb-6">
-                    <div id="search-container">
-                      <Search size={18} className="search-icon" />
-                      <input
-                        type="text"
-                        placeholder="Search"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        id="search-input"
-                      />
-                    </div>
-                    <button id="filter-button">
-                      <Filter size={18} className="filter-icon" /> Filter by Date
-                    </button>
-                  </div>
-
-        <div className="table-wrapper">
-          <table className="table-content">
-            <thead>
-              <tr className="hover:bg-gray-50 bg-gray-100 text-[#242222]">
-                {[
-                  { key: "hn_number", label: "HN", width: "20%" },
-                  { key: "name", label: "Name", width: "20%" },
-                  { key: "phone_no", label: "Phone No", width: "20%" },
-                  {
-                    key: "lab_data_status",
-                    label: "Lab Data Status",
-                    width: "15%",
-                  },
-                  {
-                    key: "account_status",
-                    label: "Account Status",
-                    width: "15%",
-                  },
-                ].map((column) => (
-                  <th
-                    key={column.key}
-                    onClick={() => handleSort(column.key)}
-                    className="p-4 text-center cursor-pointer hover:bg-gray-200"
-                    style={{ width: column.width }}
-                  >
-                    <div className="flex items-center justify-between">
-                      {column.label}
-                      {sortConfig.key === column.key &&
-                        (sortConfig.direction === "ascending" ? (
-                          <ChevronUp
-                            size={16}
-                            className="ml-1 text-[#595959]"
-                          />
-                        ) : (
-                          <ChevronDown
-                            size={16}
-                            className="ml-1 text-[#595959]"
-                          />
-                        ))}
-                    </div>
-                  </th>
-                ))}
-                <th className="p-4 text-left">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentPatients.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="text-center p-8 text-gray-500">
-                    There's no patient yet.
-                  </td>
+          <div className="table-wrapper">
+            <table className="table-content">
+              <thead>
+                <tr className="hover:bg-gray-50 bg-gray-100 text-[#242222]">
+                  {[
+                    { key: "hn_number", label: "HN", width: "20%" },
+                    { key: "name", label: "Name", width: "20%" },
+                    { key: "phone_no", label: "Phone No", width: "20%" },
+                    {
+                      key: "lab_data_status",
+                      label: "Lab Data Status",
+                      width: "15%",
+                    },
+                    {
+                      key: "account_status",
+                      label: "Account Status",
+                      width: "15%",
+                    },
+                  ].map((column) => (
+                    <th
+                      key={column.key}
+                      onClick={() => handleSort(column.key)}
+                      className="p-4 text-center cursor-pointer hover:bg-gray-200"
+                      style={{ width: column.width }}
+                    >
+                      <div className="flex items-center justify-between">
+                        {column.label}
+                        {sortConfig.key === column.key &&
+                          (sortConfig.direction === "ascending" ? (
+                            <ChevronUp
+                              size={16}
+                              className="ml-1 text-[#595959]"
+                            />
+                          ) : (
+                            <ChevronDown
+                              size={16}
+                              className="ml-1 text-[#595959]"
+                            />
+                          ))}
+                      </div>
+                    </th>
+                  ))}
+                  <th className="p-4 text-left">Action</th>
                 </tr>
-              ) : (
-                currentPatients.map((patient, index) => (
-                  <tr
-                    key={patient.id}
-                    className={`hover:bg-gray-50 transition-colors duration-150 border-b border-gray-300`}
-                  >
-                    <td className="p-4 text-start text-[#595959]">
-                      {patient.hn_number}
-                    </td>
-                    <td className="p-4 text-start text-[#595959]">
-                      {patient.name}
-                    </td>
-                    <td className="p-4 text-start text-[#595959]">
-                      {patient.phone_no}
-                    </td>
-                    <td className="p-4 text-start text-[#595959]">
-                      <StatusIcon type="lab" status={patient.lab_data_status} />
-                    </td>
-                    <td className="p-4 text-start">
-                      <StatusIcon
-                        type="account"
-                        status={patient.account_status}
-                      />
-                    </td>
-                    <td className="p-4 flex items-center space-x-5">
-                      <PenBox
-                        size={20}
-                        className="cursor-pointer text-[#3BA092] hover:text-[#2A7E6C]"
-                        onClick={() => handleViewDetails(patient)}
-                        title="View Details"
-                      />
-                      <Trash2
-                        size={20}
-                        className="cursor-pointer text-red-500 hover:text-red-700"
-                        onClick={() => handleDeletePatient(patient.id)}
-                        title="Delete Patient"
-                      />
+              </thead>
+              <tbody>
+                {currentPatients.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="text-center p-8 text-gray-500">
+                      There's no patient yet.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : (
+                  currentPatients.map((patient, index) => (
+                    <tr
+                      key={patient.id}
+                      className={`hover:bg-gray-50 transition-colors duration-150 border-b border-gray-300`}
+                    >
+                      <td className="p-4 text-start text-[#595959]">
+                        {patient.hn_number}
+                      </td>
+                      <td className="p-4 text-start text-[#595959]">
+                        {patient.name}
+                      </td>
+                      <td className="p-4 text-start text-[#595959]">
+                        {patient.phone_no}
+                      </td>
+                      <td className="p-4 text-start text-[#595959]">
+                        <StatusIcon
+                          type="lab"
+                          status={patient.lab_data_status}
+                        />
+                      </td>
+                      <td className="p-4 text-start">
+                        <StatusIcon
+                          type="account"
+                          status={patient.account_status}
+                        />
+                      </td>
+                      <td className="p-4 flex items-center space-x-5">
+                        <PenBox
+                          size={20}
+                          className="cursor-pointer text-[#3BA092] hover:text-[#2A7E6C]"
+                          onClick={() => handleViewDetails(patient)}
+                          title="View Details"
+                        />
+                        <Trash2
+                          size={20}
+                          className="cursor-pointer text-red-500 hover:text-red-700"
+                          onClick={() => handleDeletePatient(patient.id)}
+                          title="Delete Patient"
+                        />
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
 
-        <div className="flex justify-end mt-6 gap-2">
-          <button
-            onClick={() => handlePageChange(1)}
-            disabled={currentPage === 1}
-            className="pButton"
-          >
-            First
-          </button>
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="pButton"
-          >
-            Previous
-          </button>
-          {renderPagination()}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="pButton"
-          >
-            Next
-          </button>
-          <button
-            onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage === totalPages}
-            className="pButton"
-          >
-            Last
-          </button>
-        </div>
-        <LabDataUploadPopup
-          show={showLabUploadPopup}
-          onClose={() => setShowLabUploadPopup(false)}
-          onUpload={handleLabUploadSuccess}
-        />
+          <div className="flex justify-end mt-6 gap-2">
+            <button
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+              className="pButton"
+            >
+              First
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="pButton"
+            >
+              Previous
+            </button>
+            {renderPagination()}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="pButton"
+            >
+              Next
+            </button>
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+              className="pButton"
+            >
+              Last
+            </button>
+          </div>
+          <LabDataUploadPopup
+            show={showLabUploadPopup}
+            onClose={() => setShowLabUploadPopup(false)}
+            onUpload={handleLabUploadSuccess}
+          />
 
-        <PatientUploadPopup
-          show={showPatientUploadPopup}
-          onClose={() => setShowPatientUploadPopup(false)}
-          onUpload={handlePatientUploadSuccess}
-        />
-      </div>
+          <PatientUploadPopup
+            show={showPatientUploadPopup}
+            onClose={() => setShowPatientUploadPopup(false)}
+            onUpload={handlePatientUploadSuccess}
+          />
+        </div>
       </div>
     </div>
   );

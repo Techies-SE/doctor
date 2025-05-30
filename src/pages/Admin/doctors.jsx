@@ -357,12 +357,12 @@ const Doctors = () => {
             </Link>
           </button>
 
-          <button className="sidebar-btn">
+          {/* <button className="sidebar-btn">
             <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
             <Link to="/recommendations" className="sidebar-link">
               Recommendations
             </Link>
-          </button>
+          </button> */}
 
           <button className="sidebar-btn">
             <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />

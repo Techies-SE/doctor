@@ -40,7 +40,7 @@ const Dashboard = () => {
           fetch(`https://backend-pg-cm2b.onrender.com/doctors/pending-lab-results-count`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }),
-          fetch(`https://backend-pg-cm2b.onrender.com/doctors/recent-lab-tests`, {
+          fetch(`https://backend-pg-cm2b.onrender.com/recent-lab-tests`, {
             headers: { 'Authorization': `Bearer ${token}` }
           })
         ]);

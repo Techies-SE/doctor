@@ -665,12 +665,12 @@ const Sidebar = () => (
         </Link>
       </button>
 
-      <button className="sidebar-btn active-tab">
+      {/* <button className="sidebar-btn active-tab">
         <FontAwesomeIcon icon={faFileMedical} className="sidebar-icon" />
         <Link to="/recommendations" className="sidebar-link">
           Recommendations
         </Link>
-      </button>
+      </button> */}
 
       <button className="sidebar-btn">
         <FontAwesomeIcon icon={faHospital} className="sidebar-icon" />
