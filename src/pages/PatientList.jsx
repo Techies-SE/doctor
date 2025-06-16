@@ -351,8 +351,8 @@ const PatientList = () => {
 
       {/* Main Content */}
       <div id="main-content">
-        <div className="bg-white rounded-lg p-6 shadow font-sans">
-          <div className="flex justify-between items-center mb-">
+        <div className="bg-white rounded-lg p-8 shadow font-sans mt-4">
+          <div className="flex justify-between items-center mb-3">
             <h1 className="text-black text-2xl font-semibold">Patient List</h1>
           </div>
           <div className="flex items-center mb-6">

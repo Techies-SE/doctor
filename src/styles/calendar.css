@@ -1,10 +1,10 @@
 /* Reset */
-body {
+/* body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f4f4f4;
     padding-top:80px;
-}
+} */
 
 /* Navbar */
 #navbar {
@@ -158,12 +158,12 @@ body {
 }
 
 /* Main Content */
-.main-content {
+/* .main-content {
     margin-left: 130px; /* space for sidebar */
-    padding-top:80px;
+    /* padding-top:80px;
     position: relative;
     z-index: 1;
-}
+} */ 
 
 /* Unified wrapper */
 .calendar-wrapper {
