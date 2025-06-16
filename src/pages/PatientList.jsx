@@ -6,6 +6,7 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
 import { useDoctorProfile } from "../useDoctorProfile";
 import "../styles/patientlist.css";
+import { FiInfo } from "react-icons/fi"; // Import the info icon
 
 // Import icons (assuming you're using react-feather or similar)
 // If you don't have these icons, you'll need to import them from your icon library
@@ -406,7 +407,7 @@ const PatientList = () => {
                         </div>
                       </th>
                     ))}
-                    <th id="table-header-cell" style={{ width: "15%" }}>
+                    <th id="table-header-cell" style={{ width: "15%", textAlign: "center" }}>
                       Action
                     </th>
                   </tr>
@@ -425,51 +426,15 @@ const PatientList = () => {
                         <td id="table-cell">{patient.hn_number}</td>
                         <td id="table-cell">{patient.lab_test}</td>
                         <td id="table-cell">{patient.lab_test_date}</td>
-                        <td id="table-cell relative">
-                          <MoreVertical
-                            size={25}
-                            data-action-icon
-                            className="action-icon"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const rect =
-                                e.currentTarget.getBoundingClientRect();
-                              setButtonPosition({
-                                top: rect.bottom + window.scrollY,
-                                left: rect.right - 110,
-                              });
-                              setPopupIndex(
-                                popupIndex === index ? null : index
-                              );
-                            }}
-                          />
-                          {popupIndex === index &&
-                            createPortal(
-                              <div
-                                data-action-popup
-                                className="action-popup"
-                                style={{
-                                  top: `${buttonPosition.top}px`,
-                                  left: `${buttonPosition.left}px`,
-                                }}
-                              >
-                                <Link
-                                  to={`/details/${patient.hn_number}/lab-test`}
-                                  // state={{
-                                  //   patientId: patient.id,
-                                  //   patientName: patient.name,
-                                  //   hnNumber: patient.hn_number,
-                                  //   labTest: patient.lab_test,
-                                  //   labTestDate: patient.lab_test_date
-                                  // }}
-                                  className="action-button"
-                                >
-                                  View Details
-                                </Link>
-                              </div>,
-                              document.body
-                            )}
-                        </td>
+                        <td id="table-cell relative" style={{ width: "15%", textAlign: "center" }}>
+                        <Link
+                          to={`/details/${patient.hn_number}/lab-test`}
+                          className="action-icon"
+                          onClick={(e) => e.stopPropagation()} // optional to prevent row click
+                        >
+                        <FiInfo size={25} />
+                        </Link>
+                      </td>
                       </tr>
                     ))
                   )}
