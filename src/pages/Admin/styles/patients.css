@@ -1,12 +1,12 @@
 
-  #main-content {
+  /* #main-content {
     margin-left: 100px !important;
     margin-top: 50px !important;
     padding: 20px;
     flex-grow: 1;
     background-color: #ffffff;
     border-radius: 10px;
-  }
+  } */
 /* Navbar */
 #navbar {
     display: flex;

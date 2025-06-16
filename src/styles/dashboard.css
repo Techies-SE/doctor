@@ -95,14 +95,14 @@
     font-weight: bold;
     color: #333;
 }
-
+/* 
 /* Container for Sidebar and Main Content */
 .container {
     display: flex;
     height: 100vh;
     overflow: hidden;
     margin-top: 70px;
-}
+} */
 
 /* Sidebar */
 #sidebar {
@@ -161,13 +161,13 @@
     color: black;
 }
 
-/* Main Content */
+/* Main Content
 #main-content {
     margin-left: 200px !important;
     margin-top: 100px !important;
     padding: 20px;
     flex-grow: 1;
-}
+} */
 .health-overview {
     display: flex;
     flex-wrap: wrap;
