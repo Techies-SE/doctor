@@ -383,7 +383,6 @@ const PatientList = () => {
                     {[
                       { key: "name", label: "Patient Name", width: "25%" },
                       { key: "hn_number", label: "HN Number", width: "20%" },
-                      { key: "lab_test", label: "Lab Test", width: "20%" },
                       {
                         key: "lab_test_date",
                         label: "Lab Test Date",
@@ -424,7 +423,6 @@ const PatientList = () => {
                       <tr key={patient.id} id="table-row">
                         <td id="table-cell">{patient.name}</td>
                         <td id="table-cell">{patient.hn_number}</td>
-                        <td id="table-cell">{patient.lab_test}</td>
                         <td id="table-cell">{patient.lab_test_date}</td>
                         <td id="table-cell relative" style={{ width: "15%", textAlign: "center" }}>
                         <Link
