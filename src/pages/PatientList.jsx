@@ -345,7 +345,7 @@ const PatientList = () => {
             alt="Logout Icon"
             className="sidebar-icon"
           />
-          <span className="login-link">Logout</span>
+          <Link to="/" className="logout-link">Logout</Link>
         </button>
       </aside>
 

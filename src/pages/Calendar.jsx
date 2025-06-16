@@ -82,7 +82,7 @@ const Calendar = () => {
         </div>
         <button className="sidebar-btn logout">
           <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
-          <Link to="/" className="login-link">Logout</Link>
+          <Link to="/" className="logout-link">Logout</Link>
         </button>
       </aside>
 

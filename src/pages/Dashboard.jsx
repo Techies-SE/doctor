@@ -165,7 +165,7 @@ const Dashboard = () => {
 
         <button className="sidebar-btn logout" onClick={logout}>
           <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
-          <span className="login-link">Logout</span>
+          <Link to="/" className="logout-link">Logout</Link>
         </button>
       </aside>
 
