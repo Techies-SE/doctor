@@ -832,7 +832,7 @@ const Departments = () => {
                       name="description"
                       value={newDepartment.description}
                       onChange={handleInputChange}
-                      required
+                      // required
                       placeholder="Enter department description"
                     />
                   </div>
