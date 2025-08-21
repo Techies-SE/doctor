@@ -170,7 +170,7 @@ const Dashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <div id="main-content">
+      <div id="main-content-dashboard">
         {/* Health Overview */}
         <div className="health-overview">
           <div className="health-card total-patients">

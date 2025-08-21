@@ -350,7 +350,7 @@ const PatientList = () => {
       </aside>
 
       {/* Main Content */}
-      <div id="main-content">
+      <div id="main-content-patient">
         <div className="bg-white rounded-lg p-8 shadow font-sans mt-4">
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-black text-2xl font-semibold">Patient List</h1>

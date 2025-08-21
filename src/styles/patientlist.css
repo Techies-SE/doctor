@@ -8,6 +8,13 @@
   
   /* Navbar styles */
   /* Navbar */
+  #main-content-patient {
+    margin-top: 100px;
+    margin-left: 220px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+   }
 #navbar {
     display: flex;
     justify-content: space-between;
