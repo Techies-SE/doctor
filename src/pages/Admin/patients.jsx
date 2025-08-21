@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles/patients.css";
-import "../../styles/doctorDashboard.css";
+//import "../../styles/doctorDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -1362,21 +1362,20 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
               </button>
             </div>
           </div>
-
           {/* Search and Filter */}
-          <div className="flex items-center mb-6">
-            <div id="search-container">
-              <Search size={18} className="search-icon" />
+          <div className="flex items-center justify-end mb-6 mt-6">
+            <div id="search-container-1">
+              <Search size={18} className="search-icon-1" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search Patients ... "
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 id="search-input"
               />
             </div>
-            <button id="filter-button">
-              <Filter size={18} className="filter-icon" /> Filter by Date
+            <button id="filter-button-1">
+              <Filter size={13} className="filter-icon-1" /> Filter
             </button>
           </div>
 
@@ -1459,7 +1458,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
                           status={patient.account_status}
                         />
                       </td>
-                      <td className="p-4 flex items-center space-x-5">
+                      <td className="p-4 flex items-center justify-evenly">
                         <PenBox
                           size={20}
                           className="cursor-pointer text-[#3BA092] hover:text-[#2A7E6C]"

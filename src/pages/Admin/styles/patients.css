@@ -228,7 +228,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -407,20 +407,19 @@
   }
   
   /* Search and filter styles */
-  #search-container {
+  #search-container-1 {
     display: flex;
     align-items: center;
-    border: 1px solid #e5e7eb;
-    border-radius: 9999px;
+    border: 0.5px solid #595959;
+    border-radius: 10px;
     width: 200px;
     height: 2rem;
     padding: 0 0.75rem;
     margin-right: 1rem;
-    background-color: #eceded;
   }
   
-  .search-icon {
-    color: #3BA092;
+  .search-icon-1 {
+    color: #595959;
   }
   
   #search-input {
@@ -436,22 +435,22 @@
     color: #969696;
   }
   
-  #filter-button {
+  #filter-button-1 {
     display: flex;
     align-items: center;
     background-color: transparent;
     border: 1px solid #3BA092;
-    border-radius: 9999px;
-    width: 158px;
+    border-radius: 10px;
     height: 2rem;
     padding: 0 1rem;
-    font-size: 0.75rem;
-    color: #969696;
+    font-size: 13px;
+    color: white;
+    background-color: #3BA092;
   }
   
-  .filter-icon {
+  .filter-icon-1 {
     margin-right: 0.5rem;
-    color: #3BA092;
+    color: white;
   }
   /* Utility Classes */
   .hidden {

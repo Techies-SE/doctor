@@ -15,15 +15,14 @@
    }
 /* Search and filter styles */
   #search-container {
-    display: flex;
+     display: flex;
     align-items: center;
-    border: 1px solid #e5e7eb;
-    border-radius: 9999px;
+    border: 0.5px solid #595959;
+    border-radius: 10px;
     width: 200px;
     height: 2rem;
     padding: 0 0.75rem;
     margin-right: 1rem;
-    background-color: #eceded;
   }
   
   .search-icon {
