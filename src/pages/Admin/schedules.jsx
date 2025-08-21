@@ -230,12 +230,12 @@ const Schedules = () => {
               </Link>
             </button>
 
-            <button className="sidebar-btn active-tab">
+            {/* <button className="sidebar-btn active-tab">
               <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
               <Link to="/schedules" className="sidebar-link">
                 Schedules
               </Link>
-            </button>
+            </button> */}
           </div>
 
           <button className="sidebar-btn logout" onClick={logout}>
@@ -337,12 +337,12 @@ const Schedules = () => {
               </Link>
             </button>
 
-            <button className="sidebar-btn active-tab">
+            {/* <button className="sidebar-btn active-tab">
               <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
               <Link to="/schedules" className="sidebar-link">
                 Schedules
               </Link>
-            </button>
+            </button> */}
           </div>
 
           <button className="sidebar-btn logout" onClick={logout}>
@@ -444,12 +444,12 @@ const Schedules = () => {
             </Link>
           </button>
 
-          <button className="sidebar-btn active-tab">
+          {/* <button className="sidebar-btn active-tab">
             <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
             <Link to="/schedules" className="sidebar-link">
               Schedules
             </Link>
-          </button>
+          </button> */}
         </div>
 
          <button className="sidebar-btn logout" onClick={logout}>

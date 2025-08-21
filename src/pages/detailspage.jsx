@@ -228,9 +228,10 @@ const DetailsPage = () => {
       {/* Main Content */}
       <div className="main-content-container">
         <div className="patient-info-box">
-          <h2>{patientData.name}</h2>
+          <h1>Patient Information</h1>
+          <h3>{patientData.name}</h3>
           <p>
-            {patientData.patient_data?.gender}, {patientData.patient_data?.age} years | HN-Number: #{hn_number}
+            {patientData.patient_data?.gender}, {patientData.patient_data?.age} years | HN-Number: {hn_number}
           </p>
         </div>
 

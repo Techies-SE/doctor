@@ -371,12 +371,12 @@ const Doctors = () => {
             </Link>
           </button>
 
-          <button className="sidebar-btn">
+          {/* <button className="sidebar-btn">
             <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
             <Link to="/schedules" className="sidebar-link">
               Schedules
             </Link>
-          </button>
+          </button> */}
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>
@@ -386,7 +386,7 @@ const Doctors = () => {
       </aside>
 
       {/* Main Content */}
-      <div id="main-content">
+      <div id="main-content-appointment">
         <div className="bg-white rounded-lg p-6 shadow font-sans">
           <div className="flex justify-between items-center mb-">
             <h1 className="text-black text-2xl font-semibold">Doctor Info</h1>

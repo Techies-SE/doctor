@@ -125,12 +125,12 @@ const AdminDashboard = () => {
             </Link>
           </button>
 
-          <button className="sidebar-btn">
+          {/* <button className="sidebar-btn">
             <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
             <Link to="/schedules" className="sidebar-link">
               Schedules
             </Link>
-          </button>
+          </button> */}
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>

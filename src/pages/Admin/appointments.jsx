@@ -878,7 +878,7 @@ const Appointments = () => {
           <span className="login-link">Logout</span>
         </button>
       </aside>
-      <div id="main-content">
+      <div id="main-content-appointment">
         <div className="bg-white rounded-lg p-6 shadow font-sans">
           <div className="flex justify-between items-center mb-">
             <h1 className="text-black text-2xl font-semibold">
