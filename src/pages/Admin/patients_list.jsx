@@ -1245,7 +1245,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
 
   if (viewingDetails) {
     return (
-      <div className="table-container font-sans">
+      <div className="table-container-details font-sans">
         <PatientDetails
           hn_number={selectedPatientId}
           onBack={handleBackToList}

@@ -36,7 +36,7 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
-import DoctorDetails from "./doctordetails";
+import DoctorDetails from "./doctor_details";
 
 const Doctors = () => {
   // State for doctors list and filtering

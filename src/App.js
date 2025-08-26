@@ -4,13 +4,13 @@ import Dashboard from "./pages/Dashboard";
 import Calendar from "./pages/Calendar";
 import Patient from "./pages/Patient";
 import AdminDashboard from "./pages/Admin/dashboard";
-import Patients from "./pages/Admin/patients";
+import Patients from "./pages/Admin/patients_list";
 import Appointments from "./pages/Admin/appointments";
-import Doctors from "./pages/Admin/doctors";
+import Doctors from "./pages/Admin/doctors_list";
 import Recommendations from "./pages/Admin/recommendations";
 import Departments from "./pages/Admin/departments";
 import Schedules from "./pages/Admin/schedules";
-import DoctorDetails from "./pages/Admin/doctordetails";
+import DoctorDetails from "./pages/Admin/doctor_details";
 import PatientList  from "./pages/PatientList";
 import DetailsPage from "./pages/detailspage";
 
