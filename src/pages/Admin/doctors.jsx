@@ -577,6 +577,7 @@ const Doctors = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Enter doctor's name"
+                      style={{ width:'95%'}}
                     />
                   </div>
                   <div className="form-group text-[#242222]">
@@ -588,6 +589,7 @@ const Doctors = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Enter phone number"
+                       style={{ width:'95%'}}
                     />
                   </div>
                   <div className="form-group text-[#242222]">
@@ -599,6 +601,7 @@ const Doctors = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Enter email address"
+                       style={{ width:'95%'}}
                     />
                   </div>
                   <div className="form-group text-[#242222]">
@@ -610,6 +613,7 @@ const Doctors = () => {
                       onChange={handleInputChange}
                       required
                       placeholder="Enter specialization"
+                       style={{ width:'95%'}}
                     />
                   </div>
                   <div className="form-group text-[#242222]">
@@ -619,6 +623,7 @@ const Doctors = () => {
                       value={newDoctor.status}
                       onChange={handleInputChange}
                       required
+                       style={{ width:'100%'}}
                     >
                       <option value="">Select Status</option>
                       <option value="active">active</option>
