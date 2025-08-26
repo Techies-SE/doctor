@@ -66,7 +66,7 @@ const Calendar = () => {
         </div>
       </div>
 
-      <aside className="sidebar">
+      <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
             <img src="img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" />
@@ -86,7 +86,7 @@ const Calendar = () => {
         </button>
       </aside>
 
-      <div className="main-content">
+      <div className="main-content" style={{width: '100%'}}>
         <div className="calendar-wrapper">
           <div className="schedule-container">
             <div className="month-selection">
@@ -108,8 +108,8 @@ const Calendar = () => {
                     <>
                       <span className="date">{day.day}</span>
                       {day.appointments && <div className="appointments">Appointment: {day.appointments}</div>}
-                      {day.visits && <div className="visits">Visit: {day.visits}</div>}
-                      {day.surgeries && <div className="surgeries">Surgery: {day.surgeries}</div>}
+                      {/* {day.visits && <div className="visits">Visit: {day.visits}</div>}
+                      {day.surgeries && <div className="surgeries">Surgery: {day.surgeries}</div>} */}
                     </>
                   )}
                 </div>

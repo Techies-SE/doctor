@@ -167,8 +167,9 @@
 
 /* Unified wrapper */
 .calendar-wrapper {
-    max-width: 1000px;
-    margin: 0 auto 30px auto; /* space from navbar,top , right, bottom , left */
+    max-width: 100%;
+    /* margin: 0 auto 30px auto; space from navbar,top , right, bottom , left */
+    margin: 0px 0px 0px 15%;
     padding-top:100px;
     padding-left: 15px;
     padding-right: 15px;
@@ -241,6 +242,11 @@
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
     font-size: 16px;
     border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    min-height: 50px;
+    margin: 5px 10px;
+    gap: 5px;
 }
 
 .calendar-day.empty {
@@ -276,6 +282,7 @@
 /* Colors for event types */
 .appointments {
     background-color: #c0edf1;
+    padding: 5px 5px !important; 
 }
 
 .visits {
