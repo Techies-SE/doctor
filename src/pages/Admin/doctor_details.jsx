@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ChevronLeft } from "lucide-react";
 import {
   faArrowLeft,
   faTrashAlt,
@@ -154,23 +155,28 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
       const responseData = await response.json();
 
+      // Update the doctor state with the new imageUrl from the server response
       setDoctor((prevDoctor) => ({
         ...prevDoctor,
         imageUrl: responseData.imageUrl,
       }));
 
+      // Clear any previous errors
+      setImageUploadError(null);
+
+      // Optional: Show a preview of the uploaded image immediately
+      // You can remove this section if you only want to show the server imageUrl
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImage(reader.result);
       };
       reader.readAsDataURL(file);
-
-      setImageUploadError(null);
     } catch (error) {
       console.error("Error uploading image:", error);
       setImageUploadError(error.message);
     }
   };
+
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
@@ -201,7 +207,6 @@ const DoctorDetails = ({ doctorId, onBack }) => {
         imageUrl: null,
       }));
 
-      setProfileImage(null);
       setImageUploadError(null);
     } catch (error) {
       console.error("Error removing image:", error);
@@ -458,10 +463,6 @@ const DoctorDetails = ({ doctorId, onBack }) => {
   if (loading) {
     return (
       <div className="doctor-details-container">
-        <button onClick={handleBack} className="back-button">
-          <FontAwesomeIcon icon={faArrowLeft} className="back-button-icon" />
-          Back to Doctors
-        </button>
         <div className="loading-state">Loading doctor details...</div>
       </div>
     );
@@ -472,7 +473,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
     return (
       <div className="doctor-details-container">
         <button onClick={handleBack} className="back-button">
-          <FontAwesomeIcon icon={faArrowLeft} className="back-button-icon" />
+          <ChevronLeft size={20} className="mr-1" />
           Back to Doctors
         </button>
         <div className="error-state">
@@ -524,7 +525,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
               </Link>
             </button>
 
-            <button className="sidebar-btn active-tab">
+            <button className="sidebar-btn">
               <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
               <Link to="/appointments" className="sidebar-link">
                 Appointments
@@ -552,12 +553,12 @@ const DoctorDetails = ({ doctorId, onBack }) => {
               </Link>
             </button>
 
-            <button className="sidebar-btn">
+            {/* <button className="sidebar-btn">
               <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
               <Link to="/schedules" className="sidebar-link">
                 Schedules
               </Link>
-            </button>
+            </button> */}
           </div>
 
           <button className="sidebar-btn logout" onClick={logout}>
@@ -575,10 +576,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
           <div className="bg-white rounded-lg p-6 shadow font-sans">
             {/* Back Button */}
             <button onClick={handleBack} className="back-button">
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                className="back-button-icon"
-              />
+              <ChevronLeft size={20} className="mr-1" />
               Back to Doctors
             </button>
 
@@ -766,105 +764,87 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
             {/* Add Schedule Modal */}
             {isAddingSchedule && (
-              <div
-                className="fixed inset-0 flex items-center justify-center z-50"
-                style={{
-                  background: "rgba(0, 0, 0, 0.5)",
-                  backdropFilter: "blur(2px)",
-                  WebkitBackdropFilter: "blur(2px)",
-                }}
-              >
-                <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                  <h2 className="text-xl font-semibold mb-4 text-black">
-                    Add New Schedule
-                  </h2>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">
-                      Select Day
-                    </label>
-                    <select
-                      name="day_of_week"
-                      value={newSchedule.day_of_week}
-                      onChange={handleScheduleChange}
-                      className="w-full px-3 py-2 border rounded-md text-gray-600"
-                    >
-                      <option value="">Choose a day</option>
-                      {days.map((day) => (
-                        <option key={day} value={day}>
-                          {day}
-                        </option>
-                      ))}
-                    </select>
+              <div className="modal-overlay">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title">Add New Schedule</h2>
                   </div>
 
-                  <div className="flex mb-4 space-x-4">
-                    <div className="w-1/2">
-                      <label className="block text-gray-700 mb-2">
-                        Start Time
-                      </label>
-                      <input
-                        type="time"
-                        name="start_time"
-                        value={newSchedule.start_time}
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label className="form-label">Select Day</label>
+                      <select
+                        name="day_of_week"
+                        value={newSchedule.day_of_week}
                         onChange={handleScheduleChange}
-                        className="w-full px-3 py-2 border rounded-md text-gray-600"
-                      />
+                        className="form-control"
+                      >
+                        <option value="">Choose a day</option>
+                        {days.map((day) => (
+                          <option key={day} value={day}>
+                            {day}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="w-1/2">
-                      <label className="block text-gray-700 mb-2">
-                        End Time
-                      </label>
-                      <input
-                        type="time"
-                        name="end_time"
-                        value={newSchedule.end_time}
-                        onChange={handleScheduleChange}
-                        className="w-full px-3 py-2 border rounded-md text-gray-600"
-                      />
+
+                    <div className="form-row">
+                      <div className="form-col">
+                        <label className="form-label">Start Time</label>
+                        <input
+                          type="time"
+                          name="start_time"
+                          value={newSchedule.start_time}
+                          onChange={handleScheduleChange}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="form-col">
+                        <label className="form-label">End Time</label>
+                        <input
+                          type="time"
+                          name="end_time"
+                          value={newSchedule.end_time}
+                          onChange={handleScheduleChange}
+                          className="form-control"
+                        />
+                      </div>
                     </div>
+
+                    <div className="info-box">
+                      <div className="info-header">
+                        <FontAwesomeIcon
+                          icon={faPlusCircle}
+                          className="info-icon"
+                        />
+                        <span className="info-title">Schedule Info</span>
+                      </div>
+                      <p className="info-text">
+                        This will add a new time slot to the doctor's schedule.
+                      </p>
+                    </div>
+
+                    {addScheduleError && (
+                      <div className="error-box">
+                        <p className="error-text">
+                          <span className="error-label">Error:</span>
+                          {addScheduleError}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="bg-blue-50 p-4 rounded-md mb-4">
-                    <div className="flex items-center mb-2">
-                      <FontAwesomeIcon
-                        icon={faPlusCircle}
-                        className="text-blue-400 mr-2"
-                      />
-                      <span className="text-blue-800 font-medium">
-                        Schedule Info
-                      </span>
-                    </div>
-                    <p className="text-blue-600 text-sm">
-                      This will add a new time slot to the doctor's schedule.
-                    </p>
-                  </div>
-
-                  {addScheduleError && (
-                    <div
-                      className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-                      role="alert"
-                    >
-                      <strong className="font-bold">Error: </strong>
-                      <span className="block sm:inline">
-                        {addScheduleError}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between">
+                  <div className="modal-footer">
                     <button
-                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                      className="btn btn-secondary"
                       onClick={cancelAddSchedule}
                       disabled={addScheduleLoading}
                     >
                       Cancel
                     </button>
                     <button
-                      className={`px-4 py-2 text-white rounded-md ${
-                        addScheduleLoading
-                          ? "bg-blue-400 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700"
+                      className={`btn btn-primary ${
+                        addScheduleLoading ? "btn-loading" : ""
                       }`}
                       onClick={confirmAddSchedule}
                       disabled={addScheduleLoading}
@@ -878,111 +858,93 @@ const DoctorDetails = ({ doctorId, onBack }) => {
 
             {/* Edit Schedule Modal */}
             {isEditingSchedule && (
-              <div
-                className="fixed inset-0 flex items-center justify-center z-50"
-                style={{
-                  background: "rgba(0, 0, 0, 0.5)",
-                  backdropFilter: "blur(2px)",
-                  WebkitBackdropFilter: "blur(2px)",
-                }}
-              >
-                <div className="bg-white rounded-lg p-6 max-w-md w-full">
-                  <h2 className="text-xl font-semibold mb-4 text-black">
-                    Update Schedule
-                  </h2>
-
-                  <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">
-                      Select Day
-                    </label>
-                    <select
-                      name="day_of_week"
-                      value={newSchedule.day_of_week}
-                      onChange={handleScheduleChange}
-                      className="w-full px-3 py-2 border rounded-md text-gray-600"
-                    >
-                      <option value="">Choose a day</option>
-                      {days.map((day) => (
-                        <option key={day} value={day}>
-                          {day}
-                        </option>
-                      ))}
-                    </select>
+              <div className="modal-overlay">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h2 className="modal-title">Update Schedule</h2>
                   </div>
 
-                  <div className="flex mb-4 space-x-4">
-                    <div className="w-1/2">
-                      <label className="block text-gray-700 mb-2">
-                        Start Time
-                      </label>
-                      <input
-                        type="time"
-                        name="start_time"
-                        value={newSchedule.start_time}
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label className="form-label">Select Day</label>
+                      <select
+                        name="day_of_week"
+                        value={newSchedule.day_of_week}
                         onChange={handleScheduleChange}
-                        className="w-full px-3 py-2 border rounded-md text-gray-600"
-                      />
+                        className="form-control"
+                      >
+                        <option value="">Choose a day</option>
+                        {days.map((day) => (
+                          <option key={day} value={day}>
+                            {day}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="w-1/2">
-                      <label className="block text-gray-700 mb-2">
-                        End Time
-                      </label>
-                      <input
-                        type="time"
-                        name="end_time"
-                        value={newSchedule.end_time}
-                        onChange={handleScheduleChange}
-                        className="w-full px-3 py-2 border rounded-md text-gray-600"
-                      />
+
+                    <div className="form-row">
+                      <div className="form-col">
+                        <label className="form-label">Start Time</label>
+                        <input
+                          type="time"
+                          name="start_time"
+                          value={newSchedule.start_time}
+                          onChange={handleScheduleChange}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="form-col">
+                        <label className="block text-gray-700 mb-2">
+                          End Time
+                        </label>
+                        <input
+                          type="time"
+                          name="end_time"
+                          value={newSchedule.end_time}
+                          onChange={handleScheduleChange}
+                          className="form-control"
+                        />
+                      </div>
                     </div>
+                    <div className="infobox">
+                      <div className="info-header">
+                        <FontAwesomeIcon
+                          icon={faPlusCircle}
+                          className="info-icon"
+                        />
+                        <span className="info-title">Schedule Update</span>
+                      </div>
+                      <p className="infoText">
+                        This will update the existing time slot in the doctor's
+                        schedule.
+                      </p>
+                    </div>
+                    {addScheduleError && (
+                      <div className="error-box">
+                        <p className="error-text">
+                          <span className="error-label">Error:</span>
+                          {addScheduleError}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="bg-blue-50 p-4 rounded-md mb-4">
-                    <div className="flex items-center mb-2">
-                      <FontAwesomeIcon
-                        icon={faPlusCircle}
-                        className="text-blue-400 mr-2"
-                      />
-                      <span className="text-blue-800 font-medium">
-                        Schedule Update
-                      </span>
-                    </div>
-                    <p className="text-blue-600 text-sm">
-                      This will update the existing time slot in the doctor's
-                      schedule.
-                    </p>
-                  </div>
-
-                  {addScheduleError && (
-                    <div
-                      className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-                      role="alert"
-                    >
-                      <strong className="font-bold">Error: </strong>
-                      <span className="block sm:inline">
-                        {addScheduleError}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between">
+                  <div className="modal-footer">
                     <button
-                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                      className="btn btn-secondary"
                       onClick={cancelEditSchedule}
                       disabled={addScheduleLoading}
                     >
                       Cancel
                     </button>
                     <button
-                      className={`px-4 py-2 text-white rounded-md ${
-                        addScheduleLoading
-                          ? "bg-blue-400 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700"
+                      className={`btn btn-primary ${
+                        addScheduleLoading ? "btn-loading" : ""
                       }`}
                       onClick={confirmUpdateSchedule}
                       disabled={addScheduleLoading}
                     >
-                      {addScheduleLoading ? "Updating..." : "Update Schedule"}
+                      {addScheduleLoading ? "Adding..." : "Add Schedule"}
                     </button>
                   </div>
                 </div>

@@ -25,7 +25,7 @@ import {
   Trash2,
   PenBox,
 } from "lucide-react";
-import PatientDetails from "./patientsdetails";
+import PatientDetails from "./patients_details";
 import { useNavigate } from "react-router-dom";
 
 const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
