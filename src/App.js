@@ -8,7 +8,7 @@ import Patients from "./pages/Admin/patients_list";
 import Appointments from "./pages/Admin/appointments";
 import Doctors from "./pages/Admin/doctors_list";
 import Recommendations from "./pages/Admin/recommendations";
-import Departments from "./pages/Admin/departments";
+import Departments from "./pages/Admin/departments_list";
 import Schedules from "./pages/Admin/schedules";
 import DoctorDetails from "./pages/Admin/doctor_details";
 import PatientList  from "./pages/PatientList";
