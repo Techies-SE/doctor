@@ -392,7 +392,7 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     selectedLabTests.length > 0;
 
   return (
-    <div className="modal-container1" style={{marginTop: '80px'}}>
+    <div className="modal-container1" style={{marginTop: '50px'}}>
       <div className="bg-white rounded-lg w-full max-w-3xl max-h-[80vh] flex flex-col">
         {/* Header */}
         <div className="p-4 flex justify-between items-center">
@@ -819,7 +819,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
   );
 
   return (
-    <div className="modal-container1" style={{paddingTop: '80px'}}>
+    <div className="modal-container1" style={{paddingTop: '50px'}}>
       <div className="bg-white rounded-lg w-full max-w-lg max-h-[80vh] flex flex-col">
         {/* Header - Fixed */}
         <div className="p-4 flex justify-between items-center text-[#242222]">
