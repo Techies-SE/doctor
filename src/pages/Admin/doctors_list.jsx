@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../../styles/doctorDashboard.css";
-import "../Admin/styles/appointments.css";
+// import "../../styles/doctorDashboard.css";
+// import "../Admin/styles/appointments.css";
+import "../Admin/styles/doctors.css";
 import { useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -556,17 +557,19 @@ const Doctors = () => {
 
           {/* New Doctor Modal */}
           {showModal && (
-            <div className="modal-overlay">
+            <div className="modal-overlay"style={{paddingTop: '100px'}}>
               <div className="modal-container">
                 <div className="modal-header text-[#242222]">
                   <h2>Create New Doctor</h2>
                   <button
                     onClick={() => setShowModal(false)}
-                    className="close-btn-1"
+                    className="close-btn-1 "
                   >
                     <FontAwesomeIcon icon={faTimes} />
                   </button>
                 </div>
+                {/* Content - Scrollable */}
+              <div className="modal-body">
                 <form onSubmit={handleFormSubmit} className="modal-form">
                   <div className="form-group text-[#242222]">
                     <label>Name</label>
@@ -659,6 +662,7 @@ const Doctors = () => {
                 </form>
               </div>
             </div>
+          </div>
           )}
         </div>
       </div>

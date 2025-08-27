@@ -401,7 +401,7 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
-            <X size={16} />
+            <X size={18} textAlign="center" /> 
           </button>
         </div>
 
@@ -828,7 +828,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
-            <X size={16} />
+            <X size={18} textAlign="center" />
           </button>
         </div>
 
