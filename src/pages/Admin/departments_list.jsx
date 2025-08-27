@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./styles/doctors.css";
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -639,7 +641,7 @@ const Departments = () => {
 
           {/* Create Department Modal */}
           {showModal && (
-            <div className="modal-overlay">
+            <div className="modal-overlay"style={{paddingTop: '30px'}}>
               <div className="modal-container">
                 <div className="modal-header text-[#242222]">
                   <h2>Create New Department</h2>
