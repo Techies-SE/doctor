@@ -557,7 +557,7 @@ const Doctors = () => {
 
           {/* New Doctor Modal */}
           {showModal && (
-            <div className="modal-overlay"style={{paddingTop: '100px'}}>
+            <div className="modal-overlay"style={{paddingTop: '60px'}}>
               <div className="modal-container">
                 <div className="modal-header text-[#242222]">
                   <h2>Create New Doctor</h2>

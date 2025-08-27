@@ -641,7 +641,7 @@ const Departments = () => {
 
           {/* Create Department Modal */}
           {showModal && (
-            <div className="modal-overlay"style={{paddingTop: '30px'}}>
+            <div className="modal-overlay"style={{paddingTop: '60px'}}>
               <div className="modal-container">
                 <div className="modal-header text-[#242222]">
                   <h2>Create New Department</h2>
