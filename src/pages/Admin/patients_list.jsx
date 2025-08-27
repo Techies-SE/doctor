@@ -392,8 +392,8 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
     selectedLabTests.length > 0;
 
   return (
-    <div className="modal-container1" style={{marginTop: '50px'}}>
-      <div className="bg-white rounded-lg w-full max-w-lg max-h-[80vh] flex flex-col">
+    <div className="modal-container1" style={{marginTop: '80px'}}>
+      <div className="bg-white rounded-lg w-full max-w-3xl max-h-[80vh] flex flex-col">
         {/* Header */}
         <div className="p-4 flex justify-between items-center">
           <h2 className="text-xl font-bold">Add Lab Data</h2>

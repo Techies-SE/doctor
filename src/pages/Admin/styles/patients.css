@@ -311,17 +311,23 @@
   }
   
   /* Modal Styles */
+  :root {
+    --header-height: 100px;
+  }
+
   .modal-container1 {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    min-height: 100%;  /* match parent container height */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1001;
+    max-height: fit-content;
   }
   
   .modal-container1 > div {
