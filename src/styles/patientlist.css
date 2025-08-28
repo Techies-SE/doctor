@@ -189,7 +189,7 @@
   }
   
   .search-icon {
-    color: #3BA092;
+    color: #969696;
   }
   
   #search-input {
@@ -197,7 +197,7 @@
     border: none;
     outline: none;
     background-color: transparent;
-    width: 50%;
+    width: 100%;
     color: #969696;
   }
   

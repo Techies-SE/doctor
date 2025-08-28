@@ -14,7 +14,7 @@
     z-index: 1;
    }
 /* Search and filter styles */
-  #search-container {
+  #search-container-1 {
      display: flex;
     align-items: center;
     border: 0.5px solid #595959;
@@ -25,8 +25,8 @@
     margin-right: 1rem;
   }
   
-  .search-icon {
-    color: #3BA092;
+  #search-icon-1 {
+    color: #969696;
   }
   
   #search-input {
@@ -34,7 +34,7 @@
     border: none;
     outline: none;
     background-color: transparent;
-    width: 50%;
+    width: 100%;
     color: #969696;
   }
   
