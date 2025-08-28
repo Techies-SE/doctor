@@ -245,25 +245,25 @@ const DetailsPage = () => {
         </div>
 
         <div className="recommendation-compare">
-          <h3>Compare Recommendation</h3>
-          <p className="error-msg">Please select one preferred recommendation.</p>
+          <h3>AI Recommendation</h3>
+          {/* <p className="error-msg">Please select one preferred recommendation.</p> */}
           <div className="recommendation-cards">
             <div
               className={`recommendation-card ${selected === "rule" ? "selected" : ""}`}
               onClick={() => handleSelect("rule")}
             >
-              <h4>Rule-Based Recommendation</h4>
+              {/* <h4>Rule-Based Recommendation</h4> */}
               <textarea readOnly value={patientData.lab_test?.rule_based || ""}></textarea>
-              <button>Select</button>
+              <button>Select & Apply</button>
             </div>
-            <div
+            {/* <div
               className={`recommendation-card ${selected === "llm" ? "selected" : ""}`}
               onClick={() => handleSelect("llm")}
             >
               <h4>LLM-Based Recommendation (Gemma)</h4>
               <textarea readOnly value={patientData.lab_test?.llm_based || ""}></textarea>
-              <button>Select</button>
-            </div>
+              <button>Select</button> 
+            </div>*/}
           </div>
         </div>
 
