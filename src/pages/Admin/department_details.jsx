@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChevronLeft } from "lucide-react";
+import "../Admin/styles/department_details.css";
 import {
   faBell,
   faUser,
@@ -551,91 +552,99 @@ const DepartmentDetails = ({ departmentId, onBack }) => {
             {/* Create Doctor Modal */}
             {showDoctorModal && (
               <div className="modal-overlay">
-                <div className="modal-container">
-                  <div className="modal-header text-[#242222]">
-                    <h2>Create New Doctor for {department.name}</h2>
-                    <button
-                      onClick={() => setShowDoctorModal(false)}
-                      className="close-btn-1"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                  <form
-                    onSubmit={handleDoctorFormSubmit}
-                    className="modal-form"
-                  >
-                    <div className="form-group text-[#242222]">
-                      <label>Name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={newDoctor.name}
-                        onChange={handleDoctorInputChange}
-                        required
-                        placeholder="Enter doctor's name"
-                        style={{ width: "95%" }}
-                      />
-                    </div>
-                    <div className="form-group text-[#242222]">
-                      <label>Phone Number</label>
-                      <input
-                        type="text"
-                        name="phone_no"
-                        value={newDoctor.phone_no}
-                        onChange={handleDoctorInputChange}
-                        required
-                        placeholder="Enter phone number"
-                        style={{ width: "95%" }}
-                      />
-                    </div>
-                    <div className="form-group text-[#242222]">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={newDoctor.email}
-                        onChange={handleDoctorInputChange}
-                        required
-                        placeholder="Enter email address"
-                        style={{ width: "95%" }}
-                      />
-                    </div>
-                    <div className="form-group text-[#242222]">
-                      <label>Specialization</label>
-                      <input
-                        type="text"
-                        name="specialization"
-                        value={newDoctor.specialization}
-                        onChange={handleDoctorInputChange}
-                        required
-                        placeholder="Enter specialization"
-                        style={{ width: "95%" }}
-                      />
-                    </div>
-                    <div className="form-group text-[#242222]">
-                      <label>Status</label>
-                      <select
-                        name="status"
-                        value={newDoctor.status}
-                        onChange={handleDoctorInputChange}
-                        required
-                        style={{ width: "100%" }}
-                      >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                      </select>
-                    </div>
-                    <button
-                      type="submit"
-                      className="submit-btn"
-                      disabled={isDoctorLoading}
-                    >
-                      {isDoctorLoading ? "Creating..." : "Create Doctor"}
-                    </button>
-                  </form>
-                </div>
-              </div>
+  <div className="modal-container">
+    {/* Header */}
+    <div className="modal-header text-[#242222]">
+      <h2>Create New Doctor for {department.name}</h2>
+      <button
+        onClick={() => setShowDoctorModal(false)}
+        className="close-btn-1"
+      >
+        <X size={16} />
+      </button>
+    </div>
+
+    {/* Body (scrollable) */}
+    <div className="modal-body">
+      <form onSubmit={handleDoctorFormSubmit} className="modal-form">
+        <div className="form-group text-[#242222]">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={newDoctor.name}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter doctor's name"
+            style={{ width: "95%" }}
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Phone Number</label>
+          <input
+            type="text"
+            name="phone_no"
+            value={newDoctor.phone_no}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter phone number"
+            style={{ width: "95%" }}
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={newDoctor.email}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter email address"
+            style={{ width: "95%" }}
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Specialization</label>
+          <input
+            type="text"
+            name="specialization"
+            value={newDoctor.specialization}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter specialization"
+            style={{ width: "95%" }}
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Status</label>
+          <select
+            name="status"
+            value={newDoctor.status}
+            onChange={handleDoctorInputChange}
+            required
+            style={{ width: "100%" }}
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    {/* Footer (fixed) */}
+    <div className="modal-footer">
+      <button
+        type="submit"
+        form="doctorForm"  // connect to form if you add id="doctorForm"
+        className="submit-btn"
+        disabled={isDoctorLoading}
+      >
+        {isDoctorLoading ? "Creating..." : "Create Doctor"}
+      </button>
+    </div>
+  </div>
+</div>
+
             )}
           </div>
         </div>

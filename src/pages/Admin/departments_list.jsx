@@ -771,91 +771,90 @@ const Departments = () => {
 
           {/* Create Doctor Modal */}
           {showDoctorModal && selectedDepartmentForDoctor && (
-            <div className="modal-overlay">
-              <div className="modal-container">
-                <div className="modal-header text-[#242222]">
-                  <h2>
-                    Create New Doctor for {selectedDepartmentForDoctor.name}
-                  </h2>
-                  <button
-                    onClick={() => setShowDoctorModal(false)}
-                    className="close-btn-1"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-                <form onSubmit={handleDoctorFormSubmit} className="modal-form">
-                  <div className="form-group text-[#242222]">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={newDoctor.name}
-                      onChange={handleDoctorInputChange}
-                      required
-                      placeholder="Enter doctor's name"
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Phone Number</label>
-                    <input
-                      type="text"
-                      name="phone_no"
-                      value={newDoctor.phone_no}
-                      onChange={handleDoctorInputChange}
-                      required
-                      placeholder="Enter phone number"
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={newDoctor.email}
-                      onChange={handleDoctorInputChange}
-                      required
-                      placeholder="Enter email address"
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Specialization</label>
-                    <input
-                      type="text"
-                      name="specialization"
-                      value={newDoctor.specialization}
-                      onChange={handleDoctorInputChange}
-                      required
-                      placeholder="Enter specialization"
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Status</label>
-                    <select
-                      name="status"
-                      value={newDoctor.status}
-                      onChange={handleDoctorInputChange}
-                      required
-                    >
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
-                    </select>
-                  </div>
-                  <input
-                    type="hidden"
-                    name="department_id"
-                    value={selectedDepartmentForDoctor.id}
-                  />
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Creating..." : "Create Doctor"}
-                  </button>
-                </form>
-              </div>
-            </div>
+            <div className="modal-overlay"style={{paddingTop: '60px'}}>
+  <div className="modal-container">
+    <div className="modal-header text-[#242222]">
+      <h2>Create New Doctor for {selectedDepartmentForDoctor.name}</h2>
+      <button
+        onClick={() => setShowDoctorModal(false)}
+        className="close-btn-1"
+      >
+        <X size={16} />
+      </button>
+    </div>
+
+    {/* Scrollable body */}
+    <div className="modal-body">
+      <form onSubmit={handleDoctorFormSubmit} className="modal-form">
+        <div className="form-group text-[#242222]">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={newDoctor.name}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter doctor's name"
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Phone Number</label>
+          <input
+            type="text"
+            name="phone_no"
+            value={newDoctor.phone_no}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter phone number"
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            value={newDoctor.email}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter email address"
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Specialization</label>
+          <input
+            type="text"
+            name="specialization"
+            value={newDoctor.specialization}
+            onChange={handleDoctorInputChange}
+            required
+            placeholder="Enter specialization"
+          />
+        </div>
+        <div className="form-group text-[#242222]">
+          <label>Status</label>
+          <select
+            name="status"
+            value={newDoctor.status}
+            onChange={handleDoctorInputChange}
+            required
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <input
+          type="hidden"
+          name="department_id"
+          value={selectedDepartmentForDoctor.id}
+        />
+        <button type="submit" className="submit-btn" disabled={isLoading}>
+          {isLoading ? "Creating..." : "Create Doctor"}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
           )}
         </div>
       </div>
