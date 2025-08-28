@@ -1096,111 +1096,120 @@ const Appointments = () => {
 
           {showRescheduleModal && selectedAppointment ? (
             <div className="reschedule-modal">
-  <div
-    className="modal-overlay"
-    onClick={handleCloseRescheduleModal}
-  ></div>
-  <div className="modal-container">
-    {/* Modal Header */}
-    <div className="modal-header">
-      <h2 className="modal-title">Reschedule Appointment</h2>
-      <button
-        onClick={handleCloseRescheduleModal}
-        className="modal-close"
-      >
-        <X className="icon" />
-      </button>
-    </div>
-
-    {/* Modal Body (scrollable) */}
-    <div className="modal-body">
-      <form onSubmit={handleRescheduleAppointment}>
-        <div className="section">
-          <h3 className="section-title">{selectedAppointment.doctor}</h3>
-          <p className="section-subtitle">
-            {selectedAppointment.specialty}
-          </p>
-        </div>
-
-        <div className="section">
-          <label className="section-label">Patient</label>
-          <p>{selectedAppointment.patientName}</p>
-        </div>
-
-        <div className="section">
-          <label className="section-label">Current Appointment</label>
-          <p>
-            {selectedAppointment.date} at {selectedAppointment.time}
-          </p>
-        </div>
-
-        <div className="section">
-          <label className="section-label" htmlFor="newDate">
-            Select New Date
-          </label>
-          <input
-            id="newDate"
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="date-input"
-            required
-          />
-        </div>
-
-        <div className="section">
-          <label className="section-label">Available Time Slots</label>
-          {availableTimeSlots.length > 0 ? (
-            <div className="time-slot-grid">
-              {availableTimeSlots.map((time) => (
-                <label key={time} className="time-slot-label">
-                  <input
-                    type="radio"
-                    name="timeSlot"
-                    value={time}
-                    checked={selectedTimeSlot === time}
-                    onChange={() => setSelectedTimeSlot(time)}
-                    className="hidden"
-                    required
-                  />
-                  <div
-                    className={`time-slot ${
-                      selectedTimeSlot === time ? "selected" : ""
-                    }`}
+              <div
+                className="modal-overlay"
+                onClick={handleCloseRescheduleModal}
+              ></div>
+              <div className="modal-container">
+                {/* Modal Header */}
+                <div className="modal-header">
+                  <h2 className="modal-title">Reschedule Appointment</h2>
+                  <button
+                    onClick={handleCloseRescheduleModal}
+                    className="modal-close"
                   >
-                    {time}
-                  </div>
-                </label>
-              ))}
+                    <X className="icon" />
+                  </button>
+                </div>
+
+                {/* Modal Body (scrollable) */}
+                <div className="modal-body">
+                  <form onSubmit={handleRescheduleAppointment}>
+                    <div className="section">
+                      <h3 className="section-title">
+                        {selectedAppointment.doctor}
+                      </h3>
+                      <p className="section-subtitle">
+                        {selectedAppointment.specialty}
+                      </p>
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label">Patient</label>
+                      <p>{selectedAppointment.patientName}</p>
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label">
+                        Current Appointment
+                      </label>
+                      <p>
+                        {selectedAppointment.date} at {selectedAppointment.time}
+                      </p>
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label" htmlFor="newDate">
+                        Select New Date
+                      </label>
+                      <input
+                        id="newDate"
+                        type="date"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        className="date-input"
+                        required
+                      />
+                    </div>
+
+                    <div className="section">
+                      <label className="section-label">
+                        Available Time Slots
+                      </label>
+                      {availableTimeSlots.length > 0 ? (
+                        <div className="time-slot-grid">
+                          {availableTimeSlots.map((time) => (
+                            <label key={time} className="time-slot-label">
+                              <input
+                                type="radio"
+                                name="timeSlot"
+                                value={time}
+                                checked={selectedTimeSlot === time}
+                                onChange={() => setSelectedTimeSlot(time)}
+                                className="hidden"
+                                required
+                              />
+                              <div
+                                className={`time-slot ${
+                                  selectedTimeSlot === time ? "selected" : ""
+                                }`}
+                              >
+                                {time}
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="no-slots">
+                          No available time slots for this date
+                        </p>
+                      )}
+                    </div>
+                  </form>
+                </div>
+
+                {/* Modal Footer (fixed at bottom) */}
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    onClick={handleCloseRescheduleModal}
+                    className="btn-cancel"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    form="rescheduleForm" // attach form by id
+                    className={`btn-confirm ${
+                      !selectedTimeSlot ? "disabled" : ""
+                    }`}
+                    disabled={!selectedTimeSlot}
+                  >
+                    Confirm Reschedule
+                  </button>
+                </div>
+              </div>
             </div>
-          ) : (
-            <p className="no-slots">No available time slots for this date</p>
-          )}
-        </div>
-      </form>
-    </div>
-
-    {/* Modal Footer (fixed at bottom) */}
-    <div className="modal-footer">
-      <button
-        type="button"
-        onClick={handleCloseRescheduleModal}
-        className="btn-cancel"
-      >
-        Cancel
-      </button>
-      <button
-        type="submit"
-        form="rescheduleForm" // attach form by id
-        className={`btn-confirm ${!selectedTimeSlot ? "disabled" : ""}`}
-        disabled={!selectedTimeSlot}
-      >
-        Confirm Reschedule
-      </button>
-    </div>
-  </div>
-</div>
-
           ) : null}
         </div>
       </div>
