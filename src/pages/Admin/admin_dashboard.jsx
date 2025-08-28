@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Chart from "chart.js/auto";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "../../styles/doctorDashboard.css";
+import "../Admin/styles/admin_dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
