@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import "../../styles/doctorDashboard.css";
 // import "../Admin/styles/appointments.css";
 import "../Admin/styles/doctors.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   Filter,
@@ -19,7 +19,7 @@ import {
   Award,
   PlusIcon,
   PenBox,
-}from "lucide-react";
+} from "lucide-react";
 import {
   faBell,
   faUser,
@@ -78,7 +78,9 @@ const Doctors = () => {
       "Content-Type": "application/json",
     };
 
-    fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", { headers })
+    fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", {
+      headers,
+    })
       .then((response) => {
         if (!response.ok) throw new Error("Failed to fetch doctors");
         return response.json();
@@ -103,14 +105,14 @@ const Doctors = () => {
   const handleInputChange = (e) => {
     setNewDoctor({ ...newDoctor, [e.target.name]: e.target.value });
   };
-  
+
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
 
@@ -131,12 +133,15 @@ const Doctors = () => {
     })
       .then((response) => response.json())
       .then(() => {
-        return fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        return fetch(
+          "https://backend-pg-cm2b.onrender.com/doctors-with-departments",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       })
       .then((response) => response.json())
       .then((updatedData) => {
@@ -268,16 +273,13 @@ const Doctors = () => {
     const token = localStorage.getItem("authToken");
     console.log("Auth Token:", token);
     if (!token) throw new Error("No authentication token found");
-    fetch(
-      `https://backend-pg-cm2b.onrender.com/doctors/${doctorID}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    fetch(`https://backend-pg-cm2b.onrender.com/doctors/${doctorID}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then(() => {
         setDoctors(doctors.filter((doctor) => doctor.doctor_id !== doctorID));
@@ -313,11 +315,7 @@ const Doctors = () => {
             <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
           <div id="profile">
-            <img
-              src="/img/profile.png"
-              alt="Profile"
-              id="profile-image"
-            />
+            <img src="/img/profile.png" alt="Profile" id="profile-image" />
             <span id="profile-name">Admin</span>
           </div>
         </div>
@@ -381,7 +379,11 @@ const Doctors = () => {
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            id="sidebar-icon"
+          />
           <span className="login-link">Logout</span>
         </button>
       </aside>
@@ -414,7 +416,6 @@ const Doctors = () => {
               <Filter size={13} className="filter-icon-1" /> Filter
             </button>
           </div>
-
 
           <div className="table-wrapper">
             <table className="table-content" style={{ marginTop: "0px" }}>
@@ -557,7 +558,7 @@ const Doctors = () => {
 
           {/* New Doctor Modal */}
           {showModal && (
-            <div className="modal-overlay"style={{paddingTop: '100px'}}>
+            <div className="modal-overlay" style={{ paddingTop: "100px" }}>
               <div className="modal-container">
                 <div className="modal-header text-[#242222]">
                   <h2>Create New Doctor</h2>
@@ -569,100 +570,100 @@ const Doctors = () => {
                   </button>
                 </div>
                 {/* Content - Scrollable */}
-              <div className="modal-body">
-                <form onSubmit={handleFormSubmit} className="modal-form">
-                  <div className="form-group text-[#242222]">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={newDoctor.name}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Enter doctor's name"
-                      style={{ width:'95%'}}
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Phone Number</label>
-                    <input
-                      type="text"
-                      name="phone_no"
-                      value={newDoctor.phone_no}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Enter phone number"
-                       style={{ width:'95%'}}
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={newDoctor.email}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Enter email address"
-                       style={{ width:'95%'}}
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Specialization</label>
-                    <input
-                      type="text"
-                      name="specialization"
-                      value={newDoctor.specialization}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Enter specialization"
-                       style={{ width:'95%'}}
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Status</label>
-                    <select
-                      name="status"
-                      value={newDoctor.status}
-                      onChange={handleInputChange}
-                      required
-                       style={{ width:'100%'}}
-                    >
-                      <option value="">Select Status</option>
-                      <option value="active">active</option>
-                      <option value="inactive">inactive</option>
-                    </select>
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Department</label>
-                    <select
-                      name="department_id"
-                      value={newDoctor.department_id}
-                      onChange={(e) =>
-                        setNewDoctor({
-                          ...newDoctor,
-                          department_id: e.target.value
-                            ? Number(e.target.value)
-                            : "",
-                        })
-                      }
-                      required
-                    >
-                      <option value="">Select Department</option>
-                      {departments.map((department) => (
-                        <option key={department.id} value={department.id}>
-                          {department.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <button type="submit" className="submit-btn">
-                    Create Doctor
-                  </button>
-                </form>
+                <div className="modal-body">
+                  <form onSubmit={handleFormSubmit} className="modal-form">
+                    <div className="form-group text-[#242222]">
+                      <label>Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={newDoctor.name}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Enter doctor's name"
+                        style={{ width: "95%" }}
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Phone Number</label>
+                      <input
+                        type="text"
+                        name="phone_no"
+                        value={newDoctor.phone_no}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Enter phone number"
+                        style={{ width: "95%" }}
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={newDoctor.email}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Enter email address"
+                        style={{ width: "95%" }}
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Specialization</label>
+                      <input
+                        type="text"
+                        name="specialization"
+                        value={newDoctor.specialization}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Enter specialization"
+                        style={{ width: "95%" }}
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Status</label>
+                      <select
+                        name="status"
+                        value={newDoctor.status}
+                        onChange={handleInputChange}
+                        required
+                        style={{ width: "100%" }}
+                      >
+                        <option value="">Select Status</option>
+                        <option value="active">active</option>
+                        <option value="inactive">inactive</option>
+                      </select>
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Department</label>
+                      <select
+                        name="department_id"
+                        value={newDoctor.department_id}
+                        onChange={(e) =>
+                          setNewDoctor({
+                            ...newDoctor,
+                            department_id: e.target.value
+                              ? Number(e.target.value)
+                              : "",
+                          })
+                        }
+                        required
+                      >
+                        <option value="">Select Department</option>
+                        {departments.map((department) => (
+                          <option key={department.id} value={department.id}>
+                            {department.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <button type="submit" className="submit-btn">
+                      Create Doctor
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
           )}
         </div>
       </div>
