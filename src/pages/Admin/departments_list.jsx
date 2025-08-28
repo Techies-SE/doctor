@@ -506,7 +506,7 @@ const Departments = () => {
               <Search size={18} className="search-icon-1" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search departments ..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 id="search-input"
