@@ -179,28 +179,35 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px; /* or 90vw for responsiveness */
-  min-width: 300px;  /* prevent it from shrinking too much */
+  max-width: 500px;
+  min-width: 300px;
   z-index: 60;
-  overflow: hidden;
-  transition: none; /* remove layout-shifting transitions */
+
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;       /* limit height relative to viewport */
+  overflow: hidden;       /* prevent outside overflow */
 }
 
-
-
-
-.modal-header,
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.modal-header {
+  flex-shrink: 0;         /* don’t shrink */
   padding: 16px;
   border-bottom: 1px solid #e5e7eb;
 }
 
 .modal-footer {
+  flex-shrink: 0;         /* don’t shrink */
+  padding: 16px;
   border-top: 1px solid #e5e7eb;
+  display: flex;
   justify-content: flex-end;
+}
+
+.modal-body {
+  flex: 1;                /* take remaining space */
+  min-height: 0;          /* allow flexbox scrolling */
+  overflow-y: auto;       /* enable scrolling */
+  padding: 24px;
 }
 
 .modal-title {
@@ -220,9 +227,7 @@
   color: #4b5563;
 }
 
-.modal-body {
-  padding: 24px;
-}
+
 
 .section {
   margin-bottom: 16px;
