@@ -123,6 +123,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       try {
+        setPatients([]);
         setLoading(true);
         const response = await fetch(
           `https://backend-pg-cm2b.onrender.com/doctors/patients-lab-tests`,
@@ -139,18 +140,25 @@ const PatientList = () => {
         }
 
         const result = await response.json();
-        console.log(result);
+        console.log("API Response:", result);
 
         if (result.success) {
-          const formattedPatients = result.data.map((patient) => ({
-            id: patient.patient_id,
-            lab_test_id: patient.lab_test_id,
-            name: patient.patient_name,
-            hn_number: patient.hn_number,
-            lab_test: patient.lab_test_name,
-            lab_test_date: patient.lab_test_date.split("T")[0],
-          }));
+          const formattedPatients = result.data.map((patient) => {
+            // Add safety checks for each field
+            const testDate = patient.test_date; // Note: API returns 'test_date', not 'lab_test_date'
 
+            return {
+              id: patient.lab_test_id || 0, // Use lab_test_id as primary key
+              patient_id: patient.patient_id || 0, // Keep original patient_id if needed elsewhere
+              lab_test_id: patient.lab_test_id || 0,
+              name: patient.patient_name || "Unknown Patient",
+              hn_number: patient.hn_number || "N/A",
+              lab_test: patient.lab_test_name || "N/A", // This field seems missing from API
+              lab_test_date: testDate ? testDate.split("T")[0] : "N/A", // Use test_date instead
+            };
+          });
+
+          console.log("Formatted patients:", formattedPatients);
           setPatients(formattedPatients);
         } else {
           throw new Error(result.message || "Failed to fetch patients");
@@ -345,7 +353,9 @@ const PatientList = () => {
             alt="Logout Icon"
             className="sidebar-icon"
           />
-          <Link to="/" className="logout-link">Logout</Link>
+          <Link to="/" className="logout-link">
+            Logout
+          </Link>
         </button>
       </aside>
 
@@ -406,7 +416,10 @@ const PatientList = () => {
                         </div>
                       </th>
                     ))}
-                    <th id="table-header-cell" style={{ width: "15%", textAlign: "center" }}>
+                    <th
+                      id="table-header-cell"
+                      style={{ width: "15%", textAlign: "center" }}
+                    >
                       Action
                     </th>
                   </tr>
@@ -424,15 +437,18 @@ const PatientList = () => {
                         <td id="table-cell">{patient.name}</td>
                         <td id="table-cell">{patient.hn_number}</td>
                         <td id="table-cell">{patient.lab_test_date}</td>
-                        <td id="table-cell relative" style={{ width: "15%", textAlign: "center" }}>
-                        <Link
-                          to={`/details/${patient.hn_number}/lab-test`}
-                          className="action-icon"
-                          onClick={(e) => e.stopPropagation()} // optional to prevent row click
+                        <td
+                          id="table-cell relative"
+                          style={{ width: "15%", textAlign: "center" }}
                         >
-                        <FiInfo size={25} />
-                        </Link>
-                      </td>
+                          <Link
+                            to={`/details/${patient.hn_number}/${patient.lab_test_id}`}
+                            className="action-icon"
+                            onClick={(e) => e.stopPropagation()} // optional to prevent row click
+                          >
+                            <FiInfo size={25} />
+                          </Link>
+                        </td>
                       </tr>
                     ))
                   )}

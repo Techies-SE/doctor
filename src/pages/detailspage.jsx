@@ -4,8 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useDoctorProfile } from "../useDoctorProfile";
 import "../styles/style.css";
+
 const DetailsPage = () => {
-  const { hn_number } = useParams();
+  const { hn_number, lab_test_id } = useParams(); // Extract both parameters
   const [patientData, setPatientData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,6 +16,8 @@ const DetailsPage = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [recommendationId, setRecommendationId] = useState(null);
+  const [recommendationStatus, setRecommendationStatus] = useState("pending"); // Add status state
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +27,7 @@ const DetailsPage = () => {
         if (!token) throw new Error("No authentication token found");
 
         const response = await fetch(
-          `https://backend-pg-cm2b.onrender.com/doctors/${hn_number}/lab-test`,
+          `https://backend-pg-cm2b.onrender.com/patients/${hn_number}/${lab_test_id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -33,63 +36,54 @@ const DetailsPage = () => {
           }
         );
 
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
 
         const data = await response.json();
+        console.log("Patient data:", data);
         setPatientData(data);
-        setRecommendation(data.lab_test?.generated_recommendation || "");
-        setRecommendationId(data.lab_test?.recommendation_id || null);
+
+        // Set recommendation from the API response
+        if (data.recommendations && data.recommendations.length > 0) {
+          const recommendationData = data.recommendations[0];
+          const status = recommendationData.status || "pending";
+
+          // Show doctor_recommendation if approved, otherwise show generated_recommendation
+          const displayRecommendation =
+            status === "approved"
+              ? recommendationData.doctor_recommendation ||
+                recommendationData.generated_recommendation
+              : recommendationData.generated_recommendation;
+
+          setRecommendation(displayRecommendation || "");
+          setRecommendationId(recommendationData.id || null);
+          setRecommendationStatus(status);
+        }
       } catch (err) {
+        console.error("Error fetching patient details:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPatientDetails();
-  }, [hn_number]);
+    if (hn_number && lab_test_id) {
+      fetchPatientDetails();
+    }
+  }, [hn_number, lab_test_id]);
 
   const handleSelect = (type) => {
     setSelected(type);
-    const selectedText =
-      type === "rule"
-        ? patientData.lab_test?.rule_based
-        : patientData.lab_test?.llm_based;
+    // You can modify this logic based on your needs
+    const selectedText = recommendation;
     setRecommendation(selectedText || "");
-  };
-
-  const handleSave = async () => {
-    try {
-      setIsSaving(true);
-      const token = localStorage.getItem("authToken");
-      const response = await fetch(
-        `https://backend-pg-cm2b.onrender.com/recommendations/${recommendationId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ generated_recommendation: recommendation }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Error saving recommendation");
-
-      const updated = await response.json();
-      if (updated.success) alert("Recommendation saved successfully.");
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const handleApprove = async () => {
     try {
       setIsApproving(true);
       const token = localStorage.getItem("authToken");
-      await fetch(
+      const response = await fetch(
         `https://backend-pg-cm2b.onrender.com/recommendations/${recommendationId}/approve`,
         {
           method: "PATCH",
@@ -97,9 +91,16 @@ const DetailsPage = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({ doctor_recommendation: recommendation }),
         }
       );
-      alert("Recommendation approved and sent.");
+
+      if (response.ok) {
+        alert("Recommendation approved and sent.");
+        setRecommendationStatus("approved"); // Update status after successful approval
+      } else {
+        throw new Error("Failed to approve recommendation");
+      }
     } catch (err) {
       alert("Error approving recommendation.");
     } finally {
@@ -119,42 +120,64 @@ const DetailsPage = () => {
 
   const displayValue = (val, fallback = "N/A") => val ?? fallback;
 
+  // Calculate age from date of birth
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return "N/A";
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
+
+  // Check if recommendation is approved
+  const isApproved = recommendationStatus === "approved";
+
   if (loading) return <div>Loading...</div>;
   if (error || !patientData) return <div>Error: {error || "No data"}</div>;
 
-  const hardcodedLabTests = [
-    {
-      title: "Complete Blood Count",
-      details: [
-        "WBC: 6.0 x10^3/uL (4.0-10.0)",
-        "RBC: 5.2 x10^6/uL (4.2-5.9)",
-        "Hemoglobin: 13.5 g/dL (13.0-17.0)"
-      ]
-    },
-    {
-      title: "Liver Function Test",
-      details: [
-        "ALT: 25 U/L (7-56)",
-        "AST: 20 U/L (10-40)"
-      ]
-    },
-    {
-      title: "Kidney Function Test",
-      details: [
-        "Creatinine: 1.0 mg/dL (0.6-1.2)",
-        "BUN: 14 mg/dL (7-20)"
-      ]
-    },
-    {
-      title: "Lipid Profile",
-      details: [
-        "Total Cholesterol: 190 mg/dL (<200)",
-        "HDL: 55 mg/dL (>40)",
-        "LDL: 110 mg/dL (<130)",
-        "Triglycerides: 150 mg/dL (<150)"
-      ]
-    }
-  ];
+  // Prepare lab tests data from API response
+  const labTests = [];
+
+  // Add main lab test
+  if (patientData.lab_test) {
+    labTests.push({
+      title: patientData.lab_test.test_name,
+      date: new Date(patientData.lab_test.lab_test_date).toLocaleDateString(),
+      details: patientData.lab_test.results.map(
+        (result) =>
+          `${result.lab_item_name}: ${result.value}${
+            result.unit ? " " + result.unit : ""
+          } (${result.normal_range || "N/A"}) - ${
+            result.lab_item_status || "N/A"
+          }`
+      ),
+    });
+  }
+
+  // Add other tests from the same day
+  if (patientData.other_tests_same_day) {
+    patientData.other_tests_same_day.forEach((test) => {
+      labTests.push({
+        title: test.test_name,
+        date: new Date(test.lab_test_date).toLocaleDateString(),
+        details: test.results.map(
+          (result) =>
+            `${result.lab_item_name}: ${result.value}${
+              result.unit ? " " + result.unit : ""
+            } (${result.normal_range || "N/A"}) - ${
+              result.lab_item_status || "N/A"
+            }`
+        ),
+      });
+    });
+  }
 
   return (
     <div className="app">
@@ -201,7 +224,9 @@ const DetailsPage = () => {
               alt="Patients Icon"
               className="sidebar-icon"
             />
-            Patients
+            <Link to="/patients" className="patients-link">
+              Patients
+            </Link>
           </button>
           <button className="sidebar-btn">
             <img
@@ -221,7 +246,9 @@ const DetailsPage = () => {
             alt="Logout Icon"
             className="sidebar-icon"
           />
-          <Link to="/" className="logout-link">Logout</Link>
+          <Link to="/" className="logout-link">
+            Logout
+          </Link>
         </button>
       </aside>
 
@@ -231,57 +258,101 @@ const DetailsPage = () => {
           <h1>Patient Information</h1>
           <h3>{patientData.name}</h3>
           <p>
-            {patientData.patient_data?.gender}, {patientData.patient_data?.age} years | HN-Number: {hn_number}
+            {displayValue(patientData.patient_data?.gender)},{" "}
+            {calculateAge(patientData.patient_data?.date_of_birth)} years |
+            HN-Number: {hn_number}
           </p>
+          <p>Phone: {displayValue(patientData.phone_no)}</p>
+          <p>
+            Blood Type: {displayValue(patientData.patient_data?.blood_type)}
+          </p>
+          <p>Weight: {displayValue(patientData.patient_data?.weight)} kg</p>
+          <p>Height: {displayValue(patientData.patient_data?.height)} cm</p>
+          <p>BMI: {displayValue(patientData.patient_data?.bmi)}</p>
         </div>
 
         <div className="lab-section">
-          <h3>Latest Lab Results</h3>
+          <h3>Lab Results</h3>
           <div className="lab-result-list">
-            {hardcodedLabTests.map((test, index) => (
-              <LabCard key={index} title={test.title} details={test.details} />
-            ))}
+            {labTests.length > 0 ? (
+              labTests.map((test, index) => (
+                <LabCard
+                  key={index}
+                  title={`${test.title} (${test.date})`}
+                  details={test.details}
+                />
+              ))
+            ) : (
+              <p>No lab results available</p>
+            )}
           </div>
         </div>
 
         <div className="recommendation-compare">
-          <h3>AI Recommendation</h3>
-          {/* <p className="error-msg">Please select one preferred recommendation.</p> */}
+          <h3>AI Generated Recommendation</h3>
           <div className="recommendation-cards">
             <div
-              className={`recommendation-card ${selected === "rule" ? "selected" : ""}`}
+              className={`recommendation-card ${
+                selected === "rule" ? "selected" : ""
+              }`}
               onClick={() => handleSelect("rule")}
             >
-              {/* <h4>Rule-Based Recommendation</h4> */}
-              <textarea readOnly value={patientData.lab_test?.rule_based || ""}></textarea>
-              <button>Select & Apply</button>
+              <textarea
+                readOnly
+                value={
+                  patientData.recommendations &&
+                  patientData.recommendations.length > 0
+                    ? patientData.recommendations[0].generated_recommendation // Always show original AI
+                    : "No recommendation available"
+                }
+              ></textarea>
             </div>
-            {/* <div
-              className={`recommendation-card ${selected === "llm" ? "selected" : ""}`}
-              onClick={() => handleSelect("llm")}
-            >
-              <h4>LLM-Based Recommendation (Gemma)</h4>
-              <textarea readOnly value={patientData.lab_test?.llm_based || ""}></textarea>
-              <button>Select</button> 
-            </div>*/}
           </div>
         </div>
 
         <div className="improved-section">
-          <h3>Improved Recommendation</h3>
+          <h3>
+            {isApproved
+              ? "Approved Recommendation"
+              : "You can improve the recommendation here"}
+          </h3>
+          {isApproved && (
+            <div
+              className="status-indicator"
+              style={{
+                color: "#28a745",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
+            >
+              ✓ This recommendation has been approved and sent
+            </div>
+          )}
           <textarea
             className="improved-textarea"
             value={recommendation}
             onChange={(e) => setRecommendation(e.target.value)}
-          ></textarea>
-          <div className="btn-group">
-            {/* <button onClick={handleSave} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save"}
-            </button> */}
-            <button onClick={handleApprove} disabled={isApproving || !recommendation}>
-              {isApproving ? "Approving..." : "Approve & Send"}
-            </button>
-          </div>
+            readOnly={isApproved} // Make read-only if approved
+            style={{
+              backgroundColor: isApproved ? "#f8f9fa" : "white",
+              cursor: isApproved ? "not-allowed" : "text",
+            }}
+            placeholder={
+              isApproved
+                ? "Approved recommendation"
+                : "Edit AI recommendation if needed"
+            }
+          />
+          {!isApproved && (
+            <div className="btn-group">
+              <button
+                onClick={handleApprove}
+                disabled={isApproving || !recommendation}
+              >
+                {isApproving ? "Approving..." : "Approve & Send"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

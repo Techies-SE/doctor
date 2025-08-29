@@ -1,82 +1,194 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
 import Chart from "chart.js/auto";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faHeartbeat, faSyringe, faLungs } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBell,
+  faHeartbeat,
+  faSyringe,
+  faLungs,
+} from "@fortawesome/free-solid-svg-icons";
 import { useDoctorProfile } from "../useDoctorProfile";
 
 const Dashboard = () => {
   const { doctorData } = useDoctorProfile();
   const navigate = useNavigate();
   const chartRef = useRef(null);
-  
+  const [totalAppointments, setTotalAppointments] = useState(0);
+  const [totalPatients, setTotalPatients] = useState(0);
+  const [totalLabTests, setTotalLabTests] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [recentActivity, setRecentActivity] = useState([]);
+
   // State for all dashboard data
-  const [dashboardData, setDashboardData] = useState({
-    patientCount: 0,
-    appointmentsCount: 0,
-    labResultsCount: 0,
-    recentPatients: [],
-    loading: true,
-    error: null
-  });
 
   // Fetch all dashboard data
   useEffect(() => {
-    
-    const fetchDashboardData = async () => {
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) throw new Error("No authentication token found");
-        // Fetch all data in parallel
-        const [patientsRes, appointmentsRes, labResultsRes, recentPatientsRes] = await Promise.all([
-          fetch(`https://backend-pg-cm2b.onrender.com/doctors/patient-count`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          }),
-          fetch(`https://backend-pg-cm2b.onrender.com/doctors/appointments-count`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          }),
-          fetch(`https://backend-pg-cm2b.onrender.com/doctors/pending-lab-results-count`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          }),
-          fetch(`https://backend-pg-cm2b.onrender.com/recent-lab-tests`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          })
-        ]);
+    let completedRequests = 0;
+    const totalRequests = 4;
 
-        // Check all responses
-        if (!patientsRes.ok || !appointmentsRes.ok || !labResultsRes.ok || !recentPatientsRes.ok) {
-          throw new Error('Failed to fetch dashboard data');
-        }
-
-        // Parse all responses
-        const [patientsData, appointmentsData, labResultsData, recentPatientsData] = await Promise.all([
-          patientsRes.json(),
-          appointmentsRes.json(),
-          labResultsRes.json(),
-          recentPatientsRes.json()
-        ]);
-
-        setDashboardData({
-          patientCount: patientsData.patient_count,
-          appointmentsCount: appointmentsData.scheduled_appointment_count,
-          labResultsCount: labResultsData.count,
-          recentPatients: recentPatientsData.data || [],
-          loading: false,
-          error: null
-        });
-      } catch (err) {
-        setDashboardData(prev => ({
-          ...prev,
-          loading: false,
-          error: err.message
-        }));
+    const checkAllComplete = () => {
+      completedRequests++;
+      if (completedRequests >= totalRequests) {
+        setLoading(false); // ✅ Set loading to false when all requests complete
       }
     };
 
-    fetchDashboardData();
-  }, [doctorData?.id]);
+    const fetchTotalAppointments = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        checkAllComplete();
+        return;
+      }
+
+      try {
+        const countResponse = await fetch(
+          "https://backend-pg-cm2b.onrender.com/dashboard/doctor-appointments",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!countResponse.ok) {
+          throw new Error(
+            `HTTP ${countResponse.status}: ${countResponse.statusText}`
+          );
+        }
+
+        const countData = await countResponse.json();
+        setTotalAppointments(countData.total_appointments || 0);
+      } catch (err) {
+        console.error("Error fetching appointments count:", err);
+        setError(
+          (prev) => prev || `Error loading appointments: ${err.message}`
+        );
+      } finally {
+        checkAllComplete();
+      }
+    };
+
+    const fetchTotalPatients = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        checkAllComplete();
+        return;
+      }
+
+      try {
+        const countResponse = await fetch(
+          "https://backend-pg-cm2b.onrender.com/dashboard/doctor-patients",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!countResponse.ok) {
+          throw new Error(
+            `HTTP ${countResponse.status}: ${countResponse.statusText}`
+          );
+        }
+
+        const countData = await countResponse.json();
+        setTotalPatients(countData.active_patients || 0);
+      } catch (err) {
+        console.error("Error fetching patients count:", err);
+        setError((prev) => prev || `Error loading patients: ${err.message}`);
+      } finally {
+        checkAllComplete();
+      }
+    };
+
+    const fetchTotalLabTests = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        checkAllComplete();
+        return;
+      }
+
+      try {
+        const countResponse = await fetch(
+          "https://backend-pg-cm2b.onrender.com/dashboard/doctor-review",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!countResponse.ok) {
+          throw new Error(
+            `HTTP ${countResponse.status}: ${countResponse.statusText}`
+          );
+        }
+
+        const countData = await countResponse.json();
+        setTotalLabTests(countData.total_appointments || 0);
+      } catch (err) {
+        console.error("Error fetching doctors count:", err);
+        setError((prev) => prev || `Error loading doctors: ${err.message}`);
+      } finally {
+        checkAllComplete();
+      }
+    };
+
+    const fetchRecentActivity = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        checkAllComplete();
+        return;
+      }
+
+      try {
+        const activityResponse = await fetch(
+          "https://backend-pg-cm2b.onrender.com/dashboard/doctor-recent",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!activityResponse.ok) {
+          throw new Error(
+            `HTTP ${activityResponse.status}: ${activityResponse.statusText}`
+          );
+        }
+
+        const activityData = await activityResponse.json();
+        setRecentActivity(activityData.data || []);
+      } catch (err) {
+        console.error("Error fetching recent activity:", err);
+        setError((prev) => prev || `Error loading activity: ${err.message}`);
+      } finally {
+        checkAllComplete();
+      }
+    };
+
+    // Start all fetch operations
+    fetchTotalAppointments();
+    fetchTotalPatients();
+    fetchTotalLabTests();
+    fetchRecentActivity();
+  }, []);
 
   // Initialize chart
   useEffect(() => {
@@ -87,18 +199,20 @@ const Dashboard = () => {
       type: "line",
       data: {
         labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-        datasets: [{
-          label: "Patient Trends",
-          data: [200, 220, 250, 280, 300],
-          borderColor: "blue",
-          borderWidth: 2,
-          fill: false,
-        }],
+        datasets: [
+          {
+            label: "Patient Trends",
+            data: [200, 220, 250, 280, 300],
+            borderColor: "blue",
+            borderWidth: 2,
+            fill: false,
+          },
+        ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false
-      }
+        maintainAspectRatio: false,
+      },
     });
 
     return () => {
@@ -114,12 +228,9 @@ const Dashboard = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
-    navigate('/');
+    navigate("/");
     window.location.reload();
   };
-
-  if (dashboardData.loading) return <div className="loading">Loading dashboard...</div>;
-  if (dashboardData.error) return <div className="error">Error: {dashboardData.error}</div>;
 
   return (
     <div>
@@ -135,13 +246,13 @@ const Dashboard = () => {
             <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
           <div id="profile">
-            <img 
-              src={doctorData?.image || "/img/profile.png"} 
-              alt="Profile" 
-              id="profile-image" 
+            <img
+              src={doctorData?.image || "/img/profile.png"}
+              alt="Profile"
+              id="profile-image"
             />
             <span id="profile-name">
-              {doctorData ? `${doctorData.name}` : 'Loading...'}
+              {doctorData ? `${doctorData.name}` : "Loading..."}
             </span>
           </div>
         </div>
@@ -151,21 +262,44 @@ const Dashboard = () => {
       <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn active-tab">
-            <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" /> Dashboard
+            <img
+              src="/img/ChartLineUp.png"
+              alt="Dashboard Icon"
+              className="sidebar-icon"
+            />{" "}
+            Dashboard
           </button>
           <button className="sidebar-btn">
-            <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />
-            <Link to="/patientlists" className="doctorPanel-link">Patients</Link>
+            <img
+              src="/img/UsersThree.png"
+              alt="Patients Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/patientlists" className="doctorPanel-link">
+              Patient
+            </Link>
           </button>
           <button className="sidebar-btn">
-            <img src="/img/Calendar.png" alt="Calendar Icon" className="sidebar-icon" />
-            <Link to="/calendar" className="calendar-link">Calendar</Link>
+            <img
+              src="/img/Calendar.png"
+              alt="Calendar Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/calendar" className="calendar-link">
+              Calendar
+            </Link>
           </button>
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" id="sidebar-icon" />
-          <Link to="/" className="logout-link">Logout</Link>
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            id="sidebar-icon"
+          />
+          <Link to="/" className="logout-link">
+            Logout
+          </Link>
         </button>
       </aside>
 
@@ -176,11 +310,15 @@ const Dashboard = () => {
           <div className="health-card total-patients">
             <div className="card-top">
               <span className="label">Total Patients</span>
-              <img src="/img/user.png" alt="Total Patients Icon" className="health-icon" />
+              <img
+                src="/img/user.png"
+                alt="Total Patients Icon"
+                className="health-icon"
+              />
             </div>
             <div className="card-bottom">
               <div className="number">
-                <h3>{dashboardData.patientCount}</h3>
+                <h3>{totalPatients}</h3>
               </div>
               <div className="info">
                 <p>+10% from last month</p>
@@ -191,7 +329,11 @@ const Dashboard = () => {
           <div className="health-card critical-cases">
             <div className="card-top">
               <span className="label">Critical Cases</span>
-              <img src="/img/Warning.png" alt="Critical Cases Icon" className="health-icon" />
+              <img
+                src="/img/Warning.png"
+                alt="Critical Cases Icon"
+                className="health-icon"
+              />
             </div>
             <div className="card-bottom">
               <div className="number">
@@ -206,11 +348,15 @@ const Dashboard = () => {
           <div className="health-card appointments">
             <div className="card-top">
               <span className="label">Appointments</span>
-              <img src="/img/appointment icon.png" alt="Appointments Icon" className="health-icon" />
+              <img
+                src="/img/appointment icon.png"
+                alt="Appointments Icon"
+                className="health-icon"
+              />
             </div>
             <div className="card-bottom">
               <div className="number">
-                <h3>{dashboardData.appointmentsCount}</h3>
+                <h3>{totalAppointments}</h3>
               </div>
               <div className="info">
                 <p>Today</p>
@@ -221,11 +367,15 @@ const Dashboard = () => {
           <div className="health-card lab-results">
             <div className="card-top">
               <span className="label">Lab Results</span>
-              <img src="/img/Flask.png" alt="Lab Results Icon" className="health-icon" />
+              <img
+                src="/img/Flask.png"
+                alt="Lab Results Icon"
+                className="health-icon"
+              />
             </div>
             <div className="card-bottom">
               <div className="number">
-                <h3>{dashboardData.labResultsCount}</h3>
+                <h3>{totalLabTests}</h3>
               </div>
               <div className="info">
                 <p>Pending Reviews</p>
@@ -242,41 +392,52 @@ const Dashboard = () => {
               <div className="patient-controls">
                 <input type="text" placeholder="Search Patient..." />
                 <button className="filter-btn">
-                  <img src="/img/Funnel.png" alt="Filter Icon" className="filter-icon" /> Filter
+                  <img
+                    src="/img/Funnel.png"
+                    alt="Filter Icon"
+                    className="filter-icon"
+                  />{" "}
+                  Filter
                 </button>
               </div>
             </div>
             <table>
               <thead>
                 <tr>
-                  <th>Patients</th>
+                  <th>Patient Name</th>
                   <th>HN-Number</th>
-                  <th>Test Name</th>
-                  <th>Test Date</th>
+                  <th>Lab Test Date</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {dashboardData.recentPatients.map((patient, index) => {
+                {recentActivity.map((patient, index) => {
                   console.log("Patient:", patient);
-                  return(
-                  <tr key={index}>
-                    <td>{patient.patient_name}</td>
-                    <td>{patient.hn_number}</td>
-                    <td>{patient.test_name}</td>
-                    <td>{new Date(patient.lab_test_date).toLocaleDateString()}</td>
-                    <td>
-                      <Link to={`/details/${patient.hn_number}/lab-test/${patient.id}`} className="view-all">View Details</Link>
-                    </td>
-                  </tr>
-                )})}
+                  return (
+                    <tr key={`${patient.lab_test_id}-${index}`}>
+                      <td>{patient.patient_name}</td>
+                      <td>{patient.hn_number}</td>
+                      <td>
+                        {new Date(patient.test_date).toLocaleDateString()}
+                      </td>
+                      <td>
+                        <Link
+                          to={`/details/${patient.hn_number}/${patient.lab_test_id}`}
+                          className="view-all"
+                        >
+                          View Details
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
 
-      {/* Health Trends and Common Conditions */}
-      <div className="health-trends-container">
+        {/* Health Trends and Common Conditions */}
+        {/* <div className="health-trends-container">
         <div className="trends-card">
           <div className="trends-header">
             <h3>Health Trends</h3>
@@ -308,13 +469,10 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+      </div> */}
       </div>
     </div>
-  </div>
   );
 };
 
 export default Dashboard;
-
-
-  
