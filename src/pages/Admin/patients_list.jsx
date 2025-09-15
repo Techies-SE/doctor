@@ -1479,37 +1479,49 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
             </table>
           </div>
 
-          <div className="flex justify-end mt-6 gap-2">
-            <button
-              onClick={() => handlePageChange(1)}
-              disabled={currentPage === 1}
-              className="pButton"
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="pButton"
-            >
-              Previous
-            </button>
-            {renderPagination()}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="pButton"
-            >
-              Next
-            </button>
-            <button
-              onClick={() => handlePageChange(totalPages)}
-              disabled={currentPage === totalPages}
-              className="pButton"
-            >
-              Last
-            </button>
-          </div>
+          <div className="flex items-center gap-2 mt-6">
+  {/* Previous */}
+  <button
+    onClick={() => handlePageChange(currentPage - 1)}
+    disabled={currentPage === 1}
+    className={`text-gray-500 ${
+      currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:text-teal-600"
+    }`}
+  >
+    Previous
+  </button>
+
+  {/* Page Numbers */}
+  <div className="flex gap-2">
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <button
+        key={page}
+        onClick={() => handlePageChange(page)}
+        className={`w-8 h-8 flex items-center justify-center rounded-full border ${
+          currentPage === page
+            ? "bg-teal-600 text-white"
+            : "text-teal-600 hover:bg-gray-100"
+        }`}
+      >
+        {page}
+      </button>
+    ))}
+  </div>
+
+  {/* Next */}
+  <button
+    onClick={() => handlePageChange(currentPage + 1)}
+    disabled={currentPage === totalPages}
+    className={`text-gray-500 ${
+      currentPage === totalPages
+        ? "opacity-50 cursor-not-allowed"
+        : "hover:text-teal-600"
+    }`}
+  >
+    Next
+  </button>
+</div>
+
           <LabDataUploadPopup
             show={showLabUploadPopup}
             onClose={() => setShowLabUploadPopup(false)}
