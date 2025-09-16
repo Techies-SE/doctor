@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronDown,
@@ -12,6 +12,14 @@ import {
   Save,
   X,
 } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBell,
+  faUser,
+  faCalendarAlt,
+  faUserMd,
+  faHospital,
+} from "@fortawesome/free-solid-svg-icons";
 import "./styles/patientdetails.css";
 
 const PatientDetails = ({ hn_number, onBack }) => {
@@ -29,6 +37,20 @@ const PatientDetails = ({ hn_number, onBack }) => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editedPatient, setEditedPatient] = useState({});
+
+  const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"));
+
+  // Logout function (same as in Patients component)
+  const logout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("lastActiveTime");
+    navigate("/");
+    window.location.reload();
+  };
 
   useEffect(() => {
     const fetchPatientDetails = async () => {
@@ -210,42 +232,6 @@ const PatientDetails = ({ hn_number, onBack }) => {
     }));
   };
 
-  // const StatusBadge = ({ status }) => {
-  //   const statusConfig = {
-  //     pending: {
-  //       color: "bg-amber-100 text-amber-800",
-  //       icon: <Clock size={14} className="mr-1" />,
-  //     },
-  //     completed: {
-  //       color: "bg-green-100 text-green-800",
-  //       icon: <CheckCircle size={14} className="mr-1" />,
-  //     },
-  //     canceled: {
-  //       color: "bg-red-100 text-red-800",
-  //       icon: <XCircle size={14} className="mr-1" />,
-  //     },
-  //     scheduled: {
-  //       color: "bg-blue-100 text-blue-800",
-  //       icon: <Calendar size={14} className="mr-1" />,
-  //     },
-  //     rescheduled: {
-  //       color: "bg-purple-100 text-purple-800",
-  //       icon: <Calendar size={14} className="mr-1" />,
-  //     },
-  //   };
-
-  //   return (
-  //     <span
-  //       className={`status-badge ${
-  //         statusConfig[status]?.color || "bg-gray-100 text-gray-800"
-  //       }`}
-  //     >
-  //       {statusConfig[status]?.icon}
-  //       {status.charAt(0).toUpperCase() + status.slice(1)}
-  //     </span>
-  //   );
-  // };
-
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -298,407 +284,500 @@ const PatientDetails = ({ hn_number, onBack }) => {
   }
 
   return (
-    <div className="patient-details-container">
-      <div className="header-section">
-        <button onClick={onBack} className="back-button">
-          <ChevronLeft size={20} className="mr-1" />
-          Back to Patients
-        </button>
+    <div>
+      {/* Navbar */}
+           <nav id="navbar">
+             <div id="navbar-left">
+               <div id="logo-circle"></div>
+               <span id="mfu-text">MFU </span>
+               <span id="wellness-text">Wellness Center</span>
+             </div>
+             <div id="navbar-right">
+               <button id="notification-btn">
+                 <FontAwesomeIcon icon={faBell} id="icon" />
+               </button>
+               <div id="profile">
+                 <img src="/img/profile.png" alt="Profile" id="profile-image" />
+                 <span id="profile-name">Admin</span>
+               </div>
+             </div>
+           </nav>
 
-        {!isEditing ? (
-          <button onClick={handleEditClick} className="edit-button">
-            <Edit size={16} className="mr-2" />
-            Edit Patient
+      {/* Sidebar */}
+           <aside id="sidebar">
+             <div className="sidebar-container">
+               <button className="sidebar-btn">
+                 <img
+                   src="/img/ChartLineUp.png"
+                   alt="Dashboard Icon"
+                   id="sidebar-icon"
+                 />
+                 <Link to="/admindashboard" className="sidebar-link">
+                   Dashboard
+                 </Link>
+               </button>
+      
+      
+               <button className="sidebar-btn active-tab">
+                 <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+                 <Link to="/patient" className="sidebar-link">
+                   Patients
+                 </Link>
+               </button>
+      
+      
+               <button className="sidebar-btn">
+                 <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+                 <Link to="/appointments" className="sidebar-link">
+                   Appointments
+                 </Link>
+               </button>
+      
+      
+               <button className="sidebar-btn">
+                 <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+                 <Link to="/doctors" className="sidebar-link">
+                   Doctors
+                 </Link>
+               </button>
+      
+      
+               {/* <button className="sidebar-btn">
+                 <FontAwesomeIcon icon={faFileMedical} id="sidebar-icon" />
+                 <Link to="/recommendations" className="sidebar-link">
+                   Recommendations
+                 </Link>
+               </button> */}
+      
+      
+               <button className="sidebar-btn">
+                 <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+                 <Link to="/departments" className="sidebar-link">
+                   Departments
+                 </Link>
+               </button>
+      
+      
+               {/* <button className="sidebar-btn">
+                 <FontAwesomeIcon icon={faCalendarDay} id="sidebar-icon" />
+                 <Link to="/schedules" className="sidebar-link">
+                   Schedules
+                 </Link>
+               </button> */}
+             </div>
+      
+      
+             <button className="sidebar-btn logout" onClick={logout}>
+               <img
+                 src="/img/material-symbols_logout.png"
+                 alt="Logout Icon"
+                 id="sidebar-icon"
+               />
+               <span className="login-link">Logout</span>
+             </button>
+           </aside>
+      {/* Main Content */}
+      <div id="main-content-patient-details-container">
+        <div className="header-section">
+          <button onClick={onBack} className="back-button">
+            <ChevronLeft size={20} className="mr-1" />
+            Back to Patients
           </button>
-        ) : (
-          <div className="edit-actions">
-            <button onClick={handleCancelEdit} className="cancel-button">
-              <X size={16} className="mr-2" />
-              Cancel
+
+          {!isEditing ? (
+            <button onClick={handleEditClick} className="edit-button">
+              <Edit size={16} className="mr-2" />
+              Edit Patient
             </button>
-            <button onClick={handleSave} className="save-button">
-              <Save size={16} className="mr-2" />
-              Save Changes
-            </button>
-          </div>
-        )}
-        {saveError && (
-          <div className="save-error">Save failed: {saveError}</div>
-        )}
-      </div>
-
-      <div className="patient-details-card">
-        <div className="section">
-          <h2 className="section-title">Personal Information</h2>
-
-          <div className="info-grid">
-            {/* Column 1 - Basic Info */}
-            <div className="info-column">
-              <div className="info-item">
-                <p className="info-label">HN Number</p>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="hn_number"
-                    value={editedPatient.hn_number || ""}
-                    onChange={handleInputChange}
-                    className="info-input"
-                  />
-                ) : (
-                  <p className="info-value">{patient.hn_number || "-"}</p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Full Name</p>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="name"
-                    value={editedPatient.name || ""}
-                    onChange={handleInputChange}
-                    className="info-input"
-                  />
-                ) : (
-                  <p className="info-value">{patient.name || "-"}</p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Citizen ID</p>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="citizen_id"
-                    value={editedPatient.citizen_id || ""}
-                    onChange={handleInputChange}
-                    className="info-input"
-                  />
-                ) : (
-                  <p className="info-value">{patient.citizen_id || "-"}</p>
-                )}
-              </div>
+          ) : (
+            <div className="edit-actions">
+              <button onClick={handleCancelEdit} className="cancel-button">
+                <X size={16} className="mr-2" />
+                Cancel
+              </button>
+              <button onClick={handleSave} className="save-button">
+                <Save size={16} className="mr-2" />
+                Save Changes
+              </button>
             </div>
-
-            {/* Column 2 - Contact Info */}
-            <div className="info-column">
-              <div className="info-item">
-                <p className="info-label">Phone Number</p>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="phone_no"
-                    value={editedPatient.phone_no || ""}
-                    onChange={handleInputChange}
-                    className="info-input"
-                  />
-                ) : (
-                  <p className="info-value">{patient.phone_no || "-"}</p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Registered At</p>
-                <p className="info-value">
-                  {formatDate(patient.registered_at) || "-"}
-                </p>
-              </div>
-              <div className="info-item">
-                <p className="info-label">Last Updated</p>
-                <p className="info-value">
-                  {formatDate(patient.updated_at) || "-"}
-                </p>
-              </div>
-            </div>
-
-            {/* Column 3 - Demographics */}
-            <div className="info-column">
-              <div className="info-item">
-                <p className="info-label">Gender</p>
-                {isEditing ? (
-                  <select
-                    name="gender"
-                    value={editedPatient.patient_data?.gender || ""}
-                    onChange={handlePatientDataChange}
-                    className="info-input"
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">male</option>
-                    <option value="female">female</option>
-                  </select>
-                ) : (
-                  <p className="info-value">
-                    {patient.patient_data?.gender || "-"}
-                  </p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Blood Type</p>
-                {isEditing ? (
-                  <select
-                    name="blood_type"
-                    value={editedPatient.patient_data?.blood_type || ""}
-                    onChange={handlePatientDataChange}
-                    className="info-input"
-                  >
-                    <option value="">Select Blood Type</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                  </select>
-                ) : (
-                  <p className="info-value">
-                    {patient.patient_data?.blood_type || "-"}
-                  </p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Age</p>
-                {isEditing ? (
-                  <input
-                    type="number"
-                    name="age"
-                    value={editedPatient.patient_data?.age || ""}
-                    onChange={handlePatientDataChange}
-                    className="info-input"
-                    min="0"
-                  />
-                ) : (
-                  <p className="info-value">
-                    {patient.patient_data?.age || "-"}
-                  </p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Date of Birth</p>
-                {isEditing ? (
-                  <input
-                    type="date"
-                    name="date_of_birth"
-                    value={editedPatient.patient_data?.date_of_birth || ""}
-                    onChange={handlePatientDataChange}
-                    className="info-input"
-                  />
-                ) : (
-                  <p className="info-value">
-                    {formatDate(patient.patient_data?.date_of_birth) || "-"}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Column 4 - Health Metrics */}
-            <div className="info-column">
-              <div className="info-item">
-                <p className="info-label">Height (cm)</p>
-                {isEditing ? (
-                  <input
-                    type="number"
-                    name="height"
-                    value={editedPatient.patient_data?.height || ""}
-                    onChange={handlePatientDataChange}
-                    className="info-input"
-                    min="0"
-                    step="0.1"
-                  />
-                ) : (
-                  <p className="info-value">
-                    {patient.patient_data?.height || "-"}
-                  </p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">Weight (kg)</p>
-                {isEditing ? (
-                  <input
-                    type="number"
-                    name="weight"
-                    value={editedPatient.patient_data?.weight || ""}
-                    onChange={handlePatientDataChange}
-                    className="info-input"
-                    min="0"
-                    step="0.1"
-                  />
-                ) : (
-                  <p className="info-value">
-                    {patient.patient_data?.weight || "-"}
-                  </p>
-                )}
-              </div>
-              <div className="info-item">
-                <p className="info-label">BMI</p>
-                <p className="info-value">
-                  {patient.patient_data?.bmi ||
-                    calculateBMI(
-                      patient.patient_data?.height,
-                      patient.patient_data?.weight
-                    ) ||
-                    "-"}
-                </p>
-              </div>
-            </div>
-          </div>
+          )}
+          {saveError && (
+            <div className="save-error">Save failed: {saveError}</div>
+          )}
         </div>
 
-        {/* Lab Results Section */}
-        <div className="section">
-          <h2 className="section-title">
-            <Calendar size={20} className="mr-2" />
-            Lab Tests
-          </h2>
+        <div className="patient-details-card">
+          <div className="section">
+            <h2 className="section-title">Personal Information</h2>
 
-          {patient.lab_tests?.length === 0 ? (
-            <p className="no-data-text">No lab tests available</p>
-          ) : (
-            <div className="test-list">
-              {patient.lab_tests?.map((test, testIndex) => (
-                <div key={testIndex} className="test-card">
-                  <button
-                    className="test-header"
-                    onClick={() => toggleTestExpansion(testIndex)}
-                  >
-                    <div className="test-title">
-                      <span className="test-name">
-                        {test.test_name || "Unnamed Test"}
-                      </span>
-                      {/* <StatusBadge status={test.status} /> */}
-                    </div>
-                    <div className="test-date">
-                      <span className="date-text">
-                        Test Date: {formatDate(test.lab_test_date)}
-                      </span>
-                      {expandedTests[testIndex] ? (
+            <div className="info-grid">
+              {/* Column 1 - Basic Info */}
+              <div className="info-column">
+                <div className="info-item">
+                  <p className="info-label">HN Number</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="hn_number"
+                      value={editedPatient.hn_number || ""}
+                      onChange={handleInputChange}
+                      className="info-input"
+                    />
+                  ) : (
+                    <p className="info-value">{patient.hn_number || "-"}</p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Full Name</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="name"
+                      value={editedPatient.name || ""}
+                      onChange={handleInputChange}
+                      className="info-input"
+                    />
+                  ) : (
+                    <p className="info-value">{patient.name || "-"}</p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Citizen ID</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="citizen_id"
+                      value={editedPatient.citizen_id || ""}
+                      onChange={handleInputChange}
+                      className="info-input"
+                    />
+                  ) : (
+                    <p className="info-value">{patient.citizen_id || "-"}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Column 2 - Contact Info */}
+              <div className="info-column">
+                <div className="info-item">
+                  <p className="info-label">Phone Number</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="phone_no"
+                      value={editedPatient.phone_no || ""}
+                      onChange={handleInputChange}
+                      className="info-input"
+                    />
+                  ) : (
+                    <p className="info-value">{patient.phone_no || "-"}</p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Registered At</p>
+                  <p className="info-value">
+                    {formatDate(patient.registered_at) || "-"}
+                  </p>
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Last Updated</p>
+                  <p className="info-value">
+                    {formatDate(patient.updated_at) || "-"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Column 3 - Demographics */}
+              <div className="info-column">
+                <div className="info-item">
+                  <p className="info-label">Gender</p>
+                  {isEditing ? (
+                    <select
+                      name="gender"
+                      value={editedPatient.patient_data?.gender || ""}
+                      onChange={handlePatientDataChange}
+                      className="info-input"
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">male</option>
+                      <option value="female">female</option>
+                    </select>
+                  ) : (
+                    <p className="info-value">
+                      {patient.patient_data?.gender || "-"}
+                    </p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Blood Type</p>
+                  {isEditing ? (
+                    <select
+                      name="blood_type"
+                      value={editedPatient.patient_data?.blood_type || ""}
+                      onChange={handlePatientDataChange}
+                      className="info-input"
+                    >
+                      <option value="">Select Blood Type</option>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                    </select>
+                  ) : (
+                    <p className="info-value">
+                      {patient.patient_data?.blood_type || "-"}
+                    </p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Age</p>
+                  {isEditing ? (
+                    <input
+                      type="number"
+                      name="age"
+                      value={editedPatient.patient_data?.age || ""}
+                      onChange={handlePatientDataChange}
+                      className="info-input"
+                      min="0"
+                    />
+                  ) : (
+                    <p className="info-value">
+                      {patient.patient_data?.age || "-"}
+                    </p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Date of Birth</p>
+                  {isEditing ? (
+                    <input
+                      type="date"
+                      name="date_of_birth"
+                      value={editedPatient.patient_data?.date_of_birth || ""}
+                      onChange={handlePatientDataChange}
+                      className="info-input"
+                    />
+                  ) : (
+                    <p className="info-value">
+                      {formatDate(patient.patient_data?.date_of_birth) || "-"}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Column 4 - Health Metrics */}
+              <div className="info-column">
+                <div className="info-item">
+                  <p className="info-label">Height (cm)</p>
+                  {isEditing ? (
+                    <input
+                      type="number"
+                      name="height"
+                      value={editedPatient.patient_data?.height || ""}
+                      onChange={handlePatientDataChange}
+                      className="info-input"
+                      min="0"
+                      step="0.1"
+                    />
+                  ) : (
+                    <p className="info-value">
+                      {patient.patient_data?.height || "-"}
+                    </p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">Weight (kg)</p>
+                  {isEditing ? (
+                    <input
+                      type="number"
+                      name="weight"
+                      value={editedPatient.patient_data?.weight || ""}
+                      onChange={handlePatientDataChange}
+                      className="info-input"
+                      min="0"
+                      step="0.1"
+                    />
+                  ) : (
+                    <p className="info-value">
+                      {patient.patient_data?.weight || "-"}
+                    </p>
+                  )}
+                </div>
+                <div className="info-item">
+                  <p className="info-label">BMI</p>
+                  <p className="info-value">
+                    {patient.patient_data?.bmi ||
+                      calculateBMI(
+                        patient.patient_data?.height,
+                        patient.patient_data?.weight
+                      ) ||
+                      "-"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Lab Results Section */}
+          <div className="section">
+            <h2 className="section-title">
+              <Calendar size={20} className="mr-2" />
+              Lab Tests
+            </h2>
+
+            {patient.lab_tests?.length === 0 ? (
+              <p className="no-data-text">No lab tests available</p>
+            ) : (
+              <div className="test-list">
+                {patient.lab_tests?.map((test, testIndex) => (
+                  <div key={testIndex} className="test-card">
+                    <button
+                      className="test-header"
+                      onClick={() => toggleTestExpansion(testIndex)}
+                    >
+                      <div className="test-title">
+                        <span className="test-name">
+                          {test.test_name || "Unnamed Test"}
+                        </span>
+                      </div>
+                      <div className="test-date">
+                        <span className="date-text">
+                          Test Date: {formatDate(test.lab_test_date)}
+                        </span>
+                        {expandedTests[testIndex] ? (
+                          <ChevronUp size={18} />
+                        ) : (
+                          <ChevronDown size={18} />
+                        )}
+                      </div>
+                    </button>
+
+                    {expandedTests[testIndex] && (
+                      <div className="test-results">
+                        {test.results?.length > 0 ? (
+                          <div className="results-table-container">
+                            <table className="results-table">
+                              <thead>
+                                <tr>
+                                  <th>Test Item</th>
+                                  <th>Result</th>
+                                  <th>Unit</th>
+                                  <th>Reference Range</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {test.results.map((item, itemIndex) => (
+                                  <tr key={itemIndex}>
+                                    <td>{item.lab_item_name || "-"}</td>
+                                    <td className="result-value">
+                                      {item.value || "-"}
+                                    </td>
+                                    <td>{item.unit || "-"}</td>
+                                    <td>{item.normal_range || "-"}</td>
+                                    <td>
+                                      <span
+                                        className={`status-indicator ${
+                                          item.lab_item_status === "normal"
+                                            ? "normal"
+                                            : "abnormal"
+                                        }`}
+                                      >
+                                        {item.lab_item_status || "-"}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : (
+                          <p className="no-results-text">
+                            No results available for this test
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Appointments Section */}
+          <div className="appointments-section">
+            <h2 className="section-title">
+              <Calendar size={20} className="mr-2" />
+              Appointments
+            </h2>
+
+            {["scheduled", "pending", "completed", "canceled", "rescheduled"].map(
+              (status) => {
+                const filteredAppointments =
+                  patient.appointments?.filter(
+                    (appt) => appt.status === status
+                  ) || [];
+
+                if (filteredAppointments.length === 0) return null;
+
+                return (
+                  <div className="appointment-group" key={status}>
+                    <button
+                      className="appointment-group-header"
+                      onClick={() => toggleAppointmentSection(status)}
+                    >
+                      <div className="group-title">
+                        {status.charAt(0).toUpperCase() + status.slice(1)} (
+                        {filteredAppointments.length})
+                      </div>
+                      {expandedAppointments[status] ? (
                         <ChevronUp size={18} />
                       ) : (
                         <ChevronDown size={18} />
                       )}
-                    </div>
-                  </button>
+                    </button>
 
-                  {expandedTests[testIndex] && (
-                    <div className="test-results">
-                      {test.results?.length > 0 ? (
-                        <div className="results-table-container">
-                          <table className="results-table">
-                            <thead>
-                              <tr>
-                                <th>Test Item</th>
-                                <th>Result</th>
-                                <th>Unit</th>
-                                <th>Reference Range</th>
-                                <th>Status</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {test.results.map((item, itemIndex) => (
-                                <tr key={itemIndex}>
-                                  <td>{item.lab_item_name || "-"}</td>
-                                  <td className="result-value">
-                                    {item.value || "-"}
-                                  </td>
-                                  <td>{item.unit || "-"}</td>
-                                  <td>{item.normal_range || "-"}</td>
-                                  <td>
-                                    <span
-                                      className={`status-indicator ${
-                                        item.lab_item_status === "normal"
-                                          ? "normal"
-                                          : "abnormal"
-                                      }`}
-                                    >
-                                      {item.lab_item_status || "-"}
-                                    </span>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <p className="no-results-text">
-                          No results available for this test
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Appointments Section */}
-        <div className="appointments-section">
-          <h2 className="section-title">
-            <Calendar size={20} className="mr-2" />
-            Appointments
-          </h2>
-
-          {["scheduled", "pending", "completed", "canceled", "rescheduled"].map(
-            (status) => {
-              const filteredAppointments =
-                patient.appointments?.filter(
-                  (appt) => appt.status === status
-                ) || [];
-
-              if (filteredAppointments.length === 0) return null;
-
-              return (
-                <div className="appointment-group" key={status}>
-                  <button
-                    className="appointment-group-header"
-                    onClick={() => toggleAppointmentSection(status)}
-                  >
-                    <div className="group-title">
-                      {status.charAt(0).toUpperCase() + status.slice(1)} (
-                      {filteredAppointments.length})
-                    </div>
-                    {expandedAppointments[status] ? (
-                      <ChevronUp size={18} />
-                    ) : (
-                      <ChevronDown size={18} />
-                    )}
-                  </button>
-
-                  {expandedAppointments[status] && (
-                    <div className="appointment-table-container">
-                      <table className="appointment-table">
-                        <thead>
-                          <tr>
-                            <th>Date & Time</th>
-                            <th>Doctor</th>
-                            <th>Department</th>
-                            {status === "canceled" && <th>Status</th>}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredAppointments.map((appointment, index) => (
-                            <tr key={index}>
-                              <td>
-                                {formatDateTime(
-                                  appointment.appointment_date,
-                                  appointment.appointment_time
-                                )}
-                              </td>
-                              <td>{appointment.doctor?.name || "-"}</td>
-                              <td>{appointment.doctor?.department || "-"}</td>
-                              {status === "canceled" && (
-                                <td>
-                                  {/* <StatusBadge status={appointment.status} /> */}
-                                </td>
-                              )}
+                    {expandedAppointments[status] && (
+                      <div className="appointment-table-container">
+                        <table className="appointment-table">
+                          <thead>
+                            <tr>
+                              <th>Date & Time</th>
+                              <th>Doctor</th>
+                              <th>Department</th>
+                              {status === "canceled" && <th>Status</th>}
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              );
-            }
-          )}
+                          </thead>
+                          <tbody>
+                            {filteredAppointments.map((appointment, index) => (
+                              <tr key={index}>
+                                <td>
+                                  {formatDateTime(
+                                    appointment.appointment_date,
+                                    appointment.appointment_time
+                                  )}
+                                </td>
+                                <td>{appointment.doctor?.name || "-"}</td>
+                                <td>{appointment.doctor?.department || "-"}</td>
+                                {status === "canceled" && (
+                                  <td>
+                                    {/* Add status badge here if needed */}
+                                  </td>
+                                )}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+            )}
+          </div>
         </div>
       </div>
     </div>
