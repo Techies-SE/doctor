@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles/patients.css";
@@ -649,36 +648,36 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
 
 
          {/* Footer */}
-         <div className="p-4 flex justify-end space-x-3">
-           {file ? (
-             <button
-               onClick={handleBulkUpload}
-               className={`bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-600 ${
-                 isUploading ? "opacity-50 cursor-not-allowed" : ""
-               }`}
-               disabled={isUploading}
-             >
-               {isUploading ? "Uploading..." : "Upload CSV"}
-             </button>
-           ) : isFormFilled ? (
-             <button
-               onClick={handleSingleLabDataSubmit}
-               className={`bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-600 ${
-                 isUploading ? "opacity-50 cursor-not-allowed" : ""
-               }`}
-               disabled={isUploading}
-             >
-               {isUploading ? "Uploading..." : "Add Lab Data"}
-             </button>
-           ) : null}
-           <button
-             onClick={onClose}
-             className="cancel-button"
-             disabled={isUploading}
-           >
-             Cancel
-           </button>
-         </div>
+<div className="lab-footer-buttons-container">
+  {file ? (
+    <button
+      onClick={handleBulkUpload}
+      className={`upload-lab-csv-button ${
+        isUploading ? "disabled" : ""
+      }`}
+      disabled={isUploading}
+    >
+      {isUploading ? "Uploading..." : "Upload CSV"}
+    </button>
+  ) : isFormFilled ? (
+    <button
+      onClick={handleSingleLabDataSubmit}
+      className={`add-lab-data-button ${
+        isUploading ? "disabled" : ""
+      }`}
+      disabled={isUploading}
+    >
+      {isUploading ? "Uploading..." : "Add Lab Data"}
+    </button>
+  ) : null}
+  <button
+    onClick={onClose}
+    className="cancel-button"
+    disabled={isUploading}
+  >
+    Cancel
+  </button>
+</div>
        </div>
      </div>
    </div>
@@ -1062,26 +1061,26 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
 
 
        {/* Footer - Fixed */}
-       <div className="p-4 flex justify-end space-x-3">
-         {file ? (
-           <button
-             onClick={handleBulkUpload}
-             className="bg-green-600 text-white px-4 py-2 rounded text-sm"
-           >
-             Upload CSV
-           </button>
-         ) : isFormFilled ? (
-           <button
-             onClick={handleSinglePatientSubmit}
-             className="add-patient-button"
-           >
-             Add Patient
-           </button>
-         ) : null}
-         <button onClick={onClose} className="cancel-button">
-           Cancel
-         </button>
-       </div>
+<div className="footer-buttons-container">
+  {file ? (
+    <button
+      onClick={handleBulkUpload}
+      className="upload-csv-button"
+    >
+      Upload CSV
+    </button>
+  ) : isFormFilled ? (
+    <button
+      onClick={handleSinglePatientSubmit}
+      className="add-patient-button"
+    >
+      Add Patient
+    </button>
+  ) : null}
+  <button onClick={onClose} className="cancel-button">
+    Cancel
+  </button>
+</div>
      </div>
    </div>
  );
