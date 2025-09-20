@@ -437,11 +437,11 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
        <div className="p-4 flex justify-between items-center">
          <h2 className="text-xl font-bold">Add Lab Data</h2>
          <button
-           onClick={onClose}
-           className="text-gray-500 hover:text-gray-700"
-         >
-           <X size={18} textAlign="center" />
-         </button>
+  onClick={onClose}
+  className="modal-close-button"
+>
+  <X size={23} />
+</button>
        </div>
 
 
@@ -937,169 +937,160 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
        <div className="p-4 flex justify-between items-center text-[#242222]">
          <h2 className="text-xl font-bold">Add New Patients</h2>
          <button
-           onClick={onClose}
-           className="text-gray-500 hover:text-gray-700"
-         >
-           <X size={18} textAlign="center" />
-         </button>
+  onClick={onClose}
+  className="modal-close-button"
+>
+  <X size={23} />
+</button>
        </div>
 
 
        {/* Content - Scrollable */}
        <div className="overflow-y-auto flex-1 p-4">
          {/* Bulk Upload Section */}
-         <div className="container1">
-           <h3 className="text-lg font-semibold mb-3 text-[#242222]">
-             Bulk Upload
-           </h3>
-           <div
-             className={`border-2 border-dashed rounded-lg p-4 text-center ${
-               isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-             } ${file || isFormFilled ? "opacity-50 cursor-not-allowed" : ""}`}
-             onDragOver={handleDragOver}
-             onDragLeave={handleDragLeave}
-             onDrop={handleDrop}
-           >
-             <p className="mb-2 text-[#242222]">
-               📁 Drop your CSV file here or
-             </p>
-             <button
-               className="browse-button"
-               onClick={() => document.getElementById("fileUpload").click()}
-               disabled={isFormFilled}
-             >
-               Browse Files
-             </button>
-             <input
-               id="fileUpload"
-               type="file"
-               accept=".csv"
-               onChange={handleFileChange}
-               className="hidden"
-               disabled={isFormFilled}
-             />
-             {file && (
-               <div className="mt-2">
-                 <div className="flex items-center justify-center space-x-2">
-                   <p className="text-green-600 text-sm">{file.name}</p>
-                   <button
-                     onClick={handleRemoveFile}
-                     className="text-red-500 hover:text-red-700 p-1"
-                   >
-                     <X size={14} />
-                   </button>
-                 </div>
-               </div>
-             )}
-           </div>
-           <p className="text-xs text-gray-500 mt-2">Supported formats: CSV</p>
-         </div>
+<div className="simple-bulk-upload-container">
+  <h3 className="simple-bulk-upload-title">
+    Bulk Upload
+  </h3>
+  <div
+    className={`simple-upload-zone ${
+      isDragActive ? "drag-active" : ""
+    } ${file || isFormFilled ? "disabled" : ""}`}
+    onDragOver={handleDragOver}
+    onDragLeave={handleDragLeave}
+    onDrop={handleDrop}
+  >
+    <p className="simple-upload-text">
+      Drop your CSV file here or
+    </p>
+    <button
+      className="simple-browse-button"
+      onClick={() => document.getElementById("fileUpload").click()}
+      disabled={isFormFilled}
+    >
+      Browse Files
+    </button>
+    <input
+      id="fileUpload"
+      type="file"
+      accept=".csv"
+      onChange={handleFileChange}
+      className="simple-file-input-hidden"
+      disabled={isFormFilled}
+    />
+    {file && (
+      <div className="simple-file-info">
+        <span className="simple-file-name">{file.name}</span>
+        <button
+          onClick={handleRemoveFile}
+          className="simple-remove-button"
+        >
+          <X size={14} />
+        </button>
+      </div>
+    )}
+  </div>
+  <p className="simple-upload-note">Supported formats: CSV</p>
+</div>
 
-
-         <div className="text-center mb-4">
-           <span className="text-sm text-gray-500">OR</span>
-         </div>
-
+{/* OR Divider */}
+<div className="simple-or-divider">
+  <span className="simple-or-text">OR</span>
+</div>
 
          {/* Single Patient Form */}
-         <div className="container1">
-           <h3 className="text-lg font-semibold mb-3 text-[#242222]">
-             Add A Single Patient
-           </h3>
-           <div
-             className={`space-y-3 ${
-               file ? "opacity-50 cursor-not-allowed" : ""
-             }`}
-           >
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 HN Number
-               </label>
-               <input
-                 type="text"
-                 name="hn_number"
-                 placeholder="Enter HN Number"
-                 value={singlePatient.hn_number}
-                 onChange={handleSinglePatientChange}
-                 className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                 disabled={!!file}
-               />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 Full Name
-               </label>
-               <input
-                 type="text"
-                 name="name"
-                 placeholder="Enter Full Name"
-                 value={singlePatient.name}
-                 onChange={handleSinglePatientChange}
-                 className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                 disabled={!!file}
-               />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 Citizen ID
-               </label>
-               <input
-                 type="text"
-                 name="citizen_id"
-                 placeholder="Enter Citizen ID"
-                 value={singlePatient.citizen_id}
-                 onChange={handleSinglePatientChange}
-                 className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                 disabled={!!file}
-               />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 Date of Birth
-               </label>
-               <input
-                 type="date"
-                 name="date_of_birth"
-                 value={singlePatient.date_of_birth}
-                 onChange={handleSinglePatientChange}
-                 className="w-full p-2 border rounded-md text-sm text-gray-700"
-                 disabled={!!file}
-               />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 Gender
-               </label>
-               <select
-                 name="gender"
-                 value={singlePatient.gender || ""}
-                 onChange={handleSinglePatientChange}
-                 className="w-full p-2 border rounded-md text-sm text-[#969696]"
-                 disabled={!!file}
-               >
-                 <option value="" disabled>
-                   Choose Gender
-                 </option>
-                 <option value="male">male</option>
-                 <option value="female">female</option>
-               </select>
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 Phone Number
-               </label>
-               <input
-                 type="text"
-                 name="phone_no"
-                 placeholder="Enter Phone Number"
-                 value={singlePatient.phone_no}
-                 onChange={handleSinglePatientChange}
-                 className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                 disabled={!!file}
-               />
-             </div>
-           </div>
-         </div>
+<div className="simple-patient-form-container">
+  <h3 className="simple-patient-form-title">
+    Add A Single Patient
+  </h3>
+  
+  <div className={`simple-patient-form-fields ${file ? "disabled" : ""}`}>
+    <div className="simple-form-row">
+      <div className="simple-form-field">
+        <label className="simple-form-label">HN Number</label>
+        <input
+          type="text"
+          name="hn_number"
+          placeholder="Enter HN Number"
+          value={singlePatient.hn_number}
+          onChange={handleSinglePatientChange}
+          className="simple-form-input"
+          disabled={!!file}
+        />
+      </div>
+      
+      <div className="simple-form-field">
+        <label className="simple-form-label">Full Name</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter Full Name"
+          value={singlePatient.name}
+          onChange={handleSinglePatientChange}
+          className="simple-form-input"
+          disabled={!!file}
+        />
+      </div>
+    </div>
+    
+    <div className="simple-form-row">
+      <div className="simple-form-field">
+        <label className="simple-form-label">Citizen ID</label>
+        <input
+          type="text"
+          name="citizen_id"
+          placeholder="Enter Citizen ID"
+          value={singlePatient.citizen_id}
+          onChange={handleSinglePatientChange}
+          className="simple-form-input"
+          disabled={!!file}
+        />
+      </div>
+      
+      <div className="simple-form-field">
+        <label className="simple-form-label">Date of Birth</label>
+        <input
+          type="date"
+          name="date_of_birth"
+          value={singlePatient.date_of_birth}
+          onChange={handleSinglePatientChange}
+          className="simple-form-input"
+          disabled={!!file}
+        />
+      </div>
+    </div>
+    
+    <div className="simple-form-row">
+      <div className="simple-form-field">
+        <label className="simple-form-label">Gender</label>
+        <select
+          name="gender"
+          value={singlePatient.gender || ""}
+          onChange={handleSinglePatientChange}
+          className="simple-form-select"
+          disabled={!!file}
+        >
+          <option value="" disabled>Choose Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      
+      <div className="simple-form-field">
+        <label className="simple-form-label">Phone Number</label>
+        <input
+          type="text"
+          name="phone_no"
+          placeholder="Enter Phone Number"
+          value={singlePatient.phone_no}
+          onChange={handleSinglePatientChange}
+          className="simple-form-input"
+          disabled={!!file}
+        />
+      </div>
+    </div>
+  </div>
+</div>
        </div>
 
 

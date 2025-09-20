@@ -650,7 +650,7 @@
 
 /* Upload CSV button */
 .upload-csv-button {
-  background-color: #16a34a;
+  background-color: #3BA092;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -661,7 +661,7 @@
 }
 
 .upload-csv-button:hover {
-  background-color: #15803d;
+  background-color: #3BA092;
 }
 
 .upload-csv-button:disabled {
@@ -682,7 +682,7 @@
 
 /* Upload Lab CSV button */
 .upload-lab-csv-button {
-  background-color: #16a34a;
+  background-color: #3BA092;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -693,7 +693,7 @@
 }
 
 .upload-lab-csv-button:hover {
-  background-color: #15803d;
+  background-color: #3BA092;
 }
 
 /* Add Lab Data button */
@@ -1320,7 +1320,7 @@
   padding: 12px;
   background: rgba(59, 130, 246, 0.05);
   border-radius: 8px;
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid #3BA092;
 }
 
 .info-icon-container {
@@ -1331,7 +1331,7 @@
 .info-icon {
   width: 16px;
   height: 16px;
-  color: #3b82f6;
+  color: #3BA092;
 }
 
 .upload-info-text {
@@ -1478,5 +1478,343 @@
   
   .or-divider-text {
     font-size: 12px;
+  }
+}
+/* Modal Close Button */
+.modal-close-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+.modal-close-button:hover {
+  color: #374151;
+  background-color: #f3f4f6;
+  transform: scale(1.05);
+}
+
+.modal-close-button:active {
+  transform: scale(0.95);
+}
+
+.modal-close-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 160, 146, 0.2);
+}
+/* Simple Patient Form Container */
+.simple-patient-form-container {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+/* Simple Form Title */
+.simple-patient-form-title {
+  color: #374151;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Form Fields Container */
+.simple-patient-form-fields {
+  transition: opacity 0.3s ease;
+}
+
+.simple-patient-form-fields.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Form Row */
+.simple-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .simple-form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* Form Field */
+.simple-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form Label */
+.simple-form-label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* Form Input */
+.simple-form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.simple-form-input:focus {
+  outline: none;
+  border-color: #3BA092;
+  box-shadow: 0 0 0 1px #3BA092;
+}
+
+.simple-form-input:disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
+.simple-form-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Form Select */
+.simple-form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.simple-form-select:focus {
+  outline: none;
+  border-color: #3BA092;
+  box-shadow: 0 0 0 1px #3BA092;
+}
+
+.simple-form-select:disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .simple-patient-form-container {
+    padding: 20px;
+  }
+  
+  .simple-patient-form-title {
+    font-size: 16px;
+  }
+  
+  .simple-form-input,
+  .simple-form-select {
+    padding: 8px 10px;
+  }
+}
+/* Simple Bulk Upload Container */
+.simple-bulk-upload-container {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+/* Bulk Upload Title */
+.simple-bulk-upload-title {
+  color: #374151;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Upload Zone */
+.simple-upload-zone {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 32px 24px;
+  text-align: center;
+  background: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.simple-upload-zone:hover {
+  border-color: #3BA092;
+  background: #f8fafc;
+}
+
+.simple-upload-zone.drag-active {
+  border-color: #3BA092;
+  background: #eff6ff;
+}
+
+.simple-upload-zone.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f3f4f6;
+}
+
+.simple-upload-zone.disabled:hover {
+  border-color: #d1d5db;
+  background: #f3f4f6;
+}
+
+/* Upload Text */
+.simple-upload-text {
+  color: #6b7280;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+/* Browse Button */
+.simple-browse-button {
+  background-color: #3BA092;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.simple-browse-button:hover {
+  background-color: #3BA092;
+}
+
+.simple-browse-button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* Hidden File Input */
+.simple-file-input-hidden {
+  display: none;
+}
+
+/* File Info */
+.simple-file-info {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.simple-file-name {
+  color: #3BA092;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.simple-remove-button {
+  background: none;
+  border: none;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.simple-remove-button:hover {
+  color: #b91c1c;
+}
+
+/* Upload Note */
+.simple-upload-note {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+/* OR Divider */
+.simple-or-divider {
+  text-align: center;
+  margin: 24px 0;
+}
+
+.simple-or-text {
+  color: #6b7280;
+  font-size: 14px;
+  background: #ffffff;
+  padding: 0 12px;
+  position: relative;
+}
+
+.simple-or-text::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -100px;
+  right: 100%;
+  height: 1px;
+  background: #e5e7eb;
+  z-index: -1;
+}
+
+.simple-or-text::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  right: -100px;
+  height: 1px;
+  background: #e5e7eb;
+  z-index: -1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .simple-bulk-upload-container {
+    padding: 20px;
+  }
+  
+  .simple-upload-zone {
+    padding: 24px 16px;
+  }
+  
+  .simple-upload-text {
+    font-size: 14px;
   }
 }
