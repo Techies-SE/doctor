@@ -448,203 +448,246 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
        {/* Content - Scrollable */}
        <div className="overflow-y-auto flex-1 p-4">
          {/* Bulk Upload Section */}
-         <div className="container1">
-           <h3 className="text-lg font-semibold mb-3 text-[#242222]">
-             Bulk Upload
-           </h3>
-           <div
-             className={`border-2 border-dashed rounded-lg p-4 text-center ${
-               isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-             } ${file || isFormFilled ? "opacity-50 cursor-not-allowed" : ""}`}
-             onDragOver={handleDragOver}
-             onDragLeave={handleDragLeave}
-             onDrop={handleDrop}
-           >
-             <p className="mb-2 text-[#969696]">
-               📁 Drop your CSV file here or
-             </p>
-             <button
-               className="browse-button"
-               onClick={() => document.getElementById("labFileUpload").click()}
-               disabled={isFormFilled}
-             >
-               Browse Files
-             </button>
-             <input
-               id="labFileUpload"
-               type="file"
-               accept=".csv"
-               onChange={handleFileChange}
-               className="hidden"
-               disabled={isFormFilled}
-             />
-             {file && (
-               <div className="mt-2">
-                 <div className="flex items-center justify-center space-x-2">
-                   <p className="text-green-600 text-sm">{file.name}</p>
-                   <button
-                     onClick={handleRemoveFile}
-                     className="text-red-500 hover:text-red-700 p-1"
-                   >
-                     <X size={14} />
-                   </button>
-                 </div>
-               </div>
-             )}
-           </div>
-           <p className="text-xs text-gray-500 mt-2">
-             Supported formats: CSV with columns for hn_number, lab_item_name,
-             and lab_item_value
-           </p>
+<div className="bulk-upload-container">
+  <div className="bulk-upload-header">
+    <h3 className="bulk-upload-title">
+      Bulk Upload
+    </h3>
+    <div className="bulk-upload-divider"></div>
+  </div>
+  
+  <div
+    className={`bulk-upload-zone ${
+      isDragActive ? "drag-active" : ""
+    } ${file || isFormFilled ? "disabled" : ""}`}
+    onDragOver={handleDragOver}
+    onDragLeave={handleDragLeave}
+    onDrop={handleDrop}
+  >
+    <div className="upload-icon-container">
+      <svg className="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14,2 14,8 20,8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10,9 9,9 8,9"/>
+      </svg>
+    </div>
+    
+    <div className="upload-content">
+      <p className="upload-text">
+        Drop your CSV file here or{" "}
+        <span className="upload-browse-text">browse files</span>
+      </p>
+      <button
+        className="bulk-browse-button"
+        onClick={() => document.getElementById("labFileUpload").click()}
+        disabled={isFormFilled}
+      >
+        Choose File
+      </button>
+    </div>
+    
+    <input
+      id="labFileUpload"
+      type="file"
+      accept=".csv"
+      onChange={handleFileChange}
+      className="file-input-hidden"
+      disabled={isFormFilled}
+    />
+    
+    {file && (
+      <div className="uploaded-file-container">
+        <div className="uploaded-file-info">
+          <svg className="file-success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <polyline points="9,15 11,17 16,12"/>
+          </svg>
+          <span className="uploaded-file-name">{file.name}</span>
+          <button
+            onClick={handleRemoveFile}
+            className="remove-file-button"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+  
+  <div className="upload-info-section">
+    <div className="info-icon-container">
+      <svg className="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+    </div>
+    <p className="upload-info-text">
+      Supported formats: CSV with columns for hn_number, lab_item_name, and lab_item_value
+    </p>
+  </div>
 
+  {uploadError && (
+    <div className="upload-error-container">
+      <svg className="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      <span className="upload-error-text">{uploadError}</span>
+    </div>
+  )}
+</div>
 
-           {uploadError && (
-             <div className="mt-2 text-red-500 text-sm">{uploadError}</div>
-           )}
-         </div>
-
-
-         {/* OR Divider */}
-         <div className="relative mb-6">
-           <div className="absolute inset-0 flex items-center">
-             <div className="w-full border-t border-gray-300"></div>
-           </div>
-           <div className="relative flex justify-center text-sm">
-             <span className="px-3 bg-white text-gray-500">OR</span>
-           </div>
-         </div>
+{/* Beautiful OR Divider */}
+<div className="or-divider-container">
+  <div className="or-divider-line"></div>
+  <div className="or-divider-circle">
+    <span className="or-divider-text">OR</span>
+  </div>
+  <div className="or-divider-line"></div>
+</div>
 
 
          {/* Single Lab Data Form */}
-         <div className="container1">
-           <h3 className="text-lg font-semibold mb-4 text-[#242222]">
-             Add Single Lab Data
-           </h3>
+<div className="lab-data-form-container">
+  <div className="lab-form-header">
+    <h3 className="lab-form-title">
+      Add Single Lab Data
+    </h3>
+    <div className="lab-form-divider"></div>
+  </div>
 
+  {/* Basic Information */}
+  <div className="basic-info-section">
+    <div className="form-row">
+      {/* HN Number */}
+      <div className="form-field">
+        <label className="form-label">
+          HN Number <span className="required-asterisk">*</span>
+        </label>
+        <div className="input-wrapper">
+          <input
+            type="text"
+            name="hn_number"
+            placeholder="Enter 9-digit HN Number"
+            value={singleLabData.hn_number || ""}
+            onChange={handleSingleLabDataChange}
+            className="form-input hn-input"
+            disabled={!!file}
+            maxLength="9"
+          />
+        </div>
+      </div>
 
-           {/* Basic Information */}
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-             {/* HN Number */}
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 HN Number <span className="text-red-500">*</span>
-               </label>
-               <input
-                 type="text"
-                 name="hn_number"
-                 placeholder="Enter 9-digit HN Number"
-                 value={singleLabData.hn_number || ""}
-                 onChange={handleSingleLabDataChange}
-                 className="w-full p-2 border rounded-md text-sm placeholder-[#969696]"
-                 disabled={!!file}
-                 maxLength="9"
-               />
-             </div>
+      {/* Doctor */}
+      <div className="form-field">
+        <label className="form-label">
+          Assign to Doctor <span className="required-asterisk">*</span>
+        </label>
+        <div className="select-wrapper">
+          <select
+            name="doctor_id"
+            value={singleLabData.doctor_id}
+            onChange={handleSingleLabDataChange}
+            className="form-select doctor-select"
+            disabled={!!file}
+          >
+            <option value="">Select Doctor</option>
+            {doctors.map((doctor) => (
+              <option key={doctor.id} value={doctor.id}>
+                {doctor.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  {/* Lab Tests Selection */}
+  <div className="lab-tests-section">
+    <label className="section-label">
+      Select Lab Tests <span className="required-asterisk">*</span>
+    </label>
+    <div className="lab-tests-container">
+      {labTests.map((test) => (
+        <div key={test.id} className="lab-test-item">
+          <input
+            type="checkbox"
+            id={`test-${test.id}`}
+            checked={selectedLabTests.some(
+              (selectedTest) => selectedTest.id === test.id
+            )}
+            onChange={(e) =>
+              handleLabTestSelection(test.id, e.target.checked)
+            }
+            disabled={!!file}
+            className="lab-test-checkbox"
+          />
+          <label
+            htmlFor={`test-${test.id}`}
+            className="lab-test-label"
+          >
+            {test.test_name}
+          </label>
+        </div>
+      ))}
+    </div>
+  </div>
 
-             {/* Doctor */}
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-1">
-                 Assign to Doctor <span className="text-red-500">*</span>
-               </label>
-               <select
-                 name="doctor_id"
-                 value={singleLabData.doctor_id}
-                 onChange={handleSingleLabDataChange}
-                 className="w-full p-2 border rounded-md text-sm text-[#969696]"
-                 disabled={!!file}
-               >
-                 <option value="">Select Doctor</option>
-                 {doctors.map((doctor) => (
-                   <option key={doctor.id} value={doctor.id}>
-                     {doctor.name}
-                   </option>
-                 ))}
-               </select>
-             </div>
-           </div>
-
-
-           {/* Lab Tests Selection */}
-           <div className="mb-6">
-             <label className="block text-sm font-medium text-gray-700 mb-2">
-               Select Lab Tests <span className="text-red-500">*</span>
-             </label>
-             <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
-               {labTests.map((test) => (
-                 <div key={test.id} className="flex items-center mb-2">
-                   <input
-                     type="checkbox"
-                     id={`test-${test.id}`}
-                     checked={selectedLabTests.some(
-                       (selectedTest) => selectedTest.id === test.id
-                     )}
-                     onChange={(e) =>
-                       handleLabTestSelection(test.id, e.target.checked)
-                     }
-                     disabled={!!file}
-                     className="mr-2"
-                   />
-                   <label
-                     htmlFor={`test-${test.id}`}
-                     className="text-sm text-gray-700"
-                   >
-                     {test.test_name}
-                   </label>
-                 </div>
-               ))}
-             </div>
-           </div>
-
-
-           {/* Dynamic Lab Items Forms */}
-           {selectedLabTests.map((labTest) => (
-             <div
-               key={labTest.id}
-               className="mb-4 sm:mb-6 p-3 sm:p-4 border rounded-lg bg-gray-50 shadow-sm"
-             >
-               <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[#242222]">
-                 {labTest.test_name}
-               </h4>
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-                 {labTest.items?.map((item) => (
-                   <div key={item.lab_item_id} className="min-w-0">
-                     <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-                       <span className="block truncate pr-2">
-                         {item.lab_item_name}
-                       </span>
-                       {item.unit && (
-                         <span className="text-gray-500 text-xs">
-                           ({item.unit})
-                         </span>
-                       )}
-                       <span className="text-red-500 ml-1">*</span>
-                     </label>
-                     <input
-                       type="text"
-                       placeholder={`Enter ${item.lab_item_name}`}
-                       value={
-                         labTestsData[labTest.id]?.[item.lab_item_id] || ""
-                       }
-                       onChange={(e) =>
-                         handleLabItemValueChange(
-                           labTest.id,
-                           item.lab_item_id,
-                           e.target.value
-                         )
-                       }
-                       className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-md text-sm placeholder-[#969696]
-                    focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none
-                    disabled:bg-gray-100 disabled:cursor-not-allowed
-                    transition-all duration-200 hover:border-gray-400"
-                       disabled={!!file}
-                     />
-                   </div>
-                 ))}
-               </div>
-             </div>
-           ))}
-         </div>
+  {/* Dynamic Lab Items Forms */}
+  {selectedLabTests.map((labTest) => (
+    <div
+      key={labTest.id}
+      className="lab-test-form"
+    >
+      <div className="lab-test-header">
+        <h4 className="lab-test-title">
+          {labTest.test_name}
+        </h4>
+      </div>
+      <div className="lab-items-grid">
+        {labTest.items?.map((item) => (
+          <div key={item.lab_item_id} className="lab-item-field">
+            <label className="lab-item-label">
+              <span className="lab-item-name">
+                {item.lab_item_name}
+              </span>
+              {item.unit && (
+                <span className="lab-item-unit">
+                  ({item.unit})
+                </span>
+              )}
+              <span className="required-asterisk">*</span>
+            </label>
+            <div className="lab-item-input-wrapper">
+              <input
+                type="text"
+                placeholder={`Enter ${item.lab_item_name}`}
+                value={
+                  labTestsData[labTest.id]?.[item.lab_item_id] || ""
+                }
+                onChange={(e) =>
+                  handleLabItemValueChange(
+                    labTest.id,
+                    item.lab_item_id,
+                    e.target.value
+                  )
+                }
+                className="lab-item-input"
+                disabled={!!file}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
 
 
          {/* Footer */}
