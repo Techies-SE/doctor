@@ -652,119 +652,128 @@ const Departments = () => {
                     <X size={16} />
                   </button>
                 </div>
-                <form onSubmit={handleFormSubmit} className="modal-form">
-                  <div className="form-group text-[#242222]">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={newDepartment.name}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Enter department name"
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Description</label>
-                    <input
-                      type="text"
-                      name="description"
-                      value={newDepartment.description}
-                      onChange={handleInputChange}
-                      placeholder="Enter department description"
-                    />
-                  </div>
-                  <div className="form-group text-[#242222]">
-                    <label>Department Image</label>
-                    <div className="image-upload-container">
-                      <input
-                        type="file"
-                        id="department-image"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="department-image"
-                        className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 relative"
-                      >
-                        {imagePreview ? (
-                          <>
-                            <img
-                              src={imagePreview}
-                              alt="Department preview"
-                              className="w-full h-full object-cover rounded-md"
-                            />
-                            <div className="absolute inset-0 bg-opacity-0 hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
-                              <div className="opacity-0 hover:opacity-100 text-white flex flex-col items-center">
-                                <Upload size={24} className="mb-1" />
-                                <span className="text-xs">Change Image</span>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex flex-col items-center">
-                            <Upload size={24} className="text-gray-400 mb-2" />
-                            <span className="text-sm text-gray-500">
-                              Click or drag image to upload
-                            </span>
-                            <span className="text-xs text-gray-400 mt-1">
-                              (JPEG, PNG, max 5MB)
-                            </span>
-                          </div>
-                        )}
-                      </label>
-                    </div>
-                    {imageFile && (
-                      <div className="flex justify-between items-center mt-2 text-sm text-gray-600">
-                        <span>{imageFile.name}</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setImageFile(null);
-                            setImagePreview(null);
-                          }}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <X size={16} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    type="submit"
-                    className="submit-btn flex items-center justify-center"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Creating...
-                      </>
-                    ) : (
-                      "Create Department"
-                    )}
-                  </button>
-                </form>
+                <form onSubmit={handleFormSubmit} className="scrollable-department-form">
+  <div className="form-scroll-container">
+    <div className="scrollable-form-group">
+      <label className="scrollable-form-label">Name</label>
+      <input
+        type="text"
+        name="name"
+        value={newDepartment.name}
+        onChange={handleInputChange}
+        required
+        placeholder="Enter department name"
+        className="scrollable-form-input"
+      />
+    </div>
+
+    <div className="scrollable-form-group">
+      <label className="scrollable-form-label">Description</label>
+      <input
+        type="text"
+        name="description"
+        value={newDepartment.description}
+        onChange={handleInputChange}
+        placeholder="Enter department description"
+        className="scrollable-form-input"
+      />
+    </div>
+
+    <div className="scrollable-form-group">
+      <label className="scrollable-form-label">Department Image</label>
+      <div className="scrollable-image-upload-container">
+        <input
+          type="file"
+          id="department-image"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="scrollable-file-input-hidden"
+        />
+        <label
+          htmlFor="department-image"
+          className="scrollable-image-upload-area"
+        >
+          {imagePreview ? (
+            <div className="scrollable-image-preview">
+              <img
+                src={imagePreview}
+                alt="Department preview"
+                className="scrollable-preview-img"
+              />
+              <div className="scrollable-image-overlay">
+                <div className="scrollable-overlay-content">
+                  <Upload size={24} />
+                  <span className="scrollable-overlay-text">Change Image</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="scrollable-upload-placeholder">
+              <Upload size={24} className="scrollable-upload-icon" />
+              <span className="scrollable-upload-text">
+                Click or drag image to upload
+              </span>
+              <span className="scrollable-upload-subtext">
+                (JPEG, PNG, max 5MB)
+              </span>
+            </div>
+          )}
+        </label>
+      </div>
+      {imageFile && (
+        <div className="scrollable-file-info">
+          <span className="scrollable-file-name">{imageFile.name}</span>
+          <button
+            type="button"
+            onClick={() => {
+              setImageFile(null);
+              setImagePreview(null);
+            }}
+            className="scrollable-file-remove"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <div className="form-footer-fixed">
+    <button
+      type="submit"
+      className="scrollable-submit-btn"
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <div className="loading-content">
+          <svg
+            className="loading-spinner"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="spinner-circle"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="spinner-path"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Creating...
+        </div>
+      ) : (
+        "Create Department"
+      )}
+    </button>
+  </div>
+</form>
               </div>
             </div>
           )}
