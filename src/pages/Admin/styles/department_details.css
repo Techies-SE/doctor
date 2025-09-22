@@ -204,7 +204,7 @@
 }
 
 .department-details-container .add-button:hover {
-  background: #218838;
+  background: #3BA092;
 }
 
 /* Doctor Cards Grid */
@@ -323,7 +323,7 @@
 } */
 
 .department-details-container .close-btn-1 {
-  background: #f8fafc;
+  background: none;
   border: 1px solid #e2e8f0;
   color: #64748b;
   cursor: pointer;
@@ -339,9 +339,9 @@
 }
 
 .department-details-container .close-btn-1:hover {
-  background: #dc3545;
-  border-color: #dc3545;
-  color: white;
+  background: #e3e8e8;
+  border-color: 1px solid #e2e8f0;
+  color: #64748b;
   transform: scale(1.05);
 }
 
@@ -381,7 +381,7 @@
 .department-details-container .form-group input:focus,
 .department-details-container .form-group select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #3BA092;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -397,7 +397,7 @@
 .department-details-container .submit-btn {
   width: 100%;
   padding: 12px 20px;
-  background: #059669;
+  background: #3BA092;
   color: white;
   border: none;
   border-radius: 8px;
@@ -409,7 +409,7 @@
 }
 
 .department-details-container .submit-btn:hover:not(:disabled) {
-  background: #047857;
+  background: #2c796f;
 }
 
 .department-details-container .submit-btn:disabled {

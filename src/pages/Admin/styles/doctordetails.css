@@ -210,7 +210,7 @@
 }
 
 .doctor-details-container .add-button:hover {
-  background: #218838;
+  background: #2a8074;
 }
 
 /* Schedule Table */
@@ -278,12 +278,12 @@
 
 .doctor-details-container .icon-button.text-blue-500 {
   background: #e3f2fd;
-  color: #1976d2;
+  color: #3BA092;
 }
 
 .doctor-details-container .icon-button.text-blue-500:hover {
   background: #bbdefb;
-  color: #1565c0;
+  color: #3BA092;
 }
 
 .doctor-details-container .icon-button.text-red-500 {
@@ -374,7 +374,7 @@
 
 .doctor-details-container .form-control:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #3BA092;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -407,19 +407,19 @@
 }
 
 .doctor-details-container .info-icon {
-  color: #3b82f6;
+  color: #3BA092;
   font-size: 16px;
   margin-right: 8px;
 }
 
 .doctor-details-container .info-title {
-  color: #1e40af;
+  color: #3BA092;
   font-weight: 500;
   font-size: 14px;
 }
 
 .doctor-details-container .info-text {
-  color: #1d4ed8;
+  color: #3BA092;
   font-size: 13px;
   line-height: 1.4;
   margin: 0;
@@ -514,12 +514,12 @@
 }
 
 .doctor-details-container .btn-primary {
-  background: #3b82f6;
+  background: #3BA092;
   color: white;
 }
 
 .doctor-details-container .btn-primary:hover {
-  background: #2563eb;
+  background: #3BA092;
 }
 
 .doctor-details-container .btn-danger {
