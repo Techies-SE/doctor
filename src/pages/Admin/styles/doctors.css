@@ -50,3 +50,29 @@
   position: sticky;
   bottom: 0;
 }
+.modal-container .close-btn-1 {
+   background: none;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.modal-container .close-btn-1:hover {
+  background: #e3e8e8;
+  border-color: 1px solid #e2e8f0;
+  color: #64748b;
+  transform: scale(1.05);
+}
+
+.modal-container .close-btn-1:active {
+  transform: scale(0.95);
+}
