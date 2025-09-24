@@ -31,7 +31,7 @@
     margin: 0 auto 0;
 }
 
-.input-field {
+input.input-field[type="text"],[type="password"] {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -40,7 +40,7 @@
     box-sizing: border-box;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.input-field:focus {
+.input.input-field[type="text"],[typpe='password']:focus {
     background-color: #e8f5e9;
     border-color: #3BA092;
     outline: none;
