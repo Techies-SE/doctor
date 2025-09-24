@@ -986,6 +986,7 @@ const AdminDashboard = () => {
                         })
                       }
                       required
+                      style={{ width: "100%" }}
                     >
                       <option value="">Select Department</option>
                       {departments.map((department) => (
@@ -1016,118 +1017,141 @@ const AdminDashboard = () => {
                   <X size={16} />
                 </button>
               </div>
-              <form onSubmit={handleFormSubmit} className="modal-form">
-                <div className="form-group text-[#242222]">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={newDepartment.name}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter department name"
-                  />
-                </div>
-                <div className="form-group text-[#242222]">
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    value={newDepartment.description}
-                    onChange={handleInputChange}
-                    placeholder="Enter department description"
-                  />
-                </div>
-                <div className="form-group text-[#242222]">
-                  <label>Department Image</label>
-                  <div className="image-upload-container">
+              <form
+                onSubmit={handleFormSubmit}
+                className="scrollable-department-form"
+              >
+                <div className="form-scroll-container">
+                  <div className="scrollable-form-group">
+                    <label className="scrollable-form-label">Name</label>
                     <input
-                      type="file"
-                      id="department-image"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
+                      type="text"
+                      name="name"
+                      value={newDepartment.name}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter department name"
+                      className="scrollable-form-input"
+                      style={{ width: "100%" }}
                     />
-                    <label
-                      htmlFor="department-image"
-                      className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:bg-gray-50 relative"
-                    >
-                      {imagePreview ? (
-                        <>
-                          <img
-                            src={imagePreview}
-                            alt="Department preview"
-                            className="w-full h-full object-cover rounded-md"
-                          />
-                          <div className="absolute inset-0 bg-opacity-0 hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
-                            <div className="opacity-0 hover:opacity-100 text-white flex flex-col items-center">
-                              <Upload size={24} className="mb-1" />
-                              <span className="text-xs">Change Image</span>
+                  </div>
+
+                  <div className="scrollable-form-group">
+                    <label className="scrollable-form-label">Description</label>
+                    <input
+                      type="text"
+                      name="description"
+                      value={newDepartment.description}
+                      onChange={handleInputChange}
+                      placeholder="Enter department description"
+                      className="scrollable-form-input"
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+
+                  <div className="scrollable-form-group">
+                    <label className="scrollable-form-label">
+                      Department Image
+                    </label>
+                    <div className="scrollable-image-upload-container">
+                      <input
+                        type="file"
+                        id="department-image"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="scrollable-file-input-hidden"
+                      />
+                      <label
+                        htmlFor="department-image"
+                        className="scrollable-image-upload-area"
+                      >
+                        {imagePreview ? (
+                          <div className="scrollable-image-preview">
+                            <img
+                              src={imagePreview}
+                              alt="Department preview"
+                              className="scrollable-preview-img"
+                            />
+                            <div className="scrollable-image-overlay">
+                              <div className="scrollable-overlay-content">
+                                <Upload size={24} />
+                                <span className="scrollable-overlay-text">
+                                  Change Image
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          <Upload size={24} className="text-gray-400 mb-2" />
-                          <span className="text-sm text-gray-500">
-                            Click or drag image to upload
-                          </span>
-                          <span className="text-xs text-gray-400 mt-1">
-                            (JPEG, PNG, max 5MB)
-                          </span>
-                        </div>
-                      )}
-                    </label>
-                  </div>
-                  {imageFile && (
-                    <div className="flex justify-between items-center mt-2 text-sm text-gray-600">
-                      <span>{imageFile.name}</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setImageFile(null);
-                          setImagePreview(null);
-                        }}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X size={16} />
-                      </button>
+                        ) : (
+                          <div className="scrollable-upload-placeholder">
+                            <Upload
+                              size={24}
+                              className="scrollable-upload-icon"
+                            />
+                            <span className="scrollable-upload-text">
+                              Click or drag image to upload
+                            </span>
+                            <span className="scrollable-upload-subtext">
+                              (JPEG, PNG, max 5MB)
+                            </span>
+                          </div>
+                        )}
+                      </label>
                     </div>
-                  )}
+                    {imageFile && (
+                      <div className="scrollable-file-info">
+                        <span className="scrollable-file-name">
+                          {imageFile.name}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setImageFile(null);
+                            setImagePreview(null);
+                          }}
+                          className="scrollable-file-remove"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <button
-                  type="submit"
-                  className="submit-btn flex items-center justify-center"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Creating...
-                    </>
-                  ) : (
-                    "Create Department"
-                  )}
-                </button>
+
+                <div className="form-footer-fixed">
+                  <button
+                    type="submit"
+                    className="scrollable-submit-btn"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <div className="loading-content">
+                        <svg
+                          className="loading-spinner"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="spinner-circle"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="spinner-path"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Creating...
+                      </div>
+                    ) : (
+                      "Create Department"
+                    )}
+                  </button>
+                </div>
               </form>
             </div>
           </div>
@@ -1325,34 +1349,27 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
         {/* Header - Fixed */}
         <div className="p-4 flex justify-between items-center text-[#242222]">
           <h2 className="text-xl font-bold">Add New Patients</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <X size={18} textAlign="center" />
+          <button onClick={onClose} className="modal-close-button">
+            <X size={23} />
           </button>
         </div>
 
         {/* Content - Scrollable */}
         <div className="overflow-y-auto flex-1 p-4">
           {/* Bulk Upload Section */}
-          <div className="container1">
-            <h3 className="text-lg font-semibold mb-3 text-[#242222]">
-              Bulk Upload
-            </h3>
+          <div className="simple-bulk-upload-container">
+            <h3 className="simple-bulk-upload-title">Bulk Upload</h3>
             <div
-              className={`border-2 border-dashed rounded-lg p-4 text-center ${
-                isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-              } ${file || isFormFilled ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`simple-upload-zone ${
+                isDragActive ? "drag-active" : ""
+              } ${file || isFormFilled ? "disabled" : ""}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <p className="mb-2 text-[#242222]">
-                📁 Drop your CSV file here or
-              </p>
+              <p className="simple-upload-text">Drop your CSV file here or</p>
               <button
-                className="browse-button"
+                className="simple-browse-button"
                 onClick={() => document.getElementById("fileUpload").click()}
                 disabled={isFormFilled}
               >
@@ -1363,138 +1380,150 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                 type="file"
                 accept=".csv"
                 onChange={handleFileChange}
-                className="hidden"
+                className="simple-file-input-hidden"
                 disabled={isFormFilled}
               />
               {file && (
-                <div className="mt-2">
-                  <div className="flex items-center justify-center space-x-2">
-                    <p className="text-green-600 text-sm">{file.name}</p>
-                    <button
-                      onClick={handleRemoveFile}
-                      className="text-red-500 hover:text-red-700 p-1"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
+                <div className="simple-file-info">
+                  <span className="simple-file-name">{file.name}</span>
+                  <button
+                    onClick={handleRemoveFile}
+                    className="simple-remove-button"
+                  >
+                    <X size={14} />
+                  </button>
                 </div>
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-2">Supported formats: CSV</p>
+            <div className="upload-info-section">
+              <div className="info-icon-container">
+                <svg
+                  className="info-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+              </div>
+              <a
+                href="/patient_template.csv"
+                download
+                className="upload-info-text"
+              >
+                download csv template
+              </a>
+            </div>
           </div>
 
-          <div className="text-center mb-4">
-            <span className="text-sm text-gray-500">OR</span>
+          {/* OR Divider */}
+          <div className="simple-or-divider">
+            <span className="simple-or-text">OR</span>
           </div>
 
           {/* Single Patient Form */}
-          <div className="container1">
-            <h3 className="text-lg font-semibold mb-3 text-[#242222]">
-              Add A Single Patient
-            </h3>
+          <div className="simple-patient-form-container">
+            <h3 className="simple-patient-form-title">Add A Single Patient</h3>
+
             <div
-              className={`space-y-3 ${
-                file ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`simple-patient-form-fields ${file ? "disabled" : ""}`}
             >
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  HN Number
-                </label>
-                <input
-                  type="text"
-                  name="hn_number"
-                  placeholder="Enter HN Number"
-                  value={singlePatient.hn_number}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                  disabled={!!file}
-                />
+              <div className="simple-form-row">
+                <div className="simple-form-field">
+                  <label className="simple-form-label">HN Number</label>
+                  <input
+                    type="text"
+                    name="hn_number"
+                    placeholder="Enter HN Number"
+                    value={singlePatient.hn_number}
+                    onChange={handleSinglePatientChange}
+                    className="simple-form-input"
+                    disabled={!!file}
+                  />
+                </div>
+
+                <div className="simple-form-field">
+                  <label className="simple-form-label">Full Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter Full Name"
+                    value={singlePatient.name}
+                    onChange={handleSinglePatientChange}
+                    className="simple-form-input"
+                    disabled={!!file}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter Full Name"
-                  value={singlePatient.name}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                  disabled={!!file}
-                />
+
+              <div className="simple-form-row">
+                <div className="simple-form-field">
+                  <label className="simple-form-label">Citizen ID</label>
+                  <input
+                    type="text"
+                    name="citizen_id"
+                    placeholder="Enter Citizen ID"
+                    value={singlePatient.citizen_id}
+                    onChange={handleSinglePatientChange}
+                    className="simple-form-input"
+                    disabled={!!file}
+                  />
+                </div>
+
+                <div className="simple-form-field">
+                  <label className="simple-form-label">Date of Birth</label>
+                  <input
+                    type="date"
+                    name="date_of_birth"
+                    value={singlePatient.date_of_birth}
+                    onChange={handleSinglePatientChange}
+                    className="simple-form-input"
+                    disabled={!!file}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Citizen ID
-                </label>
-                <input
-                  type="text"
-                  name="citizen_id"
-                  placeholder="Enter Citizen ID"
-                  value={singlePatient.citizen_id}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                  disabled={!!file}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  name="date_of_birth"
-                  value={singlePatient.date_of_birth}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm text-gray-700"
-                  disabled={!!file}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Gender
-                </label>
-                <select
-                  name="gender"
-                  value={singlePatient.gender || ""}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
-                  disabled={!!file}
-                >
-                  <option value="" disabled>
-                    Choose Gender
-                  </option>
-                  <option value="male">male</option>
-                  <option value="female">female</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  name="phone_no"
-                  placeholder="Enter Phone Number"
-                  value={singlePatient.phone_no}
-                  onChange={handleSinglePatientChange}
-                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696] text-[#969696]"
-                  disabled={!!file}
-                />
+
+              <div className="simple-form-row">
+                <div className="simple-form-field">
+                  <label className="simple-form-label">Gender</label>
+                  <select
+                    name="gender"
+                    value={singlePatient.gender || ""}
+                    onChange={handleSinglePatientChange}
+                    className="simple-form-select"
+                    disabled={!!file}
+                  >
+                    <option value="" disabled>
+                      Choose Gender
+                    </option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+
+                <div className="simple-form-field">
+                  <label className="simple-form-label">Phone Number</label>
+                  <input
+                    type="text"
+                    name="phone_no"
+                    placeholder="Enter Phone Number"
+                    value={singlePatient.phone_no}
+                    onChange={handleSinglePatientChange}
+                    className="simple-form-input"
+                    disabled={!!file}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer - Fixed */}
-        <div className="p-4 flex justify-end space-x-3">
+        <div className="footer-buttons-container">
           {file ? (
-            <button
-              onClick={handleBulkUpload}
-              className="bg-green-600 text-white px-4 py-2 rounded text-sm"
-            >
+            <button onClick={handleBulkUpload} className="upload-csv-button">
               Upload CSV
             </button>
           ) : isFormFilled ? (
@@ -1883,136 +1912,200 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
         {/* Header */}
         <div className="p-4 flex justify-between items-center">
           <h2 className="text-xl font-bold">Add Lab Data</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <X size={18} textAlign="center" />
+          <button onClick={onClose} className="modal-close-button">
+            <X size={23} />
           </button>
         </div>
 
         {/* Content - Scrollable */}
         <div className="overflow-y-auto flex-1 p-4">
           {/* Bulk Upload Section */}
-          <div className="container1">
-            <h3 className="text-lg font-semibold mb-3 text-[#242222]">
-              Bulk Upload
-            </h3>
+          <div className="bulk-upload-container">
+            <div className="bulk-upload-header">
+              <h3 className="bulk-upload-title">Bulk Upload</h3>
+              <div className="bulk-upload-divider"></div>
+            </div>
+
             <div
-              className={`border-2 border-dashed rounded-lg p-4 text-center ${
-                isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-              } ${file || isFormFilled ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`bulk-upload-zone ${
+                isDragActive ? "drag-active" : ""
+              } ${file || isFormFilled ? "disabled" : ""}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <p className="mb-2 text-[#969696]">
-                📁 Drop your CSV file here or
-              </p>
-              <button
-                className="browse-button"
-                onClick={() => document.getElementById("labFileUpload").click()}
-                disabled={isFormFilled}
-              >
-                Browse Files
-              </button>
+              <div className="upload-icon-container">
+                <svg
+                  className="upload-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14,2 14,8 20,8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10,9 9,9 8,9" />
+                </svg>
+              </div>
+
+              <div className="upload-content">
+                <p className="upload-text">
+                  Drop your CSV file here or{" "}
+                  <span className="upload-browse-text">browse files</span>
+                </p>
+                <button
+                  className="bulk-browse-button"
+                  onClick={() =>
+                    document.getElementById("labFileUpload").click()
+                  }
+                  disabled={isFormFilled}
+                >
+                  Choose File
+                </button>
+              </div>
+
               <input
                 id="labFileUpload"
                 type="file"
                 accept=".csv"
                 onChange={handleFileChange}
-                className="hidden"
+                className="file-input-hidden"
                 disabled={isFormFilled}
               />
+
               {file && (
-                <div className="mt-2">
-                  <div className="flex items-center justify-center space-x-2">
-                    <p className="text-green-600 text-sm">{file.name}</p>
+                <div className="uploaded-file-container">
+                  <div className="uploaded-file-info">
+                    <svg
+                      className="file-success-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14,2 14,8 20,8" />
+                      <polyline points="9,15 11,17 16,12" />
+                    </svg>
+                    <span className="uploaded-file-name">{file.name}</span>
                     <button
                       onClick={handleRemoveFile}
-                      className="text-red-500 hover:text-red-700 p-1"
+                      className="remove-file-button"
                     >
-                      <X size={14} />
+                      <X size={16} />
                     </button>
                   </div>
                 </div>
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Supported formats: CSV with columns for hn_number, lab_item_name,
-              and lab_item_value
-            </p>
+
+            <div className="upload-info-section">
+              <div className="info-icon-container">
+                <svg
+                  className="info-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+              </div>
+              <a href="/template.csv" download className="upload-info-text">
+                download csv template
+              </a>
+            </div>
 
             {uploadError && (
-              <div className="mt-2 text-red-500 text-sm">{uploadError}</div>
+              <div className="upload-error-container">
+                <svg
+                  className="error-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="15" y1="9" x2="9" y2="15" />
+                  <line x1="9" y1="9" x2="15" y2="15" />
+                </svg>
+                <span className="upload-error-text">{uploadError}</span>
+              </div>
             )}
           </div>
 
-          {/* OR Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
+          {/* Beautiful OR Divider */}
+          <div className="or-divider-container">
+            <div className="or-divider-line"></div>
+            <div className="or-divider-circle">
+              <span className="or-divider-text">OR</span>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-3 bg-white text-gray-500">OR</span>
-            </div>
+            <div className="or-divider-line"></div>
           </div>
 
           {/* Single Lab Data Form */}
-          <div className="container1">
-            <h3 className="text-lg font-semibold mb-4 text-[#242222]">
-              Add Single Lab Data
-            </h3>
+          <div className="lab-data-form-container">
+            <div className="lab-form-header">
+              <h3 className="lab-form-title">Add Single Lab Data</h3>
+              <div className="lab-form-divider"></div>
+            </div>
 
             {/* Basic Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              {/* HN Number */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  HN Number <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="hn_number"
-                  placeholder="Enter 9-digit HN Number"
-                  value={singleLabData.hn_number || ""}
-                  onChange={handleSingleLabDataChange}
-                  className="w-full p-2 border rounded-md text-sm placeholder-[#969696]"
-                  disabled={!!file}
-                  maxLength="9"
-                />
-              </div>
+            <div className="basic-info-section">
+              <div className="form-row">
+                {/* HN Number */}
+                <div className="form-field">
+                  <label className="form-label">
+                    HN Number <span className="required-asterisk">*</span>
+                  </label>
+                  <div className="input-wrapper">
+                    <input
+                      type="text"
+                      name="hn_number"
+                      placeholder="Enter 9-digit HN Number"
+                      value={singleLabData.hn_number || ""}
+                      onChange={handleSingleLabDataChange}
+                      className="form-input hn-input"
+                      disabled={!!file}
+                      maxLength="9"
+                    />
+                  </div>
+                </div>
 
-              {/* Doctor */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Assign to Doctor <span className="text-red-500">*</span>
-                </label>
-                <select
-                  name="doctor_id"
-                  value={singleLabData.doctor_id}
-                  onChange={handleSingleLabDataChange}
-                  className="w-full p-2 border rounded-md text-sm text-[#969696]"
-                  disabled={!!file}
-                >
-                  <option value="">Select Doctor</option>
-                  {doctors.map((doctor) => (
-                    <option key={doctor.id} value={doctor.id}>
-                      {doctor.name}
-                    </option>
-                  ))}
-                </select>
+                {/* Doctor */}
+                <div className="form-field">
+                  <label className="form-label">
+                    Assign to Doctor{" "}
+                    <span className="required-asterisk">*</span>
+                  </label>
+                  <div className="select-wrapper">
+                    <select
+                      name="doctor_id"
+                      value={singleLabData.doctor_id}
+                      onChange={handleSingleLabDataChange}
+                      className="form-select doctor-select"
+                      disabled={!!file}
+                    >
+                      <option value="">Select Doctor</option>
+                      {doctors.map((doctor) => (
+                        <option key={doctor.id} value={doctor.id}>
+                          {doctor.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Lab Tests Selection */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Lab Tests <span className="text-red-500">*</span>
+            <div className="lab-tests-section">
+              <label className="section-label">
+                Select Lab Tests <span className="required-asterisk">*</span>
               </label>
-              <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
+              <div className="lab-tests-container">
                 {labTests.map((test) => (
-                  <div key={test.id} className="flex items-center mb-2">
+                  <div key={test.id} className="lab-test-item">
                     <input
                       type="checkbox"
                       id={`test-${test.id}`}
@@ -2023,11 +2116,11 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
                         handleLabTestSelection(test.id, e.target.checked)
                       }
                       disabled={!!file}
-                      className="mr-2"
+                      className="lab-test-checkbox"
                     />
                     <label
                       htmlFor={`test-${test.id}`}
-                      className="text-sm text-gray-700"
+                      className="lab-test-label"
                     >
                       {test.test_name}
                     </label>
@@ -2038,46 +2131,40 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
 
             {/* Dynamic Lab Items Forms */}
             {selectedLabTests.map((labTest) => (
-              <div
-                key={labTest.id}
-                className="mb-4 sm:mb-6 p-3 sm:p-4 border rounded-lg bg-gray-50 shadow-sm"
-              >
-                <h4 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-[#242222]">
-                  {labTest.test_name}
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+              <div key={labTest.id} className="lab-test-form">
+                <div className="lab-test-header">
+                  <h4 className="lab-test-title">{labTest.test_name}</h4>
+                </div>
+                <div className="lab-items-grid">
                   {labTest.items?.map((item) => (
-                    <div key={item.lab_item_id} className="min-w-0">
-                      <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-                        <span className="block truncate pr-2">
+                    <div key={item.lab_item_id} className="lab-item-field">
+                      <label className="lab-item-label">
+                        <span className="lab-item-name">
                           {item.lab_item_name}
                         </span>
                         {item.unit && (
-                          <span className="text-gray-500 text-xs">
-                            ({item.unit})
-                          </span>
+                          <span className="lab-item-unit">({item.unit})</span>
                         )}
-                        <span className="text-red-500 ml-1">*</span>
+                        <span className="required-asterisk">*</span>
                       </label>
-                      <input
-                        type="text"
-                        placeholder={`Enter ${item.lab_item_name}`}
-                        value={
-                          labTestsData[labTest.id]?.[item.lab_item_id] || ""
-                        }
-                        onChange={(e) =>
-                          handleLabItemValueChange(
-                            labTest.id,
-                            item.lab_item_id,
-                            e.target.value
-                          )
-                        }
-                        className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-md text-sm placeholder-[#969696] 
-                     focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none
-                     disabled:bg-gray-100 disabled:cursor-not-allowed
-                     transition-all duration-200 hover:border-gray-400"
-                        disabled={!!file}
-                      />
+                      <div className="lab-item-input-wrapper">
+                        <input
+                          type="text"
+                          placeholder={`Enter ${item.lab_item_name}`}
+                          value={
+                            labTestsData[labTest.id]?.[item.lab_item_id] || ""
+                          }
+                          onChange={(e) =>
+                            handleLabItemValueChange(
+                              labTest.id,
+                              item.lab_item_id,
+                              e.target.value
+                            )
+                          }
+                          className="lab-item-input"
+                          disabled={!!file}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -2086,12 +2173,12 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
           </div>
 
           {/* Footer */}
-          <div className="p-4 flex justify-end space-x-3">
+          <div className="lab-footer-buttons-container">
             {file ? (
               <button
                 onClick={handleBulkUpload}
-                className={`bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-600 ${
-                  isUploading ? "opacity-50 cursor-not-allowed" : ""
+                className={`upload-lab-csv-button ${
+                  isUploading ? "disabled" : ""
                 }`}
                 disabled={isUploading}
               >
@@ -2100,8 +2187,8 @@ const LabDataUploadPopup = ({ show, onClose, onUpload }) => {
             ) : isFormFilled ? (
               <button
                 onClick={handleSingleLabDataSubmit}
-                className={`bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-600 ${
-                  isUploading ? "opacity-50 cursor-not-allowed" : ""
+                className={`add-lab-data-button ${
+                  isUploading ? "disabled" : ""
                 }`}
                 disabled={isUploading}
               >
