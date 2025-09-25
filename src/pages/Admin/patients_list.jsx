@@ -1094,7 +1094,6 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
     localStorage.removeItem("userRole");
     localStorage.removeItem("lastActiveTime");
     navigate("/");
-    window.location.reload();
   };
 
   useEffect(() => {
