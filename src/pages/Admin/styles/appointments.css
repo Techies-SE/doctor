@@ -274,7 +274,7 @@
 
 .time-slot.selected {
   background-color: #dbeafe;
-  color: #2563eb;
+  color: #3BA092;
   border-color: #93c5fd;
 }
 
@@ -304,7 +304,7 @@
 }
 
 .btn-confirm:hover {
-  background-color: #1d4ed8;
+  background-color: #1b6359;
 }
 
 .btn-confirm.disabled {

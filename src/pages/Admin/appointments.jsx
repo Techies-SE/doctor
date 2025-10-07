@@ -1122,15 +1122,15 @@ const Appointments = () => {
             <div className="reschedule-modal">
               <div
                 className="modal-overlay"
-                onClick={handleCloseRescheduleModal}
-              ></div>
+                onClick={handleCloseRescheduleModal}  style={{ paddingTop: "100px" }}
+              >
               <div className="modal-container">
                 {/* Modal Header */}
                 <div className="modal-header">
                   <h2 className="modal-title">Reschedule Appointment</h2>
                   <button
                     onClick={handleCloseRescheduleModal}
-                    className="modal-close"
+                    className="close-btn-1"
                   >
                     <X className="icon" />
                   </button>
@@ -1235,6 +1235,7 @@ const Appointments = () => {
                     Confirm Reschedule
                   </button>
                 </div>
+              </div>
               </div>
             </div>
           ) : null}
