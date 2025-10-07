@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
@@ -10,6 +10,17 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ Effect to handle back navigation
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const role = localStorage.getItem("userRole");
+    if (token && role) {
+      // If user refreshes or reaches login by back button, keep them here
+      // But prevent forward navigation by not auto-navigating
+      console.log("User already logged in, staying on login page");
+    }
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission
     setError("");
@@ -18,9 +29,11 @@ const Login = () => {
       return;
     }
     setIsLoading(true);
-    try{
-      const endpoint = isDoctor ? "https://backend-pg-cm2b.onrender.com/login/doctors" : "https://backend-pg-cm2b.onrender.com/login/admins";
-      
+    try {
+      const endpoint = isDoctor
+        ? "https://backend-pg-cm2b.onrender.com/login/doctors"
+        : "https://backend-pg-cm2b.onrender.com/login/admins";
+
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -41,10 +54,12 @@ const Login = () => {
       localStorage.setItem("userRole", data.user.role);
 
       // Redirect based on role
-      navigate(data.user.role === 'doctor' ? "/dashboard" : "/patient");
-    }catch(e){
+      navigate(data.user.role === "doctor" ? "/dashboard" : "/patient", {
+        replace: true,
+      });
+    } catch (e) {
       setError(e.message || "An error occurred during login");
-    }finally{
+    } finally {
       setIsLoading(false);
     }
     //navigate(isDoctor ? "/dashboard" : "/patient");
@@ -52,57 +67,64 @@ const Login = () => {
 
   return (
     <div id="body">
-    <div className="login-container">
-      <div id="logo-circle"></div>
-      <div id="logo-text">
-        <span style={{ color: "#3BA092", fontWeight: "bold",fontSize:"30px" }}>MFU</span>{" "}
-        <span style={{ color: "#C0B257", fontWeight: "bold",fontSize:"30px" }}>Wellness Center</span>
-      </div>
+      <div className="login-container">
+        <div id="logo-circle"></div>
+        <div id="logo-text">
+          <span
+            style={{ color: "#3BA092", fontWeight: "bold", fontSize: "30px" }}
+          >
+            MFU
+          </span>{" "}
+          <span
+            style={{ color: "#C0B257", fontWeight: "bold", fontSize: "30px" }}
+          >
+            Wellness Center
+          </span>
+        </div>
 
-      {/* Toggle Switch */}
-      <div className="toggle-container">
-        <span className="toggle-text admin-text">Admin</span>
-        <label className="toggle-label">
+        {/* Toggle Switch */}
+        <div className="toggle-container">
+          <span className="toggle-text admin-text">Admin</span>
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={isDoctor}
+              onChange={() => setIsDoctor(!isDoctor)}
+            />
+            <span className="toggle-slider"></span>
+          </label>
+          <span className="toggle-text doctor-text">Doctor</span>
+        </div>
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit}>
+          {error && <div className="error-message">{error}</div>}
           <input
-            type="checkbox"
-            checked={isDoctor}
-            onChange={() => setIsDoctor(!isDoctor)}
+            type="text"
+            name="staffid"
+            placeholder="Email"
+            className="input-field"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          <span className="toggle-slider"></span>
-        </label>
-        <span className="toggle-text doctor-text">Doctor</span>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="input-field"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <a href="#" className="forgot-password">
+            Forgot Password?
+          </a>
+          <button type="submit" className="login-button" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Log In"}
+          </button>
+        </form>
       </div>
-
-      {/* Login Form */}
-      <form onSubmit={handleSubmit}>
-      {error && <div className="error-message">{error}</div>}
-        <input
-          type="text"
-          name="staffid"
-          placeholder="Email"
-          className="input-field"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="input-field"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <a href="#" className="forgot-password">
-          Forgot Password?
-        </a>
-        <button type="submit" className="login-button" disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Log In"}
-        </button>
-        
-      </form>
-    </div>
     </div>
   );
 };

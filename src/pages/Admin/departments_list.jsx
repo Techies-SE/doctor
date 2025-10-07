@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./styles/doctors.css";
 
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -641,7 +640,7 @@ const Departments = () => {
 
           {/* Create Department Modal */}
           {showModal && (
-            <div className="modal-overlay"style={{paddingTop: '60px'}}>
+            <div className="modal-overlay" style={{ paddingTop: "60px" }}>
               <div className="modal-container">
                 <div className="modal-header text-[#242222]">
                   <h2>Create New Department</h2>
@@ -652,218 +651,240 @@ const Departments = () => {
                     <X size={16} />
                   </button>
                 </div>
-                <form onSubmit={handleFormSubmit} className="scrollable-department-form">
-  <div className="form-scroll-container">
-    <div className="scrollable-form-group">
-      <label className="scrollable-form-label">Name</label>
-      <input
-        type="text"
-        name="name"
-        value={newDepartment.name}
-        onChange={handleInputChange}
-        required
-        placeholder="Enter department name"
-        className="scrollable-form-input"
-      />
-    </div>
+                <form
+                  onSubmit={handleFormSubmit}
+                  className="scrollable-department-form"
+                >
+                  <div className="form-scroll-container">
+                    <div className="scrollable-form-group">
+                      <label className="scrollable-form-label">Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={newDepartment.name}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Enter department name"
+                        className="scrollable-form-input"
+                      />
+                    </div>
 
-    <div className="scrollable-form-group">
-      <label className="scrollable-form-label">Description</label>
-      <input
-        type="text"
-        name="description"
-        value={newDepartment.description}
-        onChange={handleInputChange}
-        placeholder="Enter department description"
-        className="scrollable-form-input"
-      />
-    </div>
+                    <div className="scrollable-form-group">
+                      <label className="scrollable-form-label">
+                        Description
+                      </label>
+                      <input
+                        type="text"
+                        name="description"
+                        value={newDepartment.description}
+                        onChange={handleInputChange}
+                        placeholder="Enter department description"
+                        className="scrollable-form-input"
+                      />
+                    </div>
 
-    <div className="scrollable-form-group">
-      <label className="scrollable-form-label">Department Image</label>
-      <div className="scrollable-image-upload-container">
-        <input
-          type="file"
-          id="department-image"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="scrollable-file-input-hidden"
-        />
-        <label
-          htmlFor="department-image"
-          className="scrollable-image-upload-area"
-        >
-          {imagePreview ? (
-            <div className="scrollable-image-preview">
-              <img
-                src={imagePreview}
-                alt="Department preview"
-                className="scrollable-preview-img"
-              />
-              <div className="scrollable-image-overlay">
-                <div className="scrollable-overlay-content">
-                  <Upload size={24} />
-                  <span className="scrollable-overlay-text">Change Image</span>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="scrollable-upload-placeholder">
-              <Upload size={24} className="scrollable-upload-icon" />
-              <span className="scrollable-upload-text">
-                Click or drag image to upload
-              </span>
-              <span className="scrollable-upload-subtext">
-                (JPEG, PNG, max 5MB)
-              </span>
-            </div>
-          )}
-        </label>
-      </div>
-      {imageFile && (
-        <div className="scrollable-file-info">
-          <span className="scrollable-file-name">{imageFile.name}</span>
-          <button
-            type="button"
-            onClick={() => {
-              setImageFile(null);
-              setImagePreview(null);
-            }}
-            className="scrollable-file-remove"
-          >
-            <X size={16} />
-          </button>
-        </div>
-      )}
-    </div>
-  </div>
+                    <div className="scrollable-form-group">
+                      <label className="scrollable-form-label">
+                        Department Image
+                      </label>
+                      <div className="scrollable-image-upload-container">
+                        <input
+                          type="file"
+                          id="department-image"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          className="scrollable-file-input-hidden"
+                        />
+                        <label
+                          htmlFor="department-image"
+                          className="scrollable-image-upload-area"
+                        >
+                          {imagePreview ? (
+                            <div className="scrollable-image-preview">
+                              <img
+                                src={imagePreview}
+                                alt="Department preview"
+                                className="scrollable-preview-img"
+                              />
+                              <div className="scrollable-image-overlay">
+                                <div className="scrollable-overlay-content">
+                                  <Upload size={24} />
+                                  <span className="scrollable-overlay-text">
+                                    Change Image
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="scrollable-upload-placeholder">
+                              <Upload
+                                size={24}
+                                className="scrollable-upload-icon"
+                              />
+                              <span className="scrollable-upload-text">
+                                Click or drag image to upload
+                              </span>
+                              <span className="scrollable-upload-subtext">
+                                (JPEG, PNG, max 5MB)
+                              </span>
+                            </div>
+                          )}
+                        </label>
+                      </div>
+                      {imageFile && (
+                        <div className="scrollable-file-info">
+                          <span className="scrollable-file-name">
+                            {imageFile.name}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImageFile(null);
+                              setImagePreview(null);
+                            }}
+                            className="scrollable-file-remove"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-  <div className="form-footer-fixed">
-    <button
-      type="submit"
-      className="scrollable-submit-btn"
-      disabled={isLoading}
-    >
-      {isLoading ? (
-        <div className="loading-content">
-          <svg
-            className="loading-spinner"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="spinner-circle"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="spinner-path"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          Creating...
-        </div>
-      ) : (
-        "Create Department"
-      )}
-    </button>
-  </div>
-</form>
+                  <div className="form-footer-fixed">
+                    <button
+                      type="submit"
+                      className="scrollable-submit-btn"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <div className="loading-content">
+                          <svg
+                            className="loading-spinner"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="spinner-circle"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="spinner-path"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Creating...
+                        </div>
+                      ) : (
+                        "Create Department"
+                      )}
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           )}
 
           {/* Create Doctor Modal */}
           {showDoctorModal && selectedDepartmentForDoctor && (
-            <div className="modal-overlay"style={{paddingTop: '60px'}}>
-  <div className="modal-container">
-    <div className="modal-header text-[#242222]">
-      <h2>Create New Doctor for {selectedDepartmentForDoctor.name}</h2>
-      <button
-        onClick={() => setShowDoctorModal(false)}
-        className="close-btn-1"
-      >
-        <X size={16} />
-      </button>
-    </div>
+            <div className="modal-overlay" style={{ paddingTop: "60px" }}>
+              <div className="modal-container">
+                <div className="modal-header text-[#242222]">
+                  <h2>
+                    Create New Doctor for {selectedDepartmentForDoctor.name}
+                  </h2>
+                  <button
+                    onClick={() => setShowDoctorModal(false)}
+                    className="close-btn-1"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
 
-    {/* Scrollable body */}
-    <div className="modal-body">
-      <form onSubmit={handleDoctorFormSubmit} className="modal-form">
-        <div className="form-group text-[#242222]">
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={newDoctor.name}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter doctor's name"
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Phone Number</label>
-          <input
-            type="text"
-            name="phone_no"
-            value={newDoctor.phone_no}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter phone number"
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={newDoctor.email}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter email address"
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Specialization</label>
-          <input
-            type="text"
-            name="specialization"
-            value={newDoctor.specialization}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter specialization"
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Status</label>
-          <select
-            name="status"
-            value={newDoctor.status}
-            onChange={handleDoctorInputChange}
-            required
-          >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-        <input
-          type="hidden"
-          name="department_id"
-          value={selectedDepartmentForDoctor.id}
-        />
-        <button type="submit" className="submit-btn" disabled={isLoading}>
-          {isLoading ? "Creating..." : "Create Doctor"}
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
-
+                {/* Scrollable body */}
+                <div className="modal-body">
+                  <form
+                    onSubmit={handleDoctorFormSubmit}
+                    className="modal-form"
+                  >
+                    <div className="form-group text-[#242222]">
+                      <label>Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={newDoctor.name}
+                        onChange={handleDoctorInputChange}
+                        required
+                        placeholder="Enter doctor's name"
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Phone Number</label>
+                      <input
+                        type="text"
+                        name="phone_no"
+                        value={newDoctor.phone_no}
+                        onChange={handleDoctorInputChange}
+                        required
+                        placeholder="Enter phone number"
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={newDoctor.email}
+                        onChange={handleDoctorInputChange}
+                        required
+                        placeholder="Enter email address"
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Specialization</label>
+                      <input
+                        type="text"
+                        name="specialization"
+                        value={newDoctor.specialization}
+                        onChange={handleDoctorInputChange}
+                        required
+                        placeholder="Enter specialization"
+                      />
+                    </div>
+                    <div className="form-group text-[#242222]">
+                      <label>Status</label>
+                      <select
+                        name="status"
+                        value={newDoctor.status}
+                        onChange={handleDoctorInputChange}
+                        required
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                      </select>
+                    </div>
+                    <input
+                      type="hidden"
+                      name="department_id"
+                      value={selectedDepartmentForDoctor.id}
+                    />
+                    <button
+                      type="submit"
+                      className="submit-btn"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Creating..." : "Create Doctor"}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

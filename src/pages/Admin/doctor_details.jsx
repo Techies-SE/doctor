@@ -56,126 +56,157 @@ const DoctorDetails = ({ doctorId, onBack }) => {
   ];
 
   // Fetch doctor details and image on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        console.log("Auth Token:", token);
-        if (!token) throw new Error("No authentication token found");
-        // Fetch doctor schedules
-        const scheduleResponse = await fetch(
-          `https://backend-pg-cm2b.onrender.com/schedule/doctor/${doctorId}`
-        );
-
-        if (!scheduleResponse.ok) {
-          throw new Error("Failed to fetch doctor schedules");
-        }
-
-        const scheduleData = await scheduleResponse.json();
-
-        // Fetch doctor details including image URL
-        const doctorResponse = await fetch(
-          `https://backend-pg-cm2b.onrender.com/doctors/${doctorId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!doctorResponse.ok) {
-          throw new Error("Failed to fetch doctor details");
-        }
-
-        const doctorData = await doctorResponse.json();
-
-        // Combine the data
-        setDoctor({
-          ...scheduleData.doctor,
-          imageUrl: doctorData.imageUrl,
-        });
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching doctor data:", error);
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [doctorId]);
-
-  // Method to handle image upload
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
-
-    if (!file) return;
-
-    const validTypes = ["image/jpeg", "image/png", "image/gif"];
-    const maxSize = 5 * 1024 * 1024; // 5MB
-
-    if (!validTypes.includes(file.type)) {
-      setImageUploadError(
-        "Invalid file type. Please upload a JPEG, PNG, or GIF."
-      );
-      return;
-    }
-
-    if (file.size > maxSize) {
-      setImageUploadError("File is too large. Maximum size is 5MB.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("image", file);
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      setImageUploadError("Authentication token not found.");
-      return;
-    }
-
+  // Updated useEffect to properly fetch doctor data including image
+useEffect(() => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(
-        `https://backend-pg-cm2b.onrender.com/image/upload/${doctorId}`,
+      const token = localStorage.getItem("authToken");
+      console.log("Auth Token:", token);
+      if (!token) throw new Error("No authentication token found");
+
+      // Fetch doctor schedules
+      const scheduleResponse = await fetch(
+        `https://backend-pg-cm2b.onrender.com/schedule/doctor/${doctorId}`
+      );
+
+      if (!scheduleResponse.ok) {
+        throw new Error("Failed to fetch doctor schedules");
+      }
+
+      const scheduleData = await scheduleResponse.json();
+
+      // Fetch doctor details including image URL
+      const doctorResponse = await fetch(
+        `https://backend-pg-cm2b.onrender.com/doctors/${doctorId}`, // ✅ Correct endpoint
         {
-          method: "PATCH",
-          body: formData,
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to upload image");
+      if (!doctorResponse.ok) {
+        throw new Error("Failed to fetch doctor details");
       }
 
-      const responseData = await response.json();
+      const doctorData = await doctorResponse.json();
+      console.log('Fetched doctor data:', doctorData); // Debug log
+      console.log('Doctor image URL:', doctorData.image); // Debug log
 
-      // Update the doctor state with the new imageUrl from the server response
-      setDoctor((prevDoctor) => ({
-        ...prevDoctor,
-        imageUrl: responseData.imageUrl,
-      }));
+      // ✅ Combine schedule data with doctor data
+      setDoctor({
+        ...scheduleData.doctor,
+        image: doctorData.image, // Backend returns 'image' field with Cloudinary URL
+      });
 
-      // Clear any previous errors
-      setImageUploadError(null);
+      // ✅ Set the profile image state for immediate display
+      if (doctorData.image) {
+        setProfileImage(doctorData.image);
+        console.log('Set profile image:', doctorData.image); // Debug log
+      }
 
-      // Optional: Show a preview of the uploaded image immediately
-      // You can remove this section if you only want to show the server imageUrl
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setLoading(false);
     } catch (error) {
-      console.error("Error uploading image:", error);
-      setImageUploadError(error.message);
+      console.error("Error fetching doctor data:", error);
+      setError(error.message);
+      setLoading(false);
     }
   };
+
+  fetchData();
+}, [doctorId]);
+
+// Updated handleImageUpload to refresh data after upload
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const validTypes = ["image/jpeg", "image/png", "image/gif"];
+  const maxSize = 5 * 1024 * 1024; // 5 MB
+
+  if (!validTypes.includes(file.type)) {
+    setImageUploadError(
+      "Invalid file type. Please upload JPEG, PNG, or GIF."
+    );
+    return;
+  }
+  if (file.size > maxSize) {
+    setImageUploadError("File is too large. Maximum size is 5 MB.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    setImageUploadError("Authentication token not found.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://backend-pg-cm2b.onrender.com/image/upload/${doctorId}`,
+      {
+        method: "PATCH",
+        body: formData,
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to upload image");
+    }
+
+    const { imageUrl } = await response.json();
+    console.log('Upload response:', { imageUrl }); // Debug log
+
+    // ✅ Update both states consistently
+    setDoctor((prev) => ({ ...prev, image: imageUrl }));
+    setProfileImage(imageUrl);
+    setImageUploadError(null);
+
+    // ✅ Optional: Refetch data to ensure consistency
+    // You can uncomment this if you want to be extra sure
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 1000);
+
+  } catch (err) {
+    console.error("Error uploading image:", err);
+    setImageUploadError(err.message);
+  }
+};
+
+// Updated handleRemoveImage function
+const handleRemoveImage = async () => {
+  try {
+    const response = await fetch(
+      `https://backend-pg-cm2b.onrender.com/image/delete/${doctorId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to remove image");
+    }
+
+    // ✅ Update both states consistently
+    setDoctor((prev) => ({ ...prev, image: null }));
+    setProfileImage(null);
+    setImageUploadError(null);
+  } catch (err) {
+    console.error("Error removing image:", err);
+    setImageUploadError(err.message);
+  }
+};
 
   const logout = (e) => {
     e.preventDefault();
@@ -187,32 +218,7 @@ const DoctorDetails = ({ doctorId, onBack }) => {
     window.location.reload();
   };
 
-  // Method to remove profile image
-  const handleRemoveImage = async () => {
-    try {
-      const response = await fetch(
-        `https://backend-pg-cm2b.onrender.com/image/delete/${doctorId}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to remove image");
-      }
-
-      setDoctor((prevDoctor) => ({
-        ...prevDoctor,
-        imageUrl: null,
-      }));
-
-      setImageUploadError(null);
-    } catch (error) {
-      console.error("Error removing image:", error);
-      setImageUploadError(error.message);
-    }
-  };
+  
 
   // Handle navigation back to doctors list
   const handleBack = () => {
