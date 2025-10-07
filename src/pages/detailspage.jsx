@@ -237,47 +237,48 @@ const DetailsPage = () => {
             </div>
           </div>
 
-          <div className="recommendation-compare">
-            <h3>AI Generated Recommendation</h3>
-            <div className="recommendation-cards">
-              <div className={`recommendation-card ${selected === "rule" ? "selected" : ""}`} onClick={() => handleSelect("rule")}>
-                <textarea
-                  readOnly
-                  value={
-                    patientData.recommendations && patientData.recommendations.length > 0
-                      ? patientData.recommendations[0].generated_recommendation
-                      : "No recommendation available"
-                  }
-                ></textarea>
+          <div className="recommendation-column">
+            <div className="recommendation-compare">
+              <h3>AI Generated Recommendation</h3>
+              <div className="recommendation-cards">
+                <div className={`recommendation-card ${selected === "rule" ? "selected" : ""}`} onClick={() => handleSelect("rule")}>
+                  <textarea
+                    readOnly
+                    value={
+                      patientData.recommendations && patientData.recommendations.length > 0
+                        ? patientData.recommendations[0].generated_recommendation
+                        : "No recommendation available"
+                    }
+                  ></textarea>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="improved-section">
-          <h3>{isApproved ? "Approved Recommendation" : "You can improve the recommendation here"}</h3>
-          {isApproved && (
-            <div className="status-indicator">
-              ✓ This recommendation has been approved and sent
+            <div className="improved-section">
+              <h3>{isApproved ? "Approved Recommendation" : "You can improve the recommendation here"}</h3>
+              {isApproved && (
+                <div className="status-indicator">
+                  ✓ This recommendation has been approved and sent
+                </div>
+              )}
+              <textarea
+                className="improved-textarea"
+                value={recommendation}
+                onChange={(e) => setRecommendation(e.target.value)}
+                readOnly={isApproved}
+                placeholder={isApproved ? "Approved recommendation" : "Edit AI recommendation if needed"}
+              />
+              
+              <div className="btn-group-always-visible">
+                <button
+                  className={`approve-btn-always ${isApproved ? 'approved' : ''}`}
+                  onClick={handleApprove}
+                  disabled={isApproved || isApproving}
+                >
+                  Approve
+                </button>
+              </div>
             </div>
-          )}
-          <textarea
-            className="improved-textarea"
-            value={recommendation}
-            onChange={(e) => setRecommendation(e.target.value)}
-            readOnly={isApproved}
-            placeholder={isApproved ? "Approved recommendation" : "Edit AI recommendation if needed"}
-          />
-          
-          {/* Always visible approve button */}
-          <div className="btn-group-always-visible">
-            <button
-              className={`approve-btn-always ${isApproved ? 'approved' : ''}`}
-              onClick={handleApprove}
-              disabled={isApproved || isApproving}
-            >
-              Approve
-            </button>
           </div>
         </div>
       </div>
@@ -286,20 +287,16 @@ const DetailsPage = () => {
 };
 
 const LabCard = ({ title, details }) => {
-  const [open, setOpen] = useState(false);
   return (
     <div className="lab-card">
-      <div className="lab-card-header" onClick={() => setOpen(!open)}>
+      <div className="lab-card-header">
         {title}
-        <span className="arrow">{open ? "▲" : "▼"}</span>
       </div>
-      {open && (
-        <div className="lab-details">
-          {details.map((detail, index) => (
-            <p key={index}>{detail}</p>
-          ))}
-        </div>
-      )}
+      <div className="lab-details">
+        {details.map((detail, index) => (
+          <p key={index}>{detail}</p>
+        ))}
+      </div>
     </div>
   );
 };

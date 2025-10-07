@@ -200,9 +200,8 @@ body {
     align-items: stretch;
 }
 
-.lab-section,
-.recommendation-compare {
-    flex: 1;
+.lab-section {
+    flex: 0.6;
     background: #fff;
     padding: 1.5rem;
     border-radius: 10px;
@@ -211,13 +210,21 @@ body {
     flex-direction: column;
 }
 
-/* Make Recommendation section a bit larger */
-.lab-section {
-    flex: 0.6;
+/* Right column containing both recommendation sections */
+.recommendation-column {
+    flex: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .recommendation-compare {
-    flex: 1.4;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 /* Responsive stacking */
@@ -360,7 +367,7 @@ body {
     background-color: #236963;
 }
 
-/* Improved Section */
+/* Improved Section - Now in right column */
 .improved-section {
     background: #fff;
     padding: 1.5rem;
@@ -541,3 +548,38 @@ body {
 .p-1 { padding: 0.5rem; }
 .p-2 { padding: 1rem; }
 .p-3 { padding: 1.5rem; }
+.lab-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.lab-card:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.lab-card-header {
+    background: #2c8a7d;
+    color: white;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.lab-details {
+    padding: 1rem;
+    background: #fff;
+}
+
+.lab-details p {
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.lab-details p:last-child {
+    margin-bottom: 0;
+}
