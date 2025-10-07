@@ -365,19 +365,20 @@ const PatientList = () => {
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-black text-2xl font-semibold">Patient List</h1>
           </div>
-          <div className="flex items-center mb-6">
-            <div id="search-container">
-              <Search size={18} className="search-icon" />
+          {/* Search and Filter */}
+          <div className="flex items-center justify-end mb-6">
+            <div id="search-container-1">
+              <Search size={18} className="search-icon-1" />
               <input
                 type="text"
-                placeholder="Search"
+                placeholder="Search Patients ..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 id="search-input"
               />
             </div>
-            <button id="filter-button">
-              <Filter size={18} className="filter-icon" /> Filter by Date
+            <button id="filter-button-1">
+              <Filter size={13} className="filter-icon-1" /> Filter
             </button>
           </div>
 
