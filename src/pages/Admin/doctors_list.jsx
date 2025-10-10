@@ -639,6 +639,7 @@ const Doctors = () => {
                       <select
                         name="department_id"
                         value={newDoctor.department_id}
+                        style={{ width: "100%" }}
                         onChange={(e) =>
                           setNewDoctor({
                             ...newDoctor,

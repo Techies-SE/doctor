@@ -30,6 +30,7 @@ import {
   PenBox,
 } from "lucide-react";
 import DepartmentDetails from "./department_details";
+import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 
 const Departments = () => {
   const navigate = useNavigate();
@@ -666,6 +667,7 @@ const Departments = () => {
                         required
                         placeholder="Enter department name"
                         className="scrollable-form-input"
+                        style={{ width: "100%" }}
                       />
                     </div>
 
@@ -680,6 +682,7 @@ const Departments = () => {
                         onChange={handleInputChange}
                         placeholder="Enter department description"
                         className="scrollable-form-input"
+                        style={{ width: "100%" }}
                       />
                     </div>
 
