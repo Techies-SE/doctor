@@ -26,7 +26,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import "./styles/department_details.css";
 
-
 const DepartmentDetails = ({ departmentId, onBack }) => {
   const navigate = useNavigate();
   const [department, setDepartment] = useState(null);
@@ -58,8 +57,8 @@ const DepartmentDetails = ({ departmentId, onBack }) => {
           `https://backend-pg-cm2b.onrender.com/departments/${departmentId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -69,18 +68,27 @@ const DepartmentDetails = ({ departmentId, onBack }) => {
         }
 
         const data = await response.json();
+        console.log("Fetched department data:", data);
 
-        // Handle image URL properly
-        if (data.imageUrl) {
-          data.image = data.imageUrl;
-        } else if (data.image && !data.image.startsWith("https")) {
-          data.image = `https://backend-pg-cm2b.onrender.com/${
-            data.image.startsWith("/") ? data.image.substring(1) : data.image
+        // Some APIs wrap the response as { department: {...} }
+        const departmentData = data.department ? data.department : data;
+
+        // Cloudinary URLs already start with "https", so don't modify them
+        // Only prepend backend URL if it's a local file path
+        if (departmentData.image && !departmentData.image.startsWith("http")) {
+          departmentData.image = `https://backend-pg-cm2b.onrender.com/${
+            departmentData.image.startsWith("/")
+              ? departmentData.image.substring(1)
+              : departmentData.image
           }`;
         }
 
-        setDepartment(data);
+        // Set state directly, same as doctor details page
+        setDepartment(departmentData);
+
+        // If you need it for adding new doctor
         setNewDoctor((prev) => ({ ...prev, department_id: departmentId }));
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching department details:", error);
@@ -156,16 +164,16 @@ const DepartmentDetails = ({ departmentId, onBack }) => {
 
       const responseData = await response.json();
       const imageUrl = responseData.imageUrl || responseData.image;
-      const fullImageUrl = imageUrl.startsWith("https")
-        ? imageUrl
-        : `https://backend-pg-cm2b.onrender.com/${
-            imageUrl.startsWith("/") ? imageUrl.substring(1) : imageUrl
-          }`;
+      // const fullImageUrl = imageUrl.startsWith("https")
+      //   ? imageUrl
+      //   : `https://backend-pg-cm2b.onrender.com/${
+      //       imageUrl.startsWith("/") ? imageUrl.substring(1) : imageUrl
+      //     }`;
 
       setDepartment((prevDepartment) => ({
         ...prevDepartment,
-        image: fullImageUrl,
-        imageUrl: fullImageUrl,
+        image: imageUrl,
+        imageUrl: imageUrl,
       }));
 
       setImageUploadError(null);
@@ -552,99 +560,101 @@ const DepartmentDetails = ({ departmentId, onBack }) => {
             {/* Create Doctor Modal */}
             {showDoctorModal && (
               <div className="modal-overlay">
-  <div className="modal-container">
-    {/* Header */}
-    <div className="modal-header text-[#242222]">
-      <h2>Create New Doctor for {department.name}</h2>
-      <button
-        onClick={() => setShowDoctorModal(false)}
-        className="close-btn-1"
-      >
-        <X size={16} />
-      </button>
-    </div>
+                <div className="modal-container">
+                  {/* Header */}
+                  <div className="modal-header text-[#242222]">
+                    <h2>Create New Doctor for {department.name}</h2>
+                    <button
+                      onClick={() => setShowDoctorModal(false)}
+                      className="close-btn-1"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
 
-    {/* Body (scrollable) */}
-    <div className="modal-body">
-      <form onSubmit={handleDoctorFormSubmit} className="modal-form">
-        <div className="form-group text-[#242222]">
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={newDoctor.name}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter doctor's name"
-            style={{ width: "95%" }}
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Phone Number</label>
-          <input
-            type="text"
-            name="phone_no"
-            value={newDoctor.phone_no}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter phone number"
-            style={{ width: "95%" }}
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={newDoctor.email}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter email address"
-            style={{ width: "95%" }}
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Specialization</label>
-          <input
-            type="text"
-            name="specialization"
-            value={newDoctor.specialization}
-            onChange={handleDoctorInputChange}
-            required
-            placeholder="Enter specialization"
-            style={{ width: "95%" }}
-          />
-        </div>
-        <div className="form-group text-[#242222]">
-          <label>Status</label>
-          <select
-            name="status"
-            value={newDoctor.status}
-            onChange={handleDoctorInputChange}
-            required
-            style={{ width: "100%" }}
-          >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-      </form>
-    </div>
+                  {/* Body (scrollable) */}
+                  <div className="modal-body">
+                    <form
+                      onSubmit={handleDoctorFormSubmit}
+                      className="modal-form"
+                    >
+                      <div className="form-group text-[#242222]">
+                        <label>Name</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={newDoctor.name}
+                          onChange={handleDoctorInputChange}
+                          required
+                          placeholder="Enter doctor's name"
+                          style={{ width: "95%" }}
+                        />
+                      </div>
+                      <div className="form-group text-[#242222]">
+                        <label>Phone Number</label>
+                        <input
+                          type="text"
+                          name="phone_no"
+                          value={newDoctor.phone_no}
+                          onChange={handleDoctorInputChange}
+                          required
+                          placeholder="Enter phone number"
+                          style={{ width: "95%" }}
+                        />
+                      </div>
+                      <div className="form-group text-[#242222]">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={newDoctor.email}
+                          onChange={handleDoctorInputChange}
+                          required
+                          placeholder="Enter email address"
+                          style={{ width: "95%" }}
+                        />
+                      </div>
+                      <div className="form-group text-[#242222]">
+                        <label>Specialization</label>
+                        <input
+                          type="text"
+                          name="specialization"
+                          value={newDoctor.specialization}
+                          onChange={handleDoctorInputChange}
+                          required
+                          placeholder="Enter specialization"
+                          style={{ width: "95%" }}
+                        />
+                      </div>
+                      <div className="form-group text-[#242222]">
+                        <label>Status</label>
+                        <select
+                          name="status"
+                          value={newDoctor.status}
+                          onChange={handleDoctorInputChange}
+                          required
+                          style={{ width: "100%" }}
+                        >
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
+                      </div>
+                    </form>
+                  </div>
 
-    {/* Footer (fixed) */}
-    <div className="modal-footer">
-      <button
-        type="submit"
-        form="doctorForm"  // connect to form if you add id="doctorForm"
-        className="submit-btn"
-        disabled={isDoctorLoading}
-      >
-        {isDoctorLoading ? "Creating..." : "Create Doctor"}
-      </button>
-    </div>
-  </div>
-</div>
-
+                  {/* Footer (fixed) */}
+                  <div className="modal-footer">
+                    <button
+                      type="submit"
+                      form="doctorForm" // connect to form if you add id="doctorForm"
+                      className="submit-btn"
+                      disabled={isDoctorLoading}
+                    >
+                      {isDoctorLoading ? "Creating..." : "Create Doctor"}
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
