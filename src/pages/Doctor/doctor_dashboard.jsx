@@ -279,7 +279,7 @@ const Dashboard = () => {
               Patient
             </Link>
           </button>
-          <button className="sidebar-btn">
+          {/* <button className="sidebar-btn">
             <img
               src="/img/Calendar.png"
               alt="Calendar Icon"
@@ -288,7 +288,7 @@ const Dashboard = () => {
             <Link to="/calendar" className="calendar-link">
               Calendar
             </Link>
-          </button>
+          </button> */}
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>

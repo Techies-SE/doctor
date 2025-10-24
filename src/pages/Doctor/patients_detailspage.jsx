@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "../../styles/style.css";
+import { ChevronLeft } from "lucide-react";
 
-const DetailsPage = () => {
-  const { hn_number, lab_test_id } = useParams();
+const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
   const [patientData, setPatientData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -35,7 +35,8 @@ const DetailsPage = () => {
           }
         );
 
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`HTTP error! Status: ${response.status}`);
 
         const data = await response.json();
         setPatientData(data);
@@ -118,7 +119,10 @@ const DetailsPage = () => {
     const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
@@ -136,7 +140,9 @@ const DetailsPage = () => {
       date: new Date(patientData.lab_test.lab_test_date).toLocaleDateString(),
       details: patientData.lab_test.results.map(
         (result) =>
-          `${result.lab_item_name}: ${result.value}${result.unit ? " " + result.unit : ""} (${result.normal_range || "N/A"}) - ${
+          `${result.lab_item_name}: ${result.value}${
+            result.unit ? " " + result.unit : ""
+          } (${result.normal_range || "N/A"}) - ${
             result.lab_item_status || "N/A"
           }`
       ),
@@ -150,7 +156,9 @@ const DetailsPage = () => {
         date: new Date(test.lab_test_date).toLocaleDateString(),
         details: test.results.map(
           (result) =>
-            `${result.lab_item_name}: ${result.value}${result.unit ? " " + result.unit : ""} (${result.normal_range || "N/A"}) - ${
+            `${result.lab_item_name}: ${result.value}${
+              result.unit ? " " + result.unit : ""
+            } (${result.normal_range || "N/A"}) - ${
               result.lab_item_status || "N/A"
             }`
         ),
@@ -172,8 +180,14 @@ const DetailsPage = () => {
             <FontAwesomeIcon icon={faBell} id="icon" />
           </button>
           <div id="profile">
-            <img src={doctorData?.image || "/img/profile.png"} alt="Profile" id="profile-image" />
-            <span id="profile-name">{doctorData ? `Dr. ${doctorData.name}` : "Loading..."}</span>
+            <img
+              src={doctorData?.image || "/img/profile.png"}
+              alt="Profile"
+              id="profile-image"
+            />
+            <span id="profile-name">
+              {doctorData ? `Dr. ${doctorData.name}` : "Loading..."}
+            </span>
           </div>
         </div>
       </nav>
@@ -182,26 +196,42 @@ const DetailsPage = () => {
       <aside id="sidebar">
         <div className="sidebar-container">
           <button className="sidebar-btn">
-            <img src="/img/ChartLineUp.png" alt="Dashboard Icon" className="sidebar-icon" />
+            <img
+              src="/img/ChartLineUp.png"
+              alt="Dashboard Icon"
+              className="sidebar-icon"
+            />
             <Link to="/dashboard" className="dashboard-link">
               Dashboard
             </Link>
           </button>
           <button className="sidebar-btn active-tab">
-            <img src="/img/UsersThree.png" alt="Patients Icon" className="sidebar-icon" />
-            <Link to="/patients" className="patients-link">
+            <img
+              src="/img/UsersThree.png"
+              alt="Patients Icon"
+              className="sidebar-icon"
+            />
+            <Link to="/patientlists" className="patients-link">
               Patients
             </Link>
           </button>
-          <button className="sidebar-btn">
-            <img src="/img/Calendar.png" alt="Calendar Icon" className="sidebar-icon" />
+          {/* <button className="sidebar-btn">
+            <img
+              src="/img/Calendar.png"
+              alt="Calendar Icon"
+              className="sidebar-icon"
+            />
             <Link to="/calendar" className="calendar-link">
               Calendar
             </Link>
-          </button>
+          </button> */}
         </div>
         <button className="sidebar-btn logout" onClick={logout}>
-          <img src="/img/material-symbols_logout.png" alt="Logout Icon" className="sidebar-icon" />
+          <img
+            src="/img/material-symbols_logout.png"
+            alt="Logout Icon"
+            className="sidebar-icon"
+          />
           <Link to="/" className="logout-link">
             Logout
           </Link>
@@ -210,15 +240,22 @@ const DetailsPage = () => {
 
       {/* Main Content */}
       <div className="main-content-container">
+        <button onClick={onBack} className="back-button" style={{paddingBottom: 10}}>
+          <ChevronLeft size={20} className="mr-1" />
+          Back to Patients
+        </button>
         <div className="patient-info-box">
           <h1>Patient Information</h1>
           <h3>{patientData.name}</h3>
           <p>
-            {displayValue(patientData.patient_data?.gender)}, {calculateAge(patientData.patient_data?.date_of_birth)} years | HN-Number:{" "}
-            {hn_number}
+            {displayValue(patientData.patient_data?.gender)},{" "}
+            {calculateAge(patientData.patient_data?.date_of_birth)} years |
+            HN-Number: {hn_number}
           </p>
           <p>Phone: {displayValue(patientData.phone_no)}</p>
-          <p>Blood Type: {displayValue(patientData.patient_data?.blood_type)}</p>
+          <p>
+            Blood Type: {displayValue(patientData.patient_data?.blood_type)}
+          </p>
           <p>Weight: {displayValue(patientData.patient_data?.weight)} kg</p>
           <p>Height: {displayValue(patientData.patient_data?.height)} cm</p>
           <p>BMI: {displayValue(patientData.patient_data?.bmi)}</p>
@@ -230,7 +267,13 @@ const DetailsPage = () => {
             <h3>Lab Results</h3>
             <div className="lab-result-list">
               {labTests.length > 0 ? (
-                labTests.map((test, index) => <LabCard key={index} title={`${test.title} (${test.date})`} details={test.details} />)
+                labTests.map((test, index) => (
+                  <LabCard
+                    key={index}
+                    title={`${test.title} (${test.date})`}
+                    details={test.details}
+                  />
+                ))
               ) : (
                 <p>No lab results available</p>
               )}
@@ -241,12 +284,19 @@ const DetailsPage = () => {
             <div className="recommendation-compare">
               <h3>AI Generated Recommendation</h3>
               <div className="recommendation-cards">
-                <div className={`recommendation-card ${selected === "rule" ? "selected" : ""}`} onClick={() => handleSelect("rule")}>
+                <div
+                  className={`recommendation-card ${
+                    selected === "rule" ? "selected" : ""
+                  }`}
+                  onClick={() => handleSelect("rule")}
+                >
                   <textarea
                     readOnly
                     value={
-                      patientData.recommendations && patientData.recommendations.length > 0
-                        ? patientData.recommendations[0].generated_recommendation
+                      patientData.recommendations &&
+                      patientData.recommendations.length > 0
+                        ? patientData.recommendations[0]
+                            .generated_recommendation
                         : "No recommendation available"
                     }
                   ></textarea>
@@ -255,7 +305,11 @@ const DetailsPage = () => {
             </div>
 
             <div className="improved-section">
-              <h3>{isApproved ? "Approved Recommendation" : "You can improve the recommendation here"}</h3>
+              <h3>
+                {isApproved
+                  ? "Approved Recommendation"
+                  : "You can improve the recommendation here"}
+              </h3>
               {isApproved && (
                 <div className="status-indicator">
                   ✓ This recommendation has been approved and sent
@@ -266,12 +320,18 @@ const DetailsPage = () => {
                 value={recommendation}
                 onChange={(e) => setRecommendation(e.target.value)}
                 readOnly={isApproved}
-                placeholder={isApproved ? "Approved recommendation" : "Edit AI recommendation if needed"}
+                placeholder={
+                  isApproved
+                    ? "Approved recommendation"
+                    : "Edit AI recommendation if needed"
+                }
               />
-              
+
               <div className="btn-group-always-visible">
                 <button
-                  className={`approve-btn-always ${isApproved ? 'approved' : ''}`}
+                  className={`approve-btn-always ${
+                    isApproved ? "approved" : ""
+                  }`}
                   onClick={handleApprove}
                   disabled={isApproved || isApproving}
                 >
@@ -289,9 +349,7 @@ const DetailsPage = () => {
 const LabCard = ({ title, details }) => {
   return (
     <div className="lab-card">
-      <div className="lab-card-header">
-        {title}
-      </div>
+      <div className="lab-card-header">{title}</div>
       <div className="lab-details">
         {details.map((detail, index) => (
           <p key={index}>{detail}</p>

@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "./styles/patientlist.css";
 import { FiInfo } from "react-icons/fi"; // Import the info icon
+import DetailsPage from "./patients_detailspage";
 
 // Import icons (assuming you're using react-feather or similar)
 // If you don't have these icons, you'll need to import them from your icon library
@@ -115,6 +116,19 @@ const PatientList = () => {
   const [error, setError] = useState(null);
 
   const patientsPerPage = 10;
+
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleViewDetails = (patient) => {
+    setSelectedPatient(patient);
+    setShowDetails(true);
+  };
+
+  const handleBackToList = () => {
+    setShowDetails(false);
+    setSelectedPatient(null);
+  };
 
   // Fetch patients data from the backend
   useEffect(() => {
@@ -248,12 +262,12 @@ const PatientList = () => {
 
     return pages.map((page, index) =>
       page === "..." ? (
-        <span key={index} className="px-2 text-gray-500">
+        <span key={`ellipsis-${index}`} className="px-2 text-gray-500">
           ...
         </span>
       ) : (
         <button
-          key={page}
+          key={`page-${index}`} 
           onClick={() => handlePageChange(page)}
           className={`pButton ${
             currentPage === page
@@ -287,6 +301,15 @@ const PatientList = () => {
   //   //window.location.href = `/patient-details/${patient.id}`;
   //   // window.location.href = `/patient-details/${patient.hn_number}`;
   // };
+  if (showDetails && selectedPatient) {
+    return (
+      <DetailsPage
+        hn_number={selectedPatient.hn_number}
+        lab_test_id={selectedPatient.lab_test_id}
+        onBack={handleBackToList}
+      />
+    );
+  }
 
   return (
     <div id="app">
@@ -335,7 +358,7 @@ const PatientList = () => {
             />
             Patients
           </button>
-          <button className="sidebar-btn">
+          {/* <button className="sidebar-btn">
             <img
               src="/img/Calendar.png"
               alt="Calendar Icon"
@@ -344,7 +367,7 @@ const PatientList = () => {
             <Link to="/calendar" className="calendar-link">
               Calendar
             </Link>
-          </button>
+          </button> */}
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>
@@ -434,7 +457,10 @@ const PatientList = () => {
                     </tr>
                   ) : (
                     currentPatients.map((patient, index) => (
-                      <tr key={patient.id} id="table-row">
+                      <tr
+                        key={`${patient.hn_number}-${patient.lab_test_id}-${index}`}
+                        id="table-row"
+                      >
                         <td id="table-cell">{patient.name}</td>
                         <td id="table-cell">{patient.hn_number}</td>
                         <td id="table-cell">{patient.lab_test_date}</td>
@@ -442,13 +468,18 @@ const PatientList = () => {
                           id="table-cell relative"
                           style={{ width: "15%", textAlign: "center" }}
                         >
-                          <Link
-                            to={`/details/${patient.hn_number}/${patient.lab_test_id}`}
+                          <button
+                            onClick={() => handleViewDetails(patient)}
                             className="action-icon"
-                            onClick={(e) => e.stopPropagation()} // optional to prevent row click
+                            style={{
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: 0,
+                            }}
                           >
                             <FiInfo size={25} />
-                          </Link>
+                          </button>
                         </td>
                       </tr>
                     ))
