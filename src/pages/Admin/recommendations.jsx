@@ -112,7 +112,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../../styles/doctorDashboard.css";
+import "../Doctor/styles/doctorDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,

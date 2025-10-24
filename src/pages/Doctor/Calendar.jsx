@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "../styles/calendar.css";
+import "./styles/calendar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell} from '@fortawesome/free-solid-svg-icons';
 

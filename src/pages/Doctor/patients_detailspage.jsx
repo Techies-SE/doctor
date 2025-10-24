@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { useDoctorProfile } from "../useDoctorProfile";
-import "../styles/style.css";
+import { useDoctorProfile } from "../../useDoctorProfile";
+import "../../styles/style.css";
 
 const DetailsPage = () => {
   const { hn_number, lab_test_id } = useParams();

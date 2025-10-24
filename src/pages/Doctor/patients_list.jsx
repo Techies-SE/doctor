@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { createPortal } from "react-dom";
-import { useDoctorProfile } from "../useDoctorProfile";
-import "../styles/patientlist.css";
+import { useDoctorProfile } from "../../useDoctorProfile";
+import "./styles/patientlist.css";
 import { FiInfo } from "react-icons/fi"; // Import the info icon
 
 // Import icons (assuming you're using react-feather or similar)

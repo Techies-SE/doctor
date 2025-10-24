@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/dashboard.css";
+import "./styles/dashboard.css";
 import Chart from "chart.js/auto";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +10,7 @@ import {
   faSyringe,
   faLungs,
 } from "@fortawesome/free-solid-svg-icons";
-import { useDoctorProfile } from "../useDoctorProfile";
+import { useDoctorProfile } from "../../useDoctorProfile";
 
 const Dashboard = () => {
   const { doctorData } = useDoctorProfile();
