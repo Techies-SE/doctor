@@ -3,14 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { createPortal } from "react-dom";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "./styles/patientlist.css";
 import { FiInfo } from "react-icons/fi"; // Import the info icon
 import DetailsPage from "./patients_detailspage";
 
-// Import icons (assuming you're using react-feather or similar)
-// If you don't have these icons, you'll need to import them from your icon library
 const Search = ({ size, className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -77,26 +74,6 @@ const ChevronDown = ({ size, className }) => (
     className={className}
   >
     <polyline points="6 9 12 15 18 9"></polyline>
-  </svg>
-);
-
-const MoreVertical = ({ size, className, onClick }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    onClick={onClick}
-  >
-    <circle cx="12" cy="12" r="1"></circle>
-    <circle cx="12" cy="5" r="1"></circle>
-    <circle cx="12" cy="19" r="1"></circle>
   </svg>
 );
 
@@ -267,7 +244,7 @@ const PatientList = () => {
         </span>
       ) : (
         <button
-          key={`page-${index}`} 
+          key={`page-${index}`}
           onClick={() => handlePageChange(page)}
           className={`pButton ${
             currentPage === page
@@ -295,12 +272,6 @@ const PatientList = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // const handleViewDetails = (patient) => {
-  //   // Navigate to patient details page
-  //   //window.location.href = `/patient-details/${patient.id}`;
-  //   //window.location.href = `/patient-details/${patient.id}`;
-  //   // window.location.href = `/patient-details/${patient.hn_number}`;
-  // };
   if (showDetails && selectedPatient) {
     return (
       <DetailsPage
@@ -358,16 +329,6 @@ const PatientList = () => {
             />
             Patients
           </button>
-          {/* <button className="sidebar-btn">
-            <img
-              src="/img/Calendar.png"
-              alt="Calendar Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/calendar" className="calendar-link">
-              Calendar
-            </Link>
-          </button> */}
         </div>
 
         <button className="sidebar-btn logout" onClick={logout}>
