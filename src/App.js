@@ -14,6 +14,7 @@ import PatientList from "./pages/Doctor/patients_list";
 import DetailsPage from "./pages/Doctor/patients_detailspage";
 import RedirectIfAuth from "./RedirectIfAuth";
 import PrivateRoute from "./PrivateRoute";
+import DoctorProfile from "./pages/Doctor/doctor_profile"
 
 function App() {
   const isAuthenticated = Boolean(localStorage.getItem("token"));
@@ -40,6 +41,7 @@ function App() {
         <Route path="/schedules" element={<Schedules />} />
         <Route path="/docdetails" element={<DoctorDetails />} />
         <Route path="/patientlists" element={<PatientList />} />
+        <Route path="/profile" element={<DoctorProfile/>} />
         <Route
           path="/details/:hn_number/:lab_test_id"
           element={<DetailsPage />}

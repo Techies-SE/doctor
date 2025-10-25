@@ -5,6 +5,8 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "../../styles/style.css";
 import { ChevronLeft } from "lucide-react";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
   const [patientData, setPatientData] = useState(null);
@@ -114,7 +116,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
     window.location.reload();
   };
 
-  const displayValue = (val, fallback = "N/A") => val ?? fallback;
+  const displayValue = (val, fallback = "-") => val ?? fallback;
 
   const calculateAge = (dateOfBirth) => {
     if (!dateOfBirth) return "N/A";
@@ -133,8 +135,273 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
 
   const isApproved = recommendationStatus === "approved";
 
-  if (loading) return <div>Loading...</div>;
-  if (error || !patientData) return <div>Error: {error || "No data"}</div>;
+  if (loading) {
+    return (
+      <div className="app">
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Sidebar */}
+        <Sidebar activeTab="patients"/>
+
+        {/* Loading Content */}
+        <div className="main-content-container">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "calc(100vh - 200px)",
+              gap: "24px",
+            }}
+          >
+            {/* Spinner */}
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                border: "4px solid #e5e7eb",
+                borderTop: "4px solid #68aaa0",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+              }}
+            ></div>
+
+            {/* Loading Text */}
+            <div
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  color: "#111827",
+                  marginBottom: "8px",
+                }}
+              >
+                Loading Patient Information
+              </h3>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                }}
+              >
+                Please wait while we retrieve the data...
+              </p>
+            </div>
+          </div>
+
+          {/* Add CSS animation */}
+          <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        </div>
+      </div>
+    );
+  }
+  if (error || !patientData) {
+    return (
+      <div className="app">
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Sidebar */}
+        <Sidebar activeTab="patients"/>
+
+        {/* Error Content */}
+        <div className="main-content-container">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "calc(100vh - 200px)",
+              padding: "40px",
+            }}
+          >
+            {/* Error Card */}
+            <div
+              style={{
+                backgroundColor: "white",
+                borderRadius: "12px",
+                border: "1px solid #e5e7eb",
+                padding: "48px",
+                maxWidth: "500px",
+                width: "100%",
+                textAlign: "center",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              {/* Error Icon */}
+              <div
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  backgroundColor: "#fee2e2",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 24px",
+                }}
+              >
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#dc2626"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </div>
+
+              {/* Error Title */}
+              <h2
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "600",
+                  color: "#111827",
+                  marginBottom: "12px",
+                }}
+              >
+                {error ? "Unable to Load Patient Data" : "Patient Not Found"}
+              </h2>
+
+              {/* Error Message */}
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                  marginBottom: "8px",
+                  lineHeight: "1.6",
+                }}
+              >
+                {error
+                  ? `We encountered an error while loading the patient information.`
+                  : "The patient data you're looking for could not be found."}
+              </p>
+
+              {/* Technical Details (collapsible) */}
+              {error && (
+                <details
+                  style={{
+                    marginTop: "16px",
+                    marginBottom: "24px",
+                    textAlign: "left",
+                  }}
+                >
+                  <summary
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      color: "#6b7280",
+                      fontWeight: "500",
+                      padding: "8px",
+                      backgroundColor: "#f9fafb",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    Technical Details
+                  </summary>
+                  <div
+                    style={{
+                      marginTop: "8px",
+                      padding: "12px",
+                      backgroundColor: "#fef2f2",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      color: "#991b1b",
+                      fontFamily: "monospace",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {error}
+                  </div>
+                </details>
+              )}
+
+              {/* Action Buttons */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  marginTop: "24px",
+                }}
+              >
+                <button
+                  onClick={() => window.location.reload()}
+                  style={{
+                    flex: 1,
+                    padding: "12px 24px",
+                    backgroundColor: "#2563eb",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.target.style.backgroundColor = "#1d4ed8")
+                  }
+                  onMouseOut={(e) =>
+                    (e.target.style.backgroundColor = "#2563eb")
+                  }
+                >
+                  Try Again
+                </button>
+                <button
+                  onClick={onBack}
+                  style={{
+                    flex: 1,
+                    padding: "12px 24px",
+                    backgroundColor: "white",
+                    color: "#374151",
+                    border: "1px solid #d1d5db",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.target.style.backgroundColor = "#f9fafb")
+                  }
+                  onMouseOut={(e) => (e.target.style.backgroundColor = "white")}
+                >
+                  Back to Patients
+                </button>
+              </div>
+
+              {/* Help Text */}
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "#9ca3af",
+                  marginTop: "24px",
+                }}
+              >
+                If the problem persists, please contact IT support
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Organize all lab tests
   const allLabTests = [];
@@ -153,90 +420,335 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
   return (
     <div className="app">
       {/* Navbar */}
-      <nav id="navbar">
-        <div id="navbar-left">
-          <div id="logo-circle"></div>
-          <span id="mfu-text">MFU</span>
-          <span id="wellness-text">Wellness Center</span>
-        </div>
-        <div id="navbar-right">
-          <button id="notification-btn">
-            <FontAwesomeIcon icon={faBell} id="icon" />
-          </button>
-          <div id="profile">
-            <img
-              src={doctorData?.image || "/img/profile.png"}
-              alt="Profile"
-              id="profile-image"
-            />
-            <span id="profile-name">
-              {doctorData ? `Dr. ${doctorData.name}` : "Loading..."}
-            </span>
-          </div>
-        </div>
-      </nav>
+      <Navbar /> 
 
       {/* Sidebar */}
-      <aside id="sidebar">
-        <div className="sidebar-container">
-          <button className="sidebar-btn">
-            <img
-              src="/img/ChartLineUp.png"
-              alt="Dashboard Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/dashboard" className="dashboard-link">
-              Dashboard
-            </Link>
-          </button>
-          <button className="sidebar-btn active-tab">
-            <img
-              src="/img/UsersThree.png"
-              alt="Patients Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/patientlists" className="patients-link">
-              Patients
-            </Link>
-          </button>
-        </div>
-        <button className="sidebar-btn logout" onClick={logout}>
-          <img
-            src="/img/material-symbols_logout.png"
-            alt="Logout Icon"
-            className="sidebar-icon"
-          />
-          <Link to="/" className="logout-link">
-            Logout
-          </Link>
-        </button>
-      </aside>
+      <Sidebar activeTab="patients"/>
 
       {/* Main Content */}
       <div className="main-content-container">
-        <button
-          onClick={onBack}
-          className="back-button"
-          style={{ paddingBottom: 10 }}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "20px",
+            fontSize: "14px",
+            color: "#6b7280",
+          }}
         >
-          <ChevronLeft size={20} className="mr-1" />
-          Back to Patients
-        </button>
-        <div className="patient-info-box">
-          <h1>Patient Information</h1>
-          <h3>{patientData.name}</h3>
-          <p>
-            {displayValue(patientData.patient_data?.gender)},{" "}
-            {calculateAge(patientData.patient_data?.date_of_birth)} years |
-            HN-Number: {hn_number}
-          </p>
-          <p>Phone: {displayValue(patientData.phone_no)}</p>
-          <p>
-            Blood Type: {displayValue(patientData.patient_data?.blood_type)}
-          </p>
-          <p>Weight: {displayValue(patientData.patient_data?.weight)} kg</p>
-          <p>Height: {displayValue(patientData.patient_data?.height)} cm</p>
-          <p>BMI: {displayValue(patientData.patient_data?.bmi)}</p>
+          <button
+            onClick={onBack}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "25px 12px",
+              backgroundColor: "transparent",
+              border: "none",
+              borderRadius: "6px",
+              fontSize: "18px",
+              fontWeight: "500",
+              color: "#68aaa0",
+              cursor: "pointer",
+              transition: "all 0.2s",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = "#eff6ff";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+            }}
+          >
+            <ChevronLeft size={16} strokeWidth={2.5} />
+            Patients
+          </button>
+          <span>/</span>
+          <span style={{ color: "#111827", fontWeight: "500", fontSize: "18px"}}>
+            Patient Details
+          </span>
+        </div>
+
+        <div
+          style={{
+            backgroundColor: "white",
+            borderRadius: "12px",
+            border: "1px solid #e5e7eb",
+            padding: "24px",
+            marginBottom: "24px",
+          }}
+        >
+          {/* Header Section */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginBottom: "24px",
+              paddingBottom: "16px",
+              borderBottom: "2px solid #f3f4f6",
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <h2
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "600",
+                  color: "#111827",
+                  marginBottom: "8px",
+                }}
+              >
+                {patientData.name}
+              </h2>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "14px",
+                    color: "#6b7280",
+                    fontWeight: "500",
+                  }}
+                >
+                  HN: {hn_number}
+                </span>
+              </div>
+            </div>
+
+            {/* Blood Type Badge */}
+            <div
+              style={{
+                backgroundColor: "#fee2e2",
+                color: "#991b1b",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                fontWeight: "600",
+              }}
+            >
+              {displayValue(patientData.patient_data?.blood_type)}
+            </div>
+          </div>
+
+          {/* Vital Stats Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+              gap: "16px",
+            }}
+          >
+            {/* Age */}
+            <div
+              style={{
+                padding: "16px",
+                backgroundColor: "#eff6ff",
+                borderRadius: "8px",
+                border: "1px solid #bfdbfe",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#1e40af",
+                  fontWeight: "600",
+                  marginBottom: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Age
+              </div>
+              <div
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "700",
+                  color: "#1e3a8a",
+                  lineHeight: "1",
+                }}
+              >
+                {calculateAge(patientData.patient_data?.date_of_birth)}
+                <span
+                  style={{
+                    fontSize: "16px",
+                    color: "#3b82f6",
+                    fontWeight: "500",
+                    marginLeft: "4px",
+                  }}
+                >
+                  years
+                </span>
+              </div>
+            </div>
+
+            {/* Gender */}
+            <div
+              style={{
+                padding: "16px",
+                backgroundColor: "#f3e8ff",
+                borderRadius: "8px",
+                border: "1px solid #d8b4fe",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#6b21a8",
+                  fontWeight: "600",
+                  marginBottom: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Gender
+              </div>
+              <div
+                style={{
+                  fontSize: "18px",
+                  fontWeight: "600",
+                  color: "#581c87",
+                  textTransform: "capitalize",
+                }}
+              >
+                {displayValue(patientData.patient_data?.gender)}
+              </div>
+            </div>
+
+            {/* Weight */}
+            <div
+              style={{
+                padding: "16px",
+                backgroundColor: "#f9fafb",
+                borderRadius: "8px",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#6b7280",
+                  fontWeight: "500",
+                  marginBottom: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Weight
+              </div>
+              <div
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  color: "#111827",
+                }}
+              >
+                {displayValue(patientData.patient_data?.weight)}{" "}
+                <span style={{ fontSize: "14px", color: "#6b7280" }}>kg</span>
+              </div>
+            </div>
+
+            {/* Height */}
+            <div
+              style={{
+                padding: "16px",
+                backgroundColor: "#f9fafb",
+                borderRadius: "8px",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#6b7280",
+                  fontWeight: "500",
+                  marginBottom: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Height
+              </div>
+              <div
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  color: "#111827",
+                }}
+              >
+                {displayValue(patientData.patient_data?.height)}{" "}
+                <span style={{ fontSize: "14px", color: "#6b7280" }}>cm</span>
+              </div>
+            </div>
+
+            {/* BMI with color coding */}
+            <div
+              style={{
+                padding: "16px",
+                backgroundColor: (() => {
+                  const bmi = patientData.patient_data?.bmi;
+                  if (!bmi) return "#f9fafb";
+                  if (bmi < 18.5) return "#fef3c7";
+                  if (bmi >= 18.5 && bmi < 25) return "#d1fae5";
+                  if (bmi >= 25 && bmi < 30) return "#fed7aa";
+                  return "#fecaca";
+                })(),
+                borderRadius: "8px",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#6b7280",
+                  fontWeight: "500",
+                  marginBottom: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                BMI
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "2px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    color: "#111827",
+                  }}
+                >
+                  {displayValue(patientData.patient_data?.bmi)}
+                </div>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "#6b7280",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  {(() => {
+                    const bmi = patientData.patient_data?.bmi;
+                    if (!bmi) return "";
+                    if (bmi < 18.5) return "Underweight";
+                    if (bmi >= 18.5 && bmi < 25) return "Normal";
+                    if (bmi >= 25 && bmi < 30) return "Overweight";
+                    return "Obese";
+                  })()}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Content Sections */}

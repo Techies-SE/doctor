@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "./styles/patientlist.css";
-import { FiInfo } from "react-icons/fi"; // Import the info icon
+import { FiInfo } from "react-icons/fi";
 import DetailsPage from "./patients_detailspage";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 const Search = ({ size, className }) => (
   <svg
@@ -108,14 +107,72 @@ const PatientList = () => {
   };
 
   // Fetch patients data from the backend
+  // useEffect(() => {
+  //   const fetchPatients = async () => {
+  //     const token = localStorage.getItem("authToken");
+  //     if (!token) throw new Error("No authentication token found");
+
+  //     try {
+  //       setPatients([]);
+  //       setLoading(true);
+  //       const response = await fetch(
+  //         `https://backend-pg-cm2b.onrender.com/doctors/patients-lab-tests`,
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+
+  //       const result = await response.json();
+  //       console.log("API Response:", result);
+
+  //       if (result.success) {
+  //         const formattedPatients = result.data.map((patient) => {
+  //           // Add safety checks for each field
+  //           const testDate = patient.test_date; // Note: API returns 'test_date', not 'lab_test_date'
+
+  //           return {
+  //             id: patient.lab_test_id || 0, // Use lab_test_id as primary key
+  //             patient_id: patient.patient_id || 0, // Keep original patient_id if needed elsewhere
+  //             lab_test_id: patient.lab_test_id || 0,
+  //             name: patient.patient_name || "Unknown Patient",
+  //             hn_number: patient.hn_number || "N/A",
+  //             lab_test: patient.lab_test_name || "N/A", // This field seems missing from API
+  //             lab_test_date: testDate ? testDate.split("T")[0] : "N/A", // Use test_date instead
+  //           };
+  //         });
+
+  //         console.log("Formatted patients:", formattedPatients);
+  //         setPatients(formattedPatients);
+  //       } else {
+  //         throw new Error(result.message || "Failed to fetch patients");
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching patients:", err);
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchPatients();
+  // }, [doctorData?.id]);
   useEffect(() => {
     const fetchPatients = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("No authentication token found");
 
       try {
-        setPatients([]);
         setLoading(true);
+        setError(null); // Clear any previous errors
+        // DON'T clear patients here - keep showing old data while loading
+
         const response = await fetch(
           `https://backend-pg-cm2b.onrender.com/doctors/patients-lab-tests`,
           {
@@ -135,35 +192,35 @@ const PatientList = () => {
 
         if (result.success) {
           const formattedPatients = result.data.map((patient) => {
-            // Add safety checks for each field
-            const testDate = patient.test_date; // Note: API returns 'test_date', not 'lab_test_date'
+            const testDate = patient.test_date;
 
             return {
-              id: patient.lab_test_id || 0, // Use lab_test_id as primary key
-              patient_id: patient.patient_id || 0, // Keep original patient_id if needed elsewhere
+              id: patient.lab_test_id || 0,
+              patient_id: patient.patient_id || 0,
               lab_test_id: patient.lab_test_id || 0,
               name: patient.patient_name || "Unknown Patient",
               hn_number: patient.hn_number || "N/A",
-              lab_test: patient.lab_test_name || "N/A", // This field seems missing from API
-              lab_test_date: testDate ? testDate.split("T")[0] : "N/A", // Use test_date instead
+              lab_test: patient.lab_test_name || "N/A",
+              lab_test_date: testDate ? testDate.split("T")[0] : "N/A",
             };
           });
 
           console.log("Formatted patients:", formattedPatients);
-          setPatients(formattedPatients);
+          setPatients(formattedPatients); // Only set patients when data arrives
         } else {
           throw new Error(result.message || "Failed to fetch patients");
         }
       } catch (err) {
         console.error("Error fetching patients:", err);
         setError(err.message);
+        setPatients([]); // Only clear on error
       } finally {
         setLoading(false);
       }
     };
 
     fetchPatients();
-  }, [doctorData?.id]);
+  }, []); // Empty dependency - only fetch once on mount
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem("authToken");
@@ -285,63 +342,10 @@ const PatientList = () => {
   return (
     <div id="app">
       {/* Navbar */}
-      <nav id="navbar">
-        <div id="navbar-left">
-          <div id="logo-circle"></div>
-          <span id="mfu-text">MFU </span>
-          <span id="wellness-text">Wellness Center</span>
-        </div>
-        <div id="navbar-right">
-          <button id="notification-btn">
-            <FontAwesomeIcon icon={faBell} id="icon" />
-          </button>
-          <div id="profile">
-            <img
-              src={doctorData?.image || "/img/profile.png"}
-              alt="Profile"
-              id="profile-image"
-            />
-            <span id="profile-name">
-              {doctorData ? `${doctorData.name}` : "Loading..."}
-            </span>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Sidebar */}
-      <aside id="sidebar">
-        <div className="sidebar-container">
-          <button className="sidebar-btn">
-            <img
-              src="/img/ChartLineUp.png"
-              alt="Dashboard Icon"
-              className="sidebar-icon"
-            />
-            <Link to="/dashboard" className="dashboard-link">
-              Dashboard
-            </Link>
-          </button>
-          <button className="sidebar-btn active-tab">
-            <img
-              src="/img/UsersThree.png"
-              alt="Patients Icon"
-              className="sidebar-icon"
-            />
-            Patients
-          </button>
-        </div>
-
-        <button className="sidebar-btn logout" onClick={logout}>
-          <img
-            src="/img/material-symbols_logout.png"
-            alt="Logout Icon"
-            className="sidebar-icon"
-          />
-          <Link to="/" className="logout-link">
-            Logout
-          </Link>
-        </button>
-      </aside>
+      <Sidebar activeTab="patients" />
 
       {/* Main Content */}
       <div id="main-content-patient">
@@ -368,7 +372,54 @@ const PatientList = () => {
 
           <div id="table-wrapper">
             {loading ? (
-              <div id="loading-message">Loading patient data...</div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "400px",
+                  gap: "24px",
+                }}
+              >
+                {/* Spinner */}
+                <div
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    border: "4px solid #e5e7eb",
+                    borderTop: "4px solid #68aaa0",
+                    borderRadius: "50%",
+                    animation: "spin 1s linear infinite",
+                  }}
+                ></div>
+
+                {/* Loading Text */}
+                <div
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "600",
+                      color: "#111827",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Loading Patient Data
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "14px",
+                      color: "#6b7280",
+                    }}
+                  >
+                    Please wait while we retrieve the information...
+                  </p>
+                </div>
+              </div>
             ) : error ? (
               <div id="error-message">Error loading patients: {error}</div>
             ) : (
@@ -448,6 +499,14 @@ const PatientList = () => {
                 </tbody>
               </table>
             )}
+
+            {/* Add CSS animation */}
+            <style>{`
+                    @keyframes spin {
+                      0% { transform: rotate(0deg); }
+                      100% { transform: rotate(360deg); }
+                      }
+                    `}</style>
           </div>
 
           {!loading && !error && filteredPatients.length > 0 && (
