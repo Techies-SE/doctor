@@ -142,7 +142,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
         <Navbar />
 
         {/* Sidebar */}
-        <Sidebar activeTab="patients"/>
+        <Sidebar activeTab="patients" />
 
         {/* Loading Content */}
         <div className="main-content-container">
@@ -213,7 +213,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
         <Navbar />
 
         {/* Sidebar */}
-        <Sidebar activeTab="patients"/>
+        <Sidebar activeTab="patients" />
 
         {/* Error Content */}
         <div className="main-content-container">
@@ -420,10 +420,10 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
   return (
     <div className="app">
       {/* Navbar */}
-      <Navbar /> 
+      <Navbar />
 
       {/* Sidebar */}
-      <Sidebar activeTab="patients"/>
+      <Sidebar activeTab="patients" />
 
       {/* Main Content */}
       <div className="main-content-container">
@@ -464,7 +464,9 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
             Patients
           </button>
           <span>/</span>
-          <span style={{ color: "#111827", fontWeight: "500", fontSize: "18px"}}>
+          <span
+            style={{ color: "#111827", fontWeight: "500", fontSize: "18px" }}
+          >
             Patient Details
           </span>
         </div>
@@ -833,25 +835,38 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                 </span>
               </div>
 
-              {activeResults.map((result, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    paddingTop: "12px",
-                    paddingBottom: "12px",
-                    borderBottom: "1px solid #f3f4f6",
-                  }}
-                >
-                  <span style={{ color: "#374151" }}>
-                    {result.lab_item_name}
-                  </span>
-                  <span style={{ color: "#111827", fontWeight: "500" }}>
-                    {result.value} {result.unit}
-                  </span>
-                </div>
-              ))}
+              {activeResults.map((result, index) => {
+                // ✅ Handle gender display logic
+                let displayValue = result.value;
+                if (result.lab_item_name === "Gender") {
+                  displayValue =
+                    result.value === 0
+                      ? "Male"
+                      : result.value === 1
+                      ? "Female"
+                      : "-";
+                }
+
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                      borderBottom: "1px solid #f3f4f6",
+                    }}
+                  >
+                    <span style={{ color: "#374151" }}>
+                      {result.lab_item_name}
+                    </span>
+                    <span style={{ color: "#111827", fontWeight: "500" }}>
+                      {displayValue} {result.unit}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
