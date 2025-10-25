@@ -107,62 +107,6 @@ const PatientList = () => {
   };
 
   // Fetch patients data from the backend
-  // useEffect(() => {
-  //   const fetchPatients = async () => {
-  //     const token = localStorage.getItem("authToken");
-  //     if (!token) throw new Error("No authentication token found");
-
-  //     try {
-  //       setPatients([]);
-  //       setLoading(true);
-  //       const response = await fetch(
-  //         `https://backend-pg-cm2b.onrender.com/doctors/patients-lab-tests`,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-
-  //       const result = await response.json();
-  //       console.log("API Response:", result);
-
-  //       if (result.success) {
-  //         const formattedPatients = result.data.map((patient) => {
-  //           // Add safety checks for each field
-  //           const testDate = patient.test_date; // Note: API returns 'test_date', not 'lab_test_date'
-
-  //           return {
-  //             id: patient.lab_test_id || 0, // Use lab_test_id as primary key
-  //             patient_id: patient.patient_id || 0, // Keep original patient_id if needed elsewhere
-  //             lab_test_id: patient.lab_test_id || 0,
-  //             name: patient.patient_name || "Unknown Patient",
-  //             hn_number: patient.hn_number || "N/A",
-  //             lab_test: patient.lab_test_name || "N/A", // This field seems missing from API
-  //             lab_test_date: testDate ? testDate.split("T")[0] : "N/A", // Use test_date instead
-  //           };
-  //         });
-
-  //         console.log("Formatted patients:", formattedPatients);
-  //         setPatients(formattedPatients);
-  //       } else {
-  //         throw new Error(result.message || "Failed to fetch patients");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching patients:", err);
-  //       setError(err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchPatients();
-  // }, [doctorData?.id]);
   useEffect(() => {
     const fetchPatients = async () => {
       const token = localStorage.getItem("authToken");

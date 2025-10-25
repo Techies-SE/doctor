@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { useDoctorProfile } from "../Doctor/hooks/useDoctorProfile";
 
 const DoctorProfile = () => {
-  const { doctorData } = useDoctorProfile();
+  const { doctorData, loading, error } = useDoctorProfile();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -174,6 +174,254 @@ const DoctorProfile = () => {
   const isScheduled = (day, time) => {
     return schedule[day]?.includes(time);
   };
+
+  if (loading) {
+    return (
+      <div className="app">
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Sidebar */}
+        <Sidebar activeTab="profile"/>
+
+        {/* Loading Content */}
+        <div className="main-content-container">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "calc(100vh - 200px)",
+              gap: "24px",
+            }}
+          >
+            {/* Spinner */}
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                border: "4px solid #e5e7eb",
+                borderTop: "4px solid #68aaa0",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+              }}
+            ></div>
+
+            {/* Loading Text */}
+            <div
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  color: "#111827",
+                  marginBottom: "8px",
+                }}
+              >
+                Loading Information
+              </h3>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                }}
+              >
+                Please wait while we retrieve the data...
+              </p>
+            </div>
+          </div>
+
+          {/* Add CSS animation */}
+          <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        </div>
+      </div>
+    );
+  }
+  if (error || !doctorData) {
+    return (
+      <div className="app">
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Sidebar */}
+        <Sidebar activeTab="profile"/>
+
+        {/* Error Content */}
+        <div className="main-content-container">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "calc(100vh - 200px)",
+              padding: "40px",
+            }}
+          >
+            {/* Error Card */}
+            <div
+              style={{
+                backgroundColor: "white",
+                borderRadius: "12px",
+                border: "1px solid #e5e7eb",
+                padding: "48px",
+                maxWidth: "500px",
+                width: "100%",
+                textAlign: "center",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              {/* Error Icon */}
+              <div
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  backgroundColor: "#fee2e2",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 24px",
+                }}
+              >
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#dc2626"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </div>
+
+              {/* Error Title */}
+              <h2
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "600",
+                  color: "#111827",
+                  marginBottom: "12px",
+                }}
+              >
+                {error ? "Unable to Load Data" : "Doctor Not Found"}
+              </h2>
+
+              {/* Error Message */}
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                  marginBottom: "8px",
+                  lineHeight: "1.6",
+                }}
+              >
+                {error
+                  ? `We encountered an error while loading your information.`
+                  : "The data you're looking for could not be found."}
+              </p>
+
+              {/* Technical Details (collapsible) */}
+              {error && (
+                <details
+                  style={{
+                    marginTop: "16px",
+                    marginBottom: "24px",
+                    textAlign: "left",
+                  }}
+                >
+                  <summary
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      color: "#6b7280",
+                      fontWeight: "500",
+                      padding: "8px",
+                      backgroundColor: "#f9fafb",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    Technical Details
+                  </summary>
+                  <div
+                    style={{
+                      marginTop: "8px",
+                      padding: "12px",
+                      backgroundColor: "#fef2f2",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      color: "#991b1b",
+                      fontFamily: "monospace",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {error}
+                  </div>
+                </details>
+              )}
+
+              {/* Action Buttons */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  marginTop: "24px",
+                }}
+              >
+                <button
+                  onClick={() => window.location.reload()}
+                  style={{
+                    flex: 1,
+                    padding: "12px 24px",
+                    backgroundColor: "#2563eb",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    transition: "background-color 0.2s",
+                  }}
+                  onMouseOver={(e) =>
+                    (e.target.style.backgroundColor = "#1d4ed8")
+                  }
+                  onMouseOut={(e) =>
+                    (e.target.style.backgroundColor = "#2563eb")
+                  }
+                >
+                  Try Again
+                </button>
+              </div>
+
+              {/* Help Text */}
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "#9ca3af",
+                  marginTop: "24px",
+                }}
+              >
+                If the problem persists, please contact IT support
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div>
