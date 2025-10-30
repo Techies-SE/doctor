@@ -1,35 +1,17 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import "../../styles/doctorDashboard.css";
-// import "../Admin/styles/appointments.css";
 import "../Admin/styles/doctors.css";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
-  Filter,
-  ChevronUp,
-  ChevronDown,
-  Eye,
-  Trash2,
-  X,
-  Upload,
-  User,
-  Mail,
-  Phone,
-  Award,
-  PlusIcon,
-  PenBox,
+  Filter
 } from "lucide-react";
 import {
   faBell,
   faUser,
   faCalendarAlt,
-  faFileMedical,
   faUserMd,
   faHospital,
-  faCalendarDay,
-  faSearch,
-  faFilter,
   faChevronUp,
   faChevronDown,
   faTrashAlt,
@@ -60,6 +42,8 @@ const Doctors = () => {
     direction: "ascending",
   });
   const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // State for doctor details view
   const [viewingDetails, setViewingDetails] = useState(false);
@@ -70,6 +54,8 @@ const Doctors = () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       console.error("No auth token found");
+      setError("No authentication token found");
+      setLoading(false);
       return;
     }
 
@@ -78,27 +64,29 @@ const Doctors = () => {
       "Content-Type": "application/json",
     };
 
-    fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", {
-      headers,
-    })
-      .then((response) => {
+    Promise.all([
+      fetch("https://backend-pg-cm2b.onrender.com/doctors-with-departments", {
+        headers,
+      }).then((response) => {
         if (!response.ok) throw new Error("Failed to fetch doctors");
         return response.json();
+      }),
+      fetch("https://backend-pg-cm2b.onrender.com/departments", { headers })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to fetch departments");
+          return response.json();
+        })
+    ])
+      .then(([doctorsData, departmentsData]) => {
+        setDoctors(doctorsData);
+        setDepartments(departmentsData);
+        setLoading(false);
       })
-      .then((data) => {
-        setDoctors(data);
-      })
-      .catch((error) => console.error("Error fetching doctors data:", error));
-
-    fetch("https://backend-pg-cm2b.onrender.com/departments", { headers })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to fetch departments");
-        return response.json();
-      })
-      .then((data) => {
-        setDepartments(data);
-      })
-      .catch((error) => console.error("Error fetching departments:", error));
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setError(error.message);
+        setLoading(false);
+      });
   }, []);
 
   // Handle input changes for new doctor form
@@ -296,6 +284,233 @@ const Doctors = () => {
     return (
       <div className="doctor-details-container">
         <DoctorDetails doctorId={selectedDoctorId} onBack={handleBackToList} />
+      </div>
+    );
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <div>
+        {/* Navbar */}
+        <nav id="navbar">
+          <div id="navbar-left">
+            <div id="logo-circle"></div>
+            <span id="mfu-text">MFU </span>
+            <span id="wellness-text">Wellness Center</span>
+          </div>
+          <div id="navbar-right">
+            <button id="notification-btn">
+              <FontAwesomeIcon icon={faBell} id="icon" />
+            </button>
+            <div id="profile">
+              <img src="/img/profile.png" alt="Profile" id="profile-image" />
+              <span id="profile-name">Admin</span>
+            </div>
+          </div>
+        </nav>
+
+        {/* Sidebar */}
+        <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
+
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
+          </div>
+
+          <button className="sidebar-btn logout" onClick={logout}>
+            <img
+              src="/img/material-symbols_logout.png"
+              alt="Logout Icon"
+              id="sidebar-icon"
+            />
+            <span className="login-link">Logout</span>
+          </button>
+        </aside>
+
+        {/* Loading Content */}
+        <div id="main-content">
+          <div className="content-area">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "calc(100vh - 200px)",
+                gap: "24px",
+              }}
+            >
+              {/* Spinner */}
+              <div
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  border: "4px solid #e5e7eb",
+                  borderTop: "4px solid #68aaa0",
+                  borderRadius: "50%",
+                  animation: "spin 1s linear infinite",
+                }}
+              ></div>
+
+              {/* Loading Text */}
+              <div
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    color: "#111827",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Loading Doctors
+                </h3>
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: "#6b7280",
+                  }}
+                >
+                  Please wait while we retrieve the data...
+                </p>
+              </div>
+            </div>
+
+            {/* Add CSS animation */}
+            <style>{`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}</style>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div>
+        {/* Navbar */}
+        <nav id="navbar">
+          <div id="navbar-left">
+            <div id="logo-circle"></div>
+            <span id="mfu-text">MFU </span>
+            <span id="wellness-text">Wellness Center</span>
+          </div>
+          <div id="navbar-right">
+            <button id="notification-btn">
+              <FontAwesomeIcon icon={faBell} id="icon" />
+            </button>
+            <div id="profile">
+              <img src="/img/profile.png" alt="Profile" id="profile-image" />
+              <span id="profile-name">Admin</span>
+            </div>
+          </div>
+        </nav>
+
+        {/* Sidebar */}
+        <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
+
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
+          </div>
+
+          <button className="sidebar-btn logout" onClick={logout}>
+            <img
+              src="/img/material-symbols_logout.png"
+              alt="Logout Icon"
+              id="sidebar-icon"
+            />
+            <span className="login-link">Logout</span>
+          </button>
+        </aside>
+
+        {/* Error Content */}
+        <div id="main-content">
+          <div className="content-area">
+            <div className="w-full h-screen p-8 bg-white text-red-500">
+              Error: {error}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

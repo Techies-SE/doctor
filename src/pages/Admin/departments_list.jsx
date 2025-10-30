@@ -8,29 +8,21 @@ import {
   faBell,
   faUser,
   faCalendarAlt,
-  faFileMedical,
   faUserMd,
-  faHospital,
-  faCalendarDay,
+  faHospital
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Search,
   Filter,
   ChevronUp,
   ChevronDown,
-  Eye,
   Trash2,
   X,
   Upload,
-  User,
-  Mail,
-  Phone,
-  Award,
   PlusIcon,
   PenBox,
 } from "lucide-react";
 import DepartmentDetails from "./department_details";
-import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 
 const Departments = () => {
   const navigate = useNavigate();
@@ -50,6 +42,7 @@ const Departments = () => {
     direction: "ascending",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
   // New states for navigation
   const [viewingDetails, setViewingDetails] = useState(false);
@@ -177,13 +170,16 @@ const Departments = () => {
       })
       .catch((error) =>
         console.error("Error fetching departments data:", error)
-      );
+      )
+      .finally(() => {
+        setPageLoading(false);
+      });
   };
 
   useEffect(() => {
     // Fetch departments with doctor counts
     fetchDepartments();
-  }, []);
+  });
 
   const logout = (e) => {
     e.preventDefault();
@@ -408,6 +404,144 @@ const Departments = () => {
           departmentId={selectedDepartmentId}
           onBack={handleBackToList}
         />
+      </div>
+    );
+  }
+
+  // Show loading state
+  if (pageLoading) {
+    return (
+      <div>
+        {/* Navbar */}
+        <nav id="navbar">
+          <div id="navbar-left">
+            <div id="logo-circle"></div>
+            <span id="mfu-text">MFU </span>
+            <span id="wellness-text">Wellness Center</span>
+          </div>
+          <div id="navbar-right">
+            <button id="notification-btn">
+              <FontAwesomeIcon icon={faBell} id="icon" />
+            </button>
+            <div id="profile">
+              <img src="/img/profile.png" alt="Profile" id="profile-image" />
+              <span id="profile-name">Admin</span>
+            </div>
+          </div>
+        </nav>
+
+        {/* Sidebar */}
+        <aside id="sidebar">
+          <div className="sidebar-container">
+            <button className="sidebar-btn">
+              <img
+                src="/img/ChartLineUp.png"
+                alt="Dashboard Icon"
+                id="sidebar-icon"
+              />
+              <Link to="/admindashboard" className="sidebar-link">
+                Dashboard
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUser} id="sidebar-icon" />
+              <Link to="/patient" className="sidebar-link">
+                Patients
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faCalendarAlt} id="sidebar-icon" />
+              <Link to="/appointments" className="sidebar-link">
+                Appointments
+              </Link>
+            </button>
+
+            <button className="sidebar-btn">
+              <FontAwesomeIcon icon={faUserMd} id="sidebar-icon" />
+              <Link to="/doctors" className="sidebar-link">
+                Doctors
+              </Link>
+            </button>
+
+            <button className="sidebar-btn active-tab">
+              <FontAwesomeIcon icon={faHospital} id="sidebar-icon" />
+              <Link to="/departments" className="sidebar-link">
+                Departments
+              </Link>
+            </button>
+          </div>
+
+          <button className="sidebar-btn logout" onClick={logout}>
+            <img
+              src="/img/material-symbols_logout.png"
+              alt="Logout Icon"
+              id="sidebar-icon"
+            />
+            <span className="login-link">Logout</span>
+          </button>
+        </aside>
+
+        {/* Loading Content */}
+        <div id="main-content-appointment">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "calc(100vh - 200px)",
+              gap: "24px",
+            }}
+          >
+            {/* Spinner */}
+            <div
+              style={{
+                width: "60px",
+                height: "60px",
+                border: "4px solid #e5e7eb",
+                borderTop: "4px solid #68aaa0",
+                borderRadius: "50%",
+                animation: "spin 1s linear infinite",
+              }}
+            ></div>
+
+            {/* Loading Text */}
+            <div
+              style={{
+                textAlign: "center",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  color: "#111827",
+                  marginBottom: "8px",
+                }}
+              >
+                Loading Departments
+              </h3>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#6b7280",
+                }}
+              >
+                Please wait while we retrieve the data...
+              </p>
+            </div>
+          </div>
+
+          {/* Add CSS animation */}
+          <style>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
       </div>
     );
   }

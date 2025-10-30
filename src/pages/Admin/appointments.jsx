@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "../Admin/styles/appointments.css";
 import {
-  ChevronLeft,
-  ChevronRight,
   Check,
   X,
   Calendar,
-  CalendarIcon,
   Search,
   Filter,
   ChevronUp,
@@ -19,7 +16,6 @@ import {
   faBell,
   faUser,
   faCalendarAlt,
-  faFileMedical,
   faUserMd,
   faHospital,
   faCalendarDay,
@@ -229,10 +225,7 @@ const Appointments = () => {
           "https://backend-pg-cm2b.onrender.com/appointments/pending",
           {
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
+            headers: headers,
           }
         );
         if (!response.ok) {
@@ -712,7 +705,62 @@ const Appointments = () => {
         </aside>
         <div id="main-content">
           <div className="content-area">
-            <div className="w-full h-screen p-8 bg-white">Loading...</div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "calc(100vh - 200px)",
+                gap: "24px",
+              }}
+            >
+              {/* Spinner */}
+              <div
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  border: "4px solid #e5e7eb",
+                  borderTop: "4px solid #68aaa0",
+                  borderRadius: "50%",
+                  animation: "spin 1s linear infinite",
+                }}
+              ></div>
+
+              {/* Loading Text */}
+              <div
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <h3
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    color: "#111827",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Loading Appointments
+                </h3>
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: "#6b7280",
+                  }}
+                >
+                  Please wait while we retrieve the data...
+                </p>
+              </div>
+            </div>
+
+            {/* Add CSS animation */}
+            <style>{`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}</style>
           </div>
         </div>
       </div>
@@ -1125,8 +1173,10 @@ const Appointments = () => {
                 onClick={handleCloseRescheduleModal}
                 style={{ paddingTop: "100px" }}
               >
-                <div className="modal-container"
-                onClick={(e) => e.stopPropagation()}>
+                <div
+                  className="modal-container"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   {/* Modal Header */}
                   <div className="modal-header">
                     <h2 className="modal-title">Reschedule Appointment</h2>
