@@ -9,7 +9,7 @@ import {
   faUser,
   faCalendarAlt,
   faUserMd,
-  faHospital
+  faHospital,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Search,
@@ -714,25 +714,29 @@ const Departments = () => {
                       <td className="p-4 text-start text-[#595959]">
                         {department.doctor_count}
                       </td>
-                      <td className="p-4 flex items-center space-x-5">
-                        <PenBox
-                          size={20}
-                          className="cursor-pointer text-[#3BA092] hover:text-[#2A7E6C]"
-                          onClick={() => handleViewDetails(department)}
-                          title="View Details"
-                        />
-                        <PlusIcon
-                          size={20}
-                          className="cursor-pointer text-blue-800 hover:text-blue-900"
-                          onClick={() => handleOpenDoctorModal(department)}
-                          title="Add Doctor to Department"
-                        />
-                        <Trash2
-                          size={20}
-                          className="cursor-pointer text-red-500 hover:text-red-700"
-                          onClick={() => handleDeleteDepartment(department.id)}
-                          title="Delete Department"
-                        />
+                      <td className="p-4">
+                        <div className="flex items-center space-x-5">
+                          <PenBox
+                            size={20}
+                            className="cursor-pointer text-[#3BA092] hover:text-[#2A7E6C]"
+                            onClick={() => handleViewDetails(department)}
+                            title="View Details"
+                          />
+                          <PlusIcon
+                            size={20}
+                            className="cursor-pointer text-blue-800 hover:text-blue-900"
+                            onClick={() => handleOpenDoctorModal(department)}
+                            title="Add Doctor to Department"
+                          />
+                          <Trash2
+                            size={20}
+                            className="cursor-pointer text-red-500 hover:text-red-700"
+                            onClick={() =>
+                              handleDeleteDepartment(department.id)
+                            }
+                            title="Delete Department"
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))

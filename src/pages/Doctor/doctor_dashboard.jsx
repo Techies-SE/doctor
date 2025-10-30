@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [recentActivity, setRecentActivity] = useState([]);
-  
+
   // State for showing details page
   const [showDetails, setShowDetails] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
@@ -368,9 +368,7 @@ const Dashboard = () => {
                   <tr key={`${patient.lab_test_id}-${index}`}>
                     <td>{patient.patient_name}</td>
                     <td>{patient.hn_number}</td>
-                    <td>
-                      {new Date(patient.test_date).toLocaleDateString()}
-                    </td>
+                    <td>{new Date(patient.test_date).toLocaleDateString()}</td>
                     <td>
                       <button
                         onClick={() => handleViewDetails(patient)}
@@ -379,9 +377,10 @@ const Dashboard = () => {
                           background: "none",
                           border: "none",
                           cursor: "pointer",
-                          color: "inherit",
+                          color: "#3BA092",
+                          textDecoration: "underline",
+                          fontSize: "14px",
                           padding: 0,
-                          font: "inherit",
                         }}
                       >
                         View Details

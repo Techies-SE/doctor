@@ -343,7 +343,7 @@
     background-color: #3BA092;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px; /* Ensure text size is consistent */
     align-items: center; /* Align icon and text in the center */

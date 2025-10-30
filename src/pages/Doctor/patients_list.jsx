@@ -426,15 +426,17 @@ const PatientList = () => {
                         >
                           <button
                             onClick={() => handleViewDetails(patient)}
-                            className="action-icon"
                             style={{
                               background: "none",
                               border: "none",
                               cursor: "pointer",
+                              color: "#3BA092", 
+                              textDecoration: "underline",
+                              fontSize: "14px",
                               padding: 0,
                             }}
                           >
-                            <FiInfo size={25} />
+                            View Details
                           </button>
                         </td>
                       </tr>
