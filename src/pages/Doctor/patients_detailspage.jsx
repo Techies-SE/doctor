@@ -345,7 +345,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                   style={{
                     flex: 1,
                     padding: "12px 24px",
-                    backgroundColor: "#2563eb",
+                    backgroundColor: "#3BA092",
                     color: "white",
                     border: "none",
                     borderRadius: "8px",
@@ -355,10 +355,10 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                     transition: "background-color 0.2s",
                   }}
                   onMouseOver={(e) =>
-                    (e.target.style.backgroundColor = "#1d4ed8")
+                    (e.target.style.backgroundColor = "#23635aff")
                   }
                   onMouseOut={(e) =>
-                    (e.target.style.backgroundColor = "#2563eb")
+                    (e.target.style.backgroundColor = "#3BA092")
                   }
                 >
                   Try Again
@@ -991,7 +991,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                         padding: "10px 16px",
                         border: "none",
                         borderRadius: "8px",
-                        backgroundColor: "#2563eb",
+                        backgroundColor: "#3BA092",
                         color: "white",
                         cursor: isApproving ? "not-allowed" : "pointer",
                         fontSize: "14px",
@@ -1000,11 +1000,11 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                       }}
                       onMouseOver={(e) =>
                         !isApproving &&
-                        (e.target.style.backgroundColor = "#1d4ed8")
+                        (e.target.style.backgroundColor = "#3BA092")
                       }
                       onMouseOut={(e) =>
                         !isApproving &&
-                        (e.target.style.backgroundColor = "#2563eb")
+                        (e.target.style.backgroundColor = "#3BA092")
                       }
                     >
                       {isApproving ? "Approving..." : "Approve & Send"}
@@ -1047,7 +1047,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                         padding: "10px 16px",
                         border: "none",
                         borderRadius: "8px",
-                        backgroundColor: isApproved ? "#d1fae5" : "#2563eb",
+                        backgroundColor: isApproved ? "#d1fae5" : "#3BA092",
                         color: isApproved ? "#065f46" : "white",
                         cursor:
                           isApproved || isApproving ? "not-allowed" : "pointer",
@@ -1058,12 +1058,12 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                       onMouseOver={(e) =>
                         !isApproved &&
                         !isApproving &&
-                        (e.target.style.backgroundColor = "#1d4ed8")
+                        (e.target.style.backgroundColor = "#54bcaeff")
                       }
                       onMouseOut={(e) =>
                         !isApproved &&
                         !isApproving &&
-                        (e.target.style.backgroundColor = "#2563eb")
+                        (e.target.style.backgroundColor = "#3BA092")
                       }
                     >
                       {isApproved
