@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate} from "react-router-dom";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "../../styles/style.css";
 import { ChevronLeft } from "lucide-react";
@@ -821,7 +819,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
+                  gridTemplateColumns: "2fr 1.5fr 1fr",
                   paddingBottom: "12px",
                   borderBottom: "2px solid #e5e7eb",
                   marginBottom: "16px",
@@ -832,6 +830,9 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                 </span>
                 <span style={{ fontWeight: "600", color: "#111827" }}>
                   Result
+                </span>
+                <span style={{ fontWeight: "600", color: "#111827" }}>
+                  Status
                 </span>
               </div>
 
@@ -847,23 +848,152 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                       : "-";
                 }
 
+                const getStatusStyle = (status) => {
+                  if (!status) return null;
+
+                  const statusLower = status.toLowerCase();
+
+                  // Handle Stage statuses
+                  if (statusLower.includes("stage")) {
+                    const stageNum = parseInt(
+                      statusLower.match(/\d+/)?.[0] || "0"
+                    );
+                    if (stageNum <= 2) {
+                      return {
+                        backgroundColor: "#fef3c7",
+                        color: "#92400e",
+                        text: status,
+                      };
+                    } else if (stageNum === 3) {
+                      return {
+                        backgroundColor: "#fed7aa",
+                        color: "#9a3412",
+                        text: status,
+                      };
+                    } else {
+                      return {
+                        backgroundColor: "#fecaca",
+                        color: "#991b1b",
+                        text: status,
+                      };
+                    }
+                  }
+
+                  // Handle other statuses
+                  switch (statusLower) {
+                    case "normal":
+                      return {
+                        backgroundColor: "#d1fae5",
+                        color: "#065f46",
+                        text: "Normal",
+                      };
+                    case "low":
+                      return {
+                        backgroundColor: "#fef3c7",
+                        color: "#92400e",
+                        text: "Low",
+                      };
+                    case "high":
+                      return {
+                        backgroundColor: "#fed7aa",
+                        color: "#9a3412",
+                        text: "High",
+                      };
+                    case "very high":
+                      return {
+                        backgroundColor: "#fecaca",
+                        color: "#991b1b",
+                        text: "Very High",
+                      };
+                    case "dangerously high":
+                    case "dangerously low":
+                      return {
+                        backgroundColor: "#fee2e2",
+                        color: "#7f1d1d",
+                        text: statusLower.includes("high")
+                          ? "Dangerously High"
+                          : "Dangerously Low",
+                      };
+                    default:
+                      return {
+                        backgroundColor: "#f3f4f6",
+                        color: "#374151",
+                        text: status,
+                      };
+                  }
+                };
+
+                const statusStyle = getStatusStyle(result.lab_item_status);
+
                 return (
-                  <div
-                    key={index}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
-                      paddingTop: "12px",
-                      paddingBottom: "12px",
-                      borderBottom: "1px solid #f3f4f6",
-                    }}
-                  >
-                    <span style={{ color: "#374151" }}>
-                      {result.lab_item_name}
-                    </span>
-                    <span style={{ color: "#111827", fontWeight: "500" }}>
-                      {displayValue} {result.unit}
-                    </span>
+                  <div key={index}>
+                    {/* Main row with test name, result, and status */}
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "2fr 1.5fr 1fr",
+                        paddingTop: "12px",
+                        paddingBottom: "8px",
+                        gap: "12px",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span style={{ color: "#374151", fontWeight: "500" }}>
+                        {result.lab_item_name}
+                      </span>
+                      <span style={{ color: "#111827", fontWeight: "600" }}>
+                        {displayValue} {result.unit}
+                      </span>
+                      <div>
+                        {statusStyle ? (
+                          <span
+                            style={{
+                              display: "inline-block",
+                              padding: "4px 10px",
+                              borderRadius: "6px",
+                              fontSize: "12px",
+                              fontWeight: "600",
+                              backgroundColor: statusStyle.backgroundColor,
+                              color: statusStyle.color,
+                              textTransform: "capitalize",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {statusStyle.text}
+                          </span>
+                        ) : (
+                          <span style={{ color: "#9ca3af", fontSize: "12px" }}>
+                            -
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Reference range row (only show if normal_range exists) */}
+                    {result.normal_range && (
+                      <div
+                        style={{
+                          paddingBottom: "12px",
+                          paddingLeft: "0px",
+                          fontSize: "12px",
+                          color: "#6b7280",
+                          borderBottom: "1px solid #f3f4f6",
+                        }}
+                      >
+                        <span style={{ fontWeight: "500" }}>Reference: </span>
+                        <span>{result.normal_range}</span>
+                      </div>
+                    )}
+
+                    {/* Border for items without reference range */}
+                    {!result.normal_range && (
+                      <div
+                        style={{
+                          borderBottom: "1px solid #f3f4f6",
+                          paddingBottom: "12px",
+                        }}
+                      ></div>
+                    )}
                   </div>
                 );
               })}
