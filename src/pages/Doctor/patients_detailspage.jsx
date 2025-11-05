@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "../../styles/style.css";
 import { ChevronLeft } from "lucide-react";
@@ -758,6 +758,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
             gridTemplateColumns: "1fr 1fr",
             gap: "24px",
             marginTop: "24px",
+            alignItems: "start",
           }}
         >
           {/* Lab Tests Section - New Design */}
@@ -1005,7 +1006,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "24px",
+              gap: "10px",
             }}
           >
             <div
@@ -1014,7 +1015,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                 borderRadius: "12px",
                 border: "1px solid #e5e7eb",
                 padding: "24px",
-                height: "100%",
+                height: "310px", // Half of 680px minus gap
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -1023,7 +1024,166 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                 style={{
                   fontSize: "20px",
                   fontWeight: "600",
-                  marginBottom: "24px",
+                  marginBottom: "16px",
+                  color: "#111827",
+                }}
+              >
+                AI Prediction Summary
+              </h2>
+
+              {/* Prediction Items List */}
+              {/* Prediction Items List - Compact Table Style */}
+              <div
+                style={{
+                  flex: 1,
+                  overflowY: "auto",
+                }}
+              >
+                {patientData.ai_prediction_details &&
+                patientData.ai_prediction_details.length > 0 ? (
+                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                    <thead>
+                      <tr
+                        style={{
+                          borderBottom: "2px solid #e5e7eb",
+                        }}
+                      >
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px 0",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            color: "#6b7280",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          Test
+                        </th>
+                        <th
+                          style={{
+                            textAlign: "left",
+                            padding: "8px 0",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            color: "#6b7280",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          Prediction
+                        </th>
+                        <th
+                          style={{
+                            textAlign: "right",
+                            padding: "8px 0",
+                            fontSize: "12px",
+                            fontWeight: "600",
+                            color: "#6b7280",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                          }}
+                        >
+                          Confidence
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {patientData.ai_prediction_details.map(
+                        (prediction, index) => {
+                          const probabilityPercent = Math.round(
+                            parseFloat(prediction.probability) * 100
+                          );
+
+                          return (
+                            <tr
+                              key={index}
+                              style={{
+                                borderBottom: "1px solid #f3f4f6",
+                              }}
+                            >
+                              <td
+                                style={{
+                                  padding: "12px 0",
+                                  fontSize: "14px",
+                                  fontWeight: "600",
+                                  color: "#111827",
+                                  width: "30%",
+                                }}
+                              >
+                                {prediction.test_name}
+                              </td>
+                              <td
+                                style={{
+                                  padding: "12px 8px",
+                                  fontSize: "13px",
+                                  color: "#6b7280",
+                                  lineHeight: "1.4",
+                                  width: "50%",
+                                }}
+                              >
+                                {prediction.best_class}
+                              </td>
+                              <td
+                                style={{
+                                  padding: "12px 0",
+                                  textAlign: "right",
+                                  width: "20%",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "13px",
+                                    fontWeight: "600",
+                                    color: "#68aaa0",
+                                    backgroundColor: "#e8f9f2",
+                                    padding: "4px 12px",
+                                    borderRadius: "6px",
+                                    display: "inline-block",
+                                  }}
+                                >
+                                  {probabilityPercent}%
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      color: "#9ca3af",
+                      fontSize: "14px",
+                      padding: "20px",
+                    }}
+                  >
+                    No AI predictions available
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ========== MODIFIED: AI Recommendation Card (Bottom) ========== */}
+            <div
+              style={{
+                backgroundColor: "white",
+                borderRadius: "12px",
+                border: "1px solid #e5e7eb",
+                padding: "24px",
+                height: "310px", // Half of 680px minus gap
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  marginBottom: "20px",
                   color: "#111827",
                 }}
               >
@@ -1034,7 +1194,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
               <div
                 style={{
                   flex: 1,
-                  marginBottom: "24px",
+                  marginBottom: "16px",
                   display: "flex",
                   flexDirection: "column",
                 }}
