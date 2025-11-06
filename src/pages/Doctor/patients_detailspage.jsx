@@ -768,7 +768,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
               borderRadius: "12px",
               border: "1px solid #e5e7eb",
               padding: "24px",
-              height: "680px",
+              height: "730px",
               display: "flex",
               flexDirection: "column",
             }}
@@ -1085,16 +1085,22 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                             letterSpacing: "0.5px",
                           }}
                         >
-                          Confidence
+                          Possibility
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {patientData.ai_prediction_details.map(
                         (prediction, index) => {
-                          const probabilityPercent = Math.round(
-                            parseFloat(prediction.probability) * 100
+                          // const probabilityPercent = Math.round(
+                          //   parseFloat(prediction.probability) * 100
+                          // );
+                          const probability = parseFloat(
+                            prediction.probability
                           );
+                          const probabilityTwoDecimal = probability
+                            .toString()
+                            .match(/^-?\d+(?:\.\d{0,2})?/)[0];
 
                           return (
                             <tr
@@ -1136,14 +1142,14 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                                   style={{
                                     fontSize: "13px",
                                     fontWeight: "600",
-                                    color: "#68aaa0",
-                                    backgroundColor: "#e8f9f2",
+                                    //color: "#68aaa0",
+                                    //backgroundColor: "#e8f9f2",
                                     padding: "4px 12px",
                                     borderRadius: "6px",
                                     display: "inline-block",
                                   }}
                                 >
-                                  {probabilityPercent}%
+                                  {probabilityTwoDecimal}
                                 </span>
                               </td>
                             </tr>
@@ -1174,7 +1180,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                 borderRadius: "12px",
                 border: "1px solid #e5e7eb",
                 padding: "24px",
-                height: "310px", // Half of 680px minus gap
+                height: "360px", // Half of 680px minus gap
                 display: "flex",
                 flexDirection: "column",
               }}
@@ -1183,7 +1189,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                 style={{
                   fontSize: "20px",
                   fontWeight: "600",
-                  marginBottom: "20px",
+                  marginBottom: "16px",
                   color: "#111827",
                 }}
               >
@@ -1203,7 +1209,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                   <textarea
                     style={{
                       flex: 1,
-                      width: "100%",
+                      //width: "100%",
                       padding: "12px",
                       border: "2px solid #2563eb",
                       borderRadius: "8px",
