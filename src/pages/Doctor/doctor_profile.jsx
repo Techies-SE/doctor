@@ -737,11 +737,25 @@ const DoctorProfile = () => {
                         document.getElementById("profileImageInput").click()
                       }
                       disabled={isUploadingImage}
-                      className="px-4 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-gray-700 text-sm"
+                      className="px-4 py-1.5 rounded-md transition-colors text-white text-sm"
                       style={{
                         flex: 1,
+                        backgroundColor: isUploadingImage
+                          ? "#9ca3af"
+                          : "#14b8a6",
+                        color: isUploadingImage ? "#4b5563" : "#ffffff",
                         cursor: isUploadingImage ? "not-allowed" : "pointer",
                         opacity: isUploadingImage ? 0.6 : 1,
+                        height: "30px",
+                        border: "none",
+                      }}
+                      onMouseOver={(e) => {
+                        if (!isUploadingImage)
+                          e.target.style.backgroundColor = "#0d9488";
+                      }}
+                      onMouseOut={(e) => {
+                        if (!isUploadingImage)
+                          e.target.style.backgroundColor = "#14b8a6";
                       }}
                     >
                       {selectedImage ? "Change" : "Select"}
@@ -759,10 +773,13 @@ const DoctorProfile = () => {
                             backgroundColor: isUploadingImage
                               ? "#9ca3af"
                               : "#14b8a6",
+                              color: isUploadingImage ? "#4b5563" : "#ffffff",
                             cursor: isUploadingImage
                               ? "not-allowed"
                               : "pointer",
                             border: "none",
+                            opacity: isUploadingImage ? 0.6 : 1,
+                            height: "30px",
                           }}
                           onMouseOver={(e) => {
                             if (!isUploadingImage)
@@ -779,12 +796,27 @@ const DoctorProfile = () => {
                         <button
                           onClick={cancelImageSelection}
                           disabled={isUploadingImage}
-                          className="px-4 py-1.5 border border-red-300 rounded-md hover:bg-red-50 transition-colors text-red-600 text-sm"
+                          className="px-4 py-1.5 rounded-md transition-colors text-sm"
                           style={{
+                            flex: 1,
+                            backgroundColor: isUploadingImage
+                              ? "#fca5a5"
+                              : "#dc2626",
+                            color: isUploadingImage ? "#4b5563" : "#ffffff",
                             cursor: isUploadingImage
                               ? "not-allowed"
                               : "pointer",
-                            opacity: isUploadingImage ? 0.6 : 1,
+                            border: "none",
+                            opacity: isUploadingImage ? 0.7 : 1,
+                            height: "30px",
+                          }}
+                          onMouseOver={(e) => {
+                            if (!isUploadingImage)
+                              e.target.style.backgroundColor = "#b91c1c";
+                          }}
+                          onMouseOut={(e) => {
+                            if (!isUploadingImage)
+                              e.target.style.backgroundColor = "#dc2626";
                           }}
                         >
                           Cancel
@@ -943,7 +975,23 @@ const DoctorProfile = () => {
                   <button
                     onClick={handlePasswordUpdate}
                     disabled={isUpdatingPassword}
-                    className="w-full bg-black text-white py-2 text-sm rounded-md hover:bg-gray-800 transition-colors font-medium mt-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="w-full text-white py-2 text-sm rounded-md transition-colors font-medium mt-2 disabled:cursor-not-allowed"
+                    style={{
+                      backgroundColor: isUpdatingPassword
+                        ? "#9ca3af"
+                        : "#14b8a6",
+                      color: isUpdatingPassword ? "#4b5563" : "#ffffff",
+                      border: "none",
+                      cursor: isUpdatingPassword ? "not-allowed" : "pointer",
+                    }}
+                    onMouseOver={(e) => {
+                      if (!isUpdatingPassword)
+                        e.target.style.backgroundColor = "#0d9488";
+                    }}
+                    onMouseOut={(e) => {
+                      if (!isUpdatingPassword)
+                        e.target.style.backgroundColor = "#14b8a6";
+                    }}
                   >
                     {isUpdatingPassword ? "Updating..." : "Update Password"}
                   </button>
