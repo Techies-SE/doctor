@@ -966,6 +966,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                     type="text"
                     name="hn_number"
                     placeholder="Enter HN Number"
+                    data-cy="hn-number-input"
                     value={singlePatient.hn_number}
                     onChange={handleSinglePatientChange}
                     className="simple-form-input"
@@ -979,6 +980,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                     type="text"
                     name="name"
                     placeholder="Enter Full Name"
+                    data-cy="full-name-input"
                     value={singlePatient.name}
                     onChange={handleSinglePatientChange}
                     className="simple-form-input"
@@ -994,6 +996,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                     type="text"
                     name="citizen_id"
                     placeholder="Enter Citizen ID"
+                    data-cy="citizen-id-input"
                     value={singlePatient.citizen_id}
                     onChange={handleSinglePatientChange}
                     className="simple-form-input"
@@ -1006,6 +1009,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                   <input
                     type="date"
                     name="date_of_birth"
+                    data-cy="dob-input"
                     value={singlePatient.date_of_birth}
                     onChange={handleSinglePatientChange}
                     className="simple-form-input"
@@ -1019,6 +1023,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                   <label className="simple-form-label">Gender</label>
                   <select
                     name="gender"
+                    data-cy="gender-input"
                     value={singlePatient.gender || ""}
                     onChange={handleSinglePatientChange}
                     className="simple-form-select"
@@ -1037,6 +1042,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
                   <input
                     type="text"
                     name="phone_no"
+                    data-cy="phone-no-input"
                     placeholder="Enter Phone Number"
                     value={singlePatient.phone_no}
                     onChange={handleSinglePatientChange}
@@ -1059,6 +1065,7 @@ const PatientUploadPopup = ({ show, onClose, onUpload }) => {
             <button
               onClick={handleSinglePatientSubmit}
               className="add-patient-button"
+              data-cy="add-patient-button"
             >
               Add Patient
             </button>
@@ -1415,6 +1422,7 @@ const Patients = ({ onNavigateToDetails = () => {} }) => {
               <button
                 onClick={() => setShowPatientUploadPopup(true)}
                 className="uButton"
+                data-cy="add-new-patient-button"
               >
                 + New Patient
               </button>

@@ -85,11 +85,12 @@ const Login = () => {
         {/* Toggle Switch */}
         <div className="toggle-container">
           <span className="toggle-text admin-text">Admin</span>
-          <label className="toggle-label">
+          <label className="toggle-label" >
             <input
               type="checkbox"
               checked={isDoctor}
               onChange={() => setIsDoctor(!isDoctor)}
+              data-cy="toggle-switch"
             />
             <span className="toggle-slider"></span>
           </label>
@@ -98,7 +99,7 @@ const Login = () => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
-          {error && <div className="error-message">{error}</div>}
+          {error && <div className="error-message" data-cy="login-error-message">{error}</div> }
           <input
             type="text"
             name="staffid"
@@ -107,6 +108,7 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            data-cy="username-input"
           />
           <input
             type="password"
@@ -116,6 +118,7 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            data-cy="password-input"
           />
           <div
             style={{
@@ -125,7 +128,7 @@ const Login = () => {
           {/* <a href="#" className="forgot-password">
             Forgot Password?
           </a> */}
-          <button type="submit" className="login-button" disabled={isLoading}>
+          <button type="submit" className="login-button" disabled={isLoading} data-cy="login-button">
             {isLoading ? "Logging in..." : "Log In"}
           </button>
         </form>
