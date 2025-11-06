@@ -32,6 +32,10 @@ class AdminPatientListPage {
         return cy.get('[data-cy="add-patient-button"]')
     }
 
+    getPatientModal(){
+        return cy.get('[data-cy="patient-modal"]')
+    }
+
     // Actions
     visit(){
          cy.visit('http://localhost:3000/');
