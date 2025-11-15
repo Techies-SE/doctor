@@ -337,7 +337,7 @@ const DoctorDashboard = () => {
       {/* Sidebar */}
       <Sidebar activeTab="dashboard" />
       {/* Main Content - adjusted for sidebar */}
-      <div style={{ marginLeft: "240px", paddingTop: "100px" }}>
+      <div style={{ marginLeft: "200px", paddingTop: "100px" }}>
         <div style={{ padding: "24px", maxWidth: "1280px", margin: "0 auto" }}>
           {/* Stats Cards */}
           <div
