@@ -1098,6 +1098,7 @@ const DetailsPage = ({ hn_number, lab_test_id, onBack }) => {
                           const probability = parseFloat(
                             prediction.probability
                           );
+                          console.log(probability);
                           const probabilityTwoDecimal = probability
                             .toString()
                             .match(/^-?\d+(?:\.\d{0,2})?/)[0];

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDoctorProfile } from "../../useDoctorProfile";
 import "./styles/patientlist.css";
-import { FiInfo } from "react-icons/fi";
 import DetailsPage from "./patients_detailspage";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import { Clock, CheckCircle, XCircle } from "lucide-react";
 
 const Search = ({ size, className }) => (
   <svg
@@ -76,10 +76,33 @@ const ChevronDown = ({ size, className }) => (
   </svg>
 );
 
+const getRelativeTime = (dateString) => {
+  if (!dateString || dateString === "N/A") return "N/A";
+
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+  const diffMinutes = Math.floor(diffTime / (1000 * 60));
+
+  if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return `${Math.floor(diffDays / 365)} years ago`;
+};
+
 const PatientList = () => {
   const { doctorData } = useDoctorProfile(); // Get doctor data from the hook
   const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all"); // all | pending | approved | rejected
+  const [showOnlyPending, setShowOnlyPending] = useState(false);
+  const [prioritySort, setPrioritySort] = useState(true); // Pending first
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const [popupIndex, setPopupIndex] = useState(null);
@@ -99,6 +122,7 @@ const PatientList = () => {
   const handleViewDetails = (patient) => {
     setSelectedPatient(patient);
     setShowDetails(true);
+    console.log(patient);
   };
 
   const handleBackToList = () => {
@@ -146,6 +170,7 @@ const PatientList = () => {
               hn_number: patient.hn_number || "N/A",
               lab_test: patient.lab_test_name || "N/A",
               lab_test_date: testDate ? testDate.split("T")[0] : "N/A",
+              status: patient.recommendation_status || "N/A",
             };
           });
 
@@ -164,6 +189,7 @@ const PatientList = () => {
     };
 
     fetchPatients();
+    setSortConfig({ key: "status", direction: "ascending" });
   }, []); // Empty dependency - only fetch once on mount
   const logout = (e) => {
     e.preventDefault();
@@ -174,6 +200,7 @@ const PatientList = () => {
     navigate("/");
     window.location.reload();
   };
+
   const sortedPatients = React.useMemo(() => {
     let sortablePatients = [...patients];
     sortablePatients.sort((a, b) => {
@@ -186,11 +213,40 @@ const PatientList = () => {
     return sortablePatients;
   }, [patients, sortConfig]);
 
-  const filteredPatients = sortedPatients.filter(
-    (patient) =>
-      patient.hn_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredPatients = useMemo(() => {
+    return patients
+      .filter((p) => {
+        const search = searchTerm.toLowerCase();
+        const matchesSearch =
+          p.name.toLowerCase().includes(search) || p.hn_number.includes(search);
+        const matchesPending = !showOnlyPending || p.status === "pending";
+        const matchesStatus =
+          filterStatus === "all" || p.status === filterStatus;
+        return matchesSearch && matchesPending && matchesStatus;
+      })
+      .sort((a, b) => {
+        // Priority sorting (pending first)
+        if (prioritySort) {
+          const order = { pending: 1, rejected: 2, approved: 3 };
+          return (order[a.status] || 4) - (order[b.status] || 4);
+        }
+        // Normal column sorting
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue < bValue)
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        if (aValue > bValue)
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        return 0;
+      });
+  }, [
+    patients,
+    searchTerm,
+    showOnlyPending,
+    filterStatus,
+    sortConfig,
+    prioritySort,
+  ]);
 
   const indexOfLastPatient = currentPage * patientsPerPage;
   const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
@@ -206,6 +262,7 @@ const PatientList = () => {
       direction = "descending";
     }
     setSortConfig({ key: column, direction });
+    setPrioritySort(false);
   };
 
   const handlePageChange = (page) => {
@@ -297,24 +354,209 @@ const PatientList = () => {
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-black text-2xl font-semibold">Patient List</h1>
           </div>
-          {/* Search and Filter */}
-          <div className="flex items-center justify-end mb-6">
-            <div id="search-container-1">
-              <Search size={18} className="search-icon-1" />
-              <input
-                type="text"
-                placeholder="Search Patients ..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                id="search-input"
-              />
-            </div>
-            <button id="filter-button-1">
-              <Filter size={13} className="filter-icon-1" /> Filter
-            </button>
-          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+              marginBottom: "24px",
+            }}
+          >
+            {/* Row 1: Search and Status Filter */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: "12px",
+              }}
+            >
+              <div id="search-container-1" style={{ width: "90%" }}>
+                <Search size={18} className="search-icon-1" />
+                <input
+                  type="text"
+                  placeholder="Search Patients ..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  id="search-input"
+                />
+              </div>
 
-          <div id="table-wrapper">
+              <select
+                style={{ width: "10%" }}
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                id="filter-button-1"
+              >
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+              </select>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "24px",
+                padding: "12px",
+                backgroundColor: "#f9fafb",
+                borderRadius: "8px",
+                border: "1px solid #e5e7eb",
+              }}
+            >
+              {/* NEW: Priority Sort Toggle - sorts pending patients first */}
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <input
+                    type="checkbox"
+                    checked={prioritySort}
+                    onChange={(e) => setPrioritySort(e.target.checked)}
+                    style={{
+                      position: "absolute",
+                      width: "1px",
+                      height: "1px",
+                      padding: 0,
+                      margin: "-1px",
+                      overflow: "hidden",
+                      clip: "rect(0, 0, 0, 0)",
+                      whiteSpace: "nowrap",
+                      borderWidth: 0,
+                    }}
+                  />
+                  <div
+                    style={{
+                      width: "44px",
+                      height: "24px",
+                      borderRadius: "9999px",
+                      backgroundColor: prioritySort ? "#2563eb" : "#d1d5db",
+                      transition: "background-color 0.2s",
+                      position: "relative",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "2px",
+                        left: "2px",
+                        width: "20px",
+                        height: "20px",
+                        backgroundColor: "white",
+                        borderRadius: "9999px",
+                        transform: prioritySort
+                          ? "translateX(20px)"
+                          : "translateX(0)",
+                        transition: "transform 0.2s",
+                      }}
+                    />
+                  </div>
+                </div>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#374151",
+                  }}
+                >
+                  Priority Sort (Pending First)
+                </span>
+              </label>
+
+              {/* NEW: View Only Pending Toggle - filters to show only pending patients */}
+              <label
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  cursor: "pointer",
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <input
+                    type="checkbox"
+                    checked={showOnlyPending}
+                    onChange={(e) => setShowOnlyPending(e.target.checked)}
+                    style={{
+                      position: "absolute",
+                      width: "1px",
+                      height: "1px",
+                      padding: 0,
+                      margin: "-1px",
+                      overflow: "hidden",
+                      clip: "rect(0, 0, 0, 0)",
+                      whiteSpace: "nowrap",
+                      borderWidth: 0,
+                    }}
+                  />
+                  <div
+                    style={{
+                      width: "44px",
+                      height: "24px",
+                      borderRadius: "9999px",
+                      backgroundColor: showOnlyPending ? "#f59e0b" : "#d1d5db",
+                      transition: "background-color 0.2s",
+                      position: "relative",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "2px",
+                        left: "2px",
+                        width: "20px",
+                        height: "20px",
+                        backgroundColor: "white",
+                        borderRadius: "9999px",
+                        transform: showOnlyPending
+                          ? "translateX(20px)"
+                          : "translateX(0)",
+                        transition: "transform 0.2s",
+                      }}
+                    />
+                  </div>
+                </div>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#374151",
+                  }}
+                >
+                  View Only Pending
+                </span>
+              </label>
+
+              {/* NEW: Results counter showing filtered patient count */}
+              <div
+                style={{
+                  marginLeft: "auto",
+                  fontSize: "14px",
+                  color: "#4b5563",
+                }}
+              >
+                Showing{" "}
+                <span style={{ fontWeight: "600" }}>
+                  {filteredPatients.length}
+                </span>{" "}
+                patients
+              </div>
+            </div>
+          </div>
+          <div
+            id="table-wrapper"
+            style={{
+              maxHeight: "600px",
+              overflowY: "auto",
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+            }}
+          >
             {loading ? (
               <div
                 style={{
@@ -368,7 +610,15 @@ const PatientList = () => {
               <div id="error-message">Error loading patients: {error}</div>
             ) : (
               <table id="table-content">
-                <thead>
+                <thead
+                  style={{
+                    position: "sticky",
+                    top: 0,
+                    backgroundColor: "#f9fafb",
+                    zIndex: 10,
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  }}
+                >
                   <tr id="table-header">
                     {[
                       { key: "name", label: "Patient Name", width: "25%" },
@@ -378,6 +628,7 @@ const PatientList = () => {
                         label: "Lab Test Date",
                         width: "20%",
                       },
+                      { key: "status", label: "Status", width: "10%" },
                     ].map((column) => (
                       <th
                         key={column.key}
@@ -398,7 +649,7 @@ const PatientList = () => {
                     ))}
                     <th
                       id="table-header-cell"
-                      style={{ width: "15%", textAlign: "center" }}
+                      style={{ width: "30%", textAlign: "center" }}
                     >
                       Action
                     </th>
@@ -416,10 +667,88 @@ const PatientList = () => {
                       <tr
                         key={`${patient.hn_number}-${patient.lab_test_id}-${index}`}
                         id="table-row"
+                        style={{
+                          backgroundColor:
+                            patient.status === "pending"
+                              ? "#fffbeb"
+                              : "transparent",
+                        }}
                       >
                         <td id="table-cell">{patient.name}</td>
                         <td id="table-cell">{patient.hn_number}</td>
-                        <td id="table-cell">{patient.lab_test_date}</td>
+                        <td id="table-cell">
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "2px",
+                            }}
+                          >
+                            <span style={{ color: "#111827" }}>
+                              {patient.lab_test_date}
+                            </span>
+                            <span
+                              style={{ fontSize: "12px", color: "#6b7280" }}
+                            >
+                              {getRelativeTime(patient.lab_test_date)}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td id="table-cell" style={{ textAlign: "start" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "8px",
+                            }}
+                          >
+                            {patient.status === "pending" && (
+                              <>
+                                <Clock size={20} color="#f0ad4e" />
+                                <span
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "#d97706",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  Pending
+                                </span>
+                              </>
+                            )}
+                            {patient.status === "approved" && (
+                              <>
+                                <CheckCircle size={20} color="#3BA092" />
+                                <span
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "#059669",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  Approved
+                                </span>
+                              </>
+                            )}
+                            {patient.status !== "pending" &&
+                              patient.status !== "approved" && (
+                                <>
+                                  <XCircle size={20} color="#d9534f" />
+                                  <span
+                                    style={{
+                                      fontSize: "14px",
+                                      color: "#dc2626",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    Rejected
+                                  </span>
+                                </>
+                              )}
+                          </div>
+                        </td>
+
                         <td
                           id="table-cell relative"
                           style={{ width: "15%", textAlign: "center" }}
@@ -430,7 +759,7 @@ const PatientList = () => {
                               background: "none",
                               border: "none",
                               cursor: "pointer",
-                              color: "#3BA092", 
+                              color: "#3BA092",
                               textDecoration: "underline",
                               fontSize: "14px",
                               padding: 0,
