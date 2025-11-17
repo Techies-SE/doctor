@@ -544,7 +544,7 @@ const PatientList = () => {
                 <span style={{ fontWeight: "600" }}>
                   {filteredPatients.length}
                 </span>{" "}
-                patients
+                lab tests
               </div>
             </div>
           </div>
